@@ -107,6 +107,7 @@ if [ "$1" == "reset" ]; then
 
     # Clean Minecraft-content folder
     rm -f /home/$username/Minecraft-content/*.xml
+    rm -f /home/$username/Minecraft-content/levelsUnlocked
 
     # Remove MC generated worlds and copy Kano-Minecraft world across to home directory
     rm -rf /home/$username/.minecraft/games/com.mojang/minecraftWorlds/*
