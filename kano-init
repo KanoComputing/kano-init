@@ -7,7 +7,7 @@ function usage
     echo "Usage: kano-init [stage|reset]"
     echo ""
     echo "    stage     The stage to start the init procedure from."
-    echo "              Values from 1 to 3 are supported."
+    echo "              Values from 1 to 4 are supported."
     echo ""
     echo "    reset     Reset the kano-kit to it's initial state."
     echo ""
@@ -107,7 +107,6 @@ if [ "$1" == "reset" ]; then
 
     # Clean Minecraft-content folder
     rm -f /home/$username/Minecraft-content/*.xml
-    rm -f /home/$username/Minecraft-content/levelsUnlocked
 
     # Remove MC generated worlds and copy Kano-Minecraft world across to home directory
     rm -rf /home/$username/.minecraft/games/com.mojang/minecraftWorlds/*
@@ -116,6 +115,9 @@ if [ "$1" == "reset" ]; then
 
     # Remove cached blocks
     rm -f /home/$username/.local/share/webkit/databases/*
+
+    # Remove email file (if any)
+    rm -f /usr/local/share/kano/email.txt &> /dev/null
 
     exit 0
 fi
@@ -136,7 +138,7 @@ old_user=`get_username`
 
 stage=1
 if [ -n "$1" ]; then
-    if [ -n "`grep [123] <<<"$1"`" ]; then
+    if [ -n "`grep [1234] <<<"$1"`" ]; then
         stage="$1"
     else
         echo "Error: Unknown parameter '$1'"
@@ -185,8 +187,33 @@ else
     username="$old_user"
 fi
 
-numFails=0
 if [ "$stage" -le 2 ]; then
+    # Read the email
+    linebreak
+    typewriter_echo "Want to save your badges and games? Type your email address." 0 1
+    typewriter_echo "Or just press [ENTER] to continue." 0 2
+    while true; do
+        read -e email
+        if [ -z "$email" ]; then
+            break
+        elif [ -z "`egrep "[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_.-]" <<<"$email"`" ]; then
+            linebreak
+            typewriter_echo "That doesn't look like a valid email address."
+            typewriter_echo "Try again or just press [ENTER] to continue." 0 2
+        else
+            echo $email > /usr/local/share/kano/email.txt
+            typewriter_echo "Thank you!" 2 0
+            break
+        fi
+    done
+ 
+    clear
+
+    set_autostart_stage 3
+fi
+
+numFails=0
+if [ "$stage" -le 3 ]; then
     echo -ne "\n"
     typewriter_echo "$username, follow the white rabbit... " 1 0
     typewriter_echo "If you dare." 0.5 2
@@ -243,10 +270,10 @@ if [ "$stage" -le 2 ]; then
 
     clear
 
-    set_autostart_stage 3
+    set_autostart_stage 4
 fi
 
-if [ "$stage" -le 3 ]; then
+if [ "$stage" -le 4 ]; then
     typewriter_echo "Uhoh..." 2
     while true; do
         python -B $res_dir/bomb.py "$username"
