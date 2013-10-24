@@ -118,7 +118,7 @@ if [ "$1" == "reset" ]; then
     rm -f /home/$username/.local/share/webkit/databases/*
 
     # Remove email file (if any)
-    rm -f /usr/local/share/kano/email.txt &> /dev/null
+    rm -f /home/$username/.email &> /dev/null
 
     exit 0
 fi
@@ -202,7 +202,8 @@ if [ "$stage" -le 2 ]; then
             typewriter_echo "That doesn't look like a valid email address."
             typewriter_echo "Try again or just press [ENTER] to continue." 0 2
         else
-            echo $email > /usr/local/share/kano/email.txt
+            echo $email > /home/$username/.email
+            chown 1000:1000 /home/$username/.email
             typewriter_echo "Thank you!" 2 0
             break
         fi
