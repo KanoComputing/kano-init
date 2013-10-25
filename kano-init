@@ -113,7 +113,8 @@ if [ "$1" == "reset" ]; then
     rm -rf /home/$username/.minecraft/games/com.mojang/minecraftWorlds/*
     cp -rf /home/$username/Minecraft-content/.minecraft/games/com.mojang/minecraftWorlds/Kano\ World/ \
            /home/$username/.minecraft/games/com.mojang/minecraftWorlds
-
+    chown -R 1000:1000 /home/$username/.minecraft
+    
     # Remove cached blocks
     rm -f /home/$username/.local/share/webkit/databases/*
 
