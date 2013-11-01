@@ -57,7 +57,7 @@ function get_option
 {
     while true; do
         read -e option
-        eval "$1=$option"
+        eval "$1=\"$option\""
         if [ -z "$option" ]; then
             typewriter_echo "You need to choose one option. Which one do you pick:"
         elif [ -z "`grep "^[123]$" <<<"$option"`" ]; then
