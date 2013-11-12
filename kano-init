@@ -171,13 +171,9 @@ if [ "$stage" -le 1 ]; then
         fi
     done
 
-    # Change both the user group names and move home dir
+    # Change both the user group names
     usermod -l "$username" -d "/home/$username" -m "$old_user" 2>/dev/null
     groupmod -n "$username" "$old_user" 2>/dev/null
-
-    # Rename the 'Home' desktop icon
-    sed -i "s/^\(Name\(\[.\+\]\)\?\)\=.*$/\1=$username/" \
-           "/home/$username/Desktop/Home"
 
     # Create a symbolic link for possible /home/pi harcoded paths
     rm -f /home/pi
