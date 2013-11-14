@@ -114,6 +114,7 @@ if [ "$1" == "reset" ]; then
 
     # Delete Music-content folder
     rm -rf /home/$username/Music-content
+    rm -rf /home/$username/.make-music/workspaces/default
     
     # Remove cached blocks
     rm -f /home/$username/.local/share/webkit/databases/*
