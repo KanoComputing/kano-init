@@ -122,6 +122,9 @@ if [ "$1" == "reset" ]; then
     # Remove email file (if any)
     rm -f /home/$username/.email &> /dev/null
 
+    # Delete cache in terminal
+    history -c
+    
     exit 0
 fi
 
