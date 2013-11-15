@@ -100,20 +100,21 @@ if [ "$1" == "reset" ]; then
 
     username=`get_username`
 
-    # Clean and copy initial pong.py script into Pong-content
-    rm -f /home/$username/Pong-content/*
-    cp -a /usr/share/make-pong/pong/pong.py /home/$username/Pong-content/pong.py
-    chown -R 1000:1000 /home/$username/Pong-content/
+    # Delete Pong-content folder
+    rm -rf /home/$username/Pong-content
 
-    # Clean Minecraft-content folder
-    rm -f /home/$username/Minecraft-content/*.xml
-    rm -f /home/$username/Minecraft-content/levelsUnlocked
+    # Delete Minecraft-content folder
+    rm -rf /home/$username/Minecraft-content
     
     # Remove MC generated worlds and copy Kano-Minecraft world across to home directory
     rm -rf /home/$username/.minecraft/games/com.mojang/minecraftWorlds/*
     cp -rf /usr/share/make-minecraft/.minecraft/games/com.mojang/minecraftWorlds/Kano\ World/ \
            /home/$username/.minecraft/games/com.mojang/minecraftWorlds
     chown -R 1000:1000 /home/$username/.minecraft
+
+    # Delete Music-content folder
+    rm -rf /home/$username/Music-content
+    rm -rf /home/$username/.make-music/workspaces/default
     
     # Remove cached blocks
     rm -f /home/$username/.local/share/webkit/databases/*
