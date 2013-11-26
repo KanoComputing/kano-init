@@ -97,34 +97,6 @@ if [ "$1" == "reset" ]; then
     set_autostart_stage 1
     disable_lxde_autostart
     echo "kano-init scheduled for the next system reboot"
-
-    username=`get_username`
-
-    # Delete Pong-content folder
-    rm -rf /home/$username/Pong-content
-
-    # Delete Minecraft-content folder
-    rm -rf /home/$username/Minecraft-content
-    
-    # Remove MC generated worlds and copy Kano-Minecraft world across to home directory
-    rm -rf /home/$username/.minecraft/games/com.mojang/minecraftWorlds/*
-    cp -rf /usr/share/make-minecraft/.minecraft/games/com.mojang/minecraftWorlds/Kano\ World/ \
-           /home/$username/.minecraft/games/com.mojang/minecraftWorlds
-    chown -R 1000:1000 /home/$username/.minecraft
-
-    # Delete Music-content folder
-    rm -rf /home/$username/Music-content
-    rm -rf /home/$username/.make-music/workspaces/default
-    
-    # Remove cached blocks
-    rm -f /home/$username/.local/share/webkit/databases/*
-
-    # Remove email file (if any)
-    rm -f /home/$username/.email &> /dev/null
-
-    # Delete cache in terminal
-    history -c
-    
     exit 0
 fi
 
@@ -139,8 +111,11 @@ fi
 stty intr undef
 stty eof '?'
 
-# Get the username of the user with UID=1000
+# Remove the user with UID=1000 if it exists
 old_user=`get_username`
+if [ -n "$old_user" ]; then
+    userdel -r "$old_user" >/dev/null 2>/dev/null
+fi
 
 stage=1
 if [ -n "$1" ]; then
@@ -175,13 +150,14 @@ if [ "$stage" -le 1 ]; then
         fi
     done
 
-    # Change both the user group names
-    usermod -l "$username" -d "/home/$username" -m "$old_user" 2>/dev/null
-    groupmod -n "$username" "$old_user" 2>/dev/null
+    # TODO: We should work with the password differently
+    USER_PASSWORD="kano"
+    USER_GROUPS="adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input"
 
-    # Create a symbolic link for possible /home/pi harcoded paths
-    rm -f /home/pi
-    sudo ln -s /home/$username /home/pi
+    # Create the new user
+    useradd -m -u 1000 -s /bin/bash "$username" 2>/dev/null
+    echo "$username:$USER_PASSWORD" | chpasswd 2>/dev/null
+    usermod -G "$USER_GROUPS" $username 2>/dev/null
 
     set_autostart_stage 2
 else
