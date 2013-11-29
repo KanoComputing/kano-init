@@ -181,6 +181,7 @@ if [ "$stage" -le 2 ]; then
         else
             echo $email > /home/$username/.email
             chown 1000:1000 /home/$username/.email
+            cp --preserve /home/$username/.email /home/$username/.useremail
             typewriter_echo "Thank you!" 2 0
             break
         fi
