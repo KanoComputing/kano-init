@@ -73,10 +73,6 @@ function get_username
     un=`grep "^[^:]*:[^:]*:1000:1000" /etc/passwd | awk -F ':' '{ print $1 }'`
     if [ -n "$un" ]; then
         echo "$un"
-    else
-        # TODO: We might create the user in this case
-        echo "Error: No user with UID=1000 found." 1>&2
-        exit 1
     fi
 }
 
