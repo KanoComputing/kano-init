@@ -1,6 +1,15 @@
 #!/bin/bash
 
-# A fun console script to set up your Raspberry Pi
+# kano-init
+#
+# Copyright (C) 2013 Kano Computing Ltd.
+# License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# A fun console script to set up Kanux
+# 1) User name
+# 2) User email
+# 3) White rabbit riddle
+# 4) Startx
 
 function usage
 {
@@ -126,6 +135,7 @@ fi
 clear
 sleep 1
 
+# Request user name and create user
 if [ "$stage" -le 1 ]; then
     typewriter_echo "Hello!" 0.5
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2
@@ -146,7 +156,6 @@ if [ "$stage" -le 1 ]; then
         fi
     done
 
-    # TODO: We should work with the password differently
     USER_PASSWORD="kano"
     USER_GROUPS="adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input"
 
@@ -161,6 +170,7 @@ else
     username="$old_user"
 fi
 
+# Request user email and store it temporarily
 if [ "$stage" -le 2 ]; then
     # Read the email
     linebreak
@@ -175,6 +185,7 @@ if [ "$stage" -le 2 ]; then
             typewriter_echo "That doesn't look like a valid email address."
             typewriter_echo "Try again or just press [ENTER] to continue." 0 2
         else
+            # Store the email in a temporary file
             echo $email > /home/$username/.email
             chown 1000:1000 /home/$username/.email
             cp --preserve /home/$username/.email /home/$username/.useremail
@@ -188,6 +199,7 @@ if [ "$stage" -le 2 ]; then
     set_autostart_stage 3
 fi
 
+# White rabbit riddle
 numFails=0
 if [ "$stage" -le 3 ]; then
     echo -ne "\n"
@@ -248,6 +260,7 @@ if [ "$stage" -le 3 ]; then
     set_autostart_stage 4
 fi
 
+# Startx
 if [ "$stage" -le 4 ]; then
     typewriter_echo "Uhoh..." 2
     while true; do

@@ -1,3 +1,0 @@
-alias youtube="youtube; exit"
-cd
-. .bashrc
