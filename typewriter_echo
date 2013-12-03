@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# typewriter_echo
+#
+# Copyright (C) 2013 Kano Computing Ltd.
+# License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# Write to terminal in a Matrix-style
+
 function rand_wait
 {
     local low=$1  # miliseconds

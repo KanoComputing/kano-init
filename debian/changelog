@@ -1,8 +1,8 @@
-kano-init (0.1-38) unstable; urgency=low
+kano-init (1.0-1) unstable; urgency=low
 
-  * Package rebuilt, updated to revision 380d47fd.
+  * Kanux MincePie.
 
- -- Team Kano <hello@kano.me>  Mon, 02 Dec 2013 18:21:35 +0000
+ -- Team Kano <hello@kano.me>  Mon, 02 Dec 2013 20:46:03 +0000
 
 kano-init (0.1-37) unstable; urgency=low
 

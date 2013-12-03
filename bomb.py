@@ -1,19 +1,23 @@
 #!/usr/bin/env python
 
-# author: Radek Pazdera <radek@kano.me>
+# bomb.py
+#
+# Copyright (C) 2013 Kano Computing Ltd.
+# License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+# Startx exercise
 
 import os
 import sys
-import re
 import time
-import select
 import curses
-from threading import Thread, Lock, Event
+from threading import Thread, Lock
 
 key = "startx"
 keypos = 0
 
 l = Lock()
+
 
 def user_input(cursorx, cursory):
     """
@@ -40,6 +44,7 @@ def user_input(cursorx, cursory):
                 keypos += 1
             if keypos >= len(key):
                 return
+
 
 def load_animation(path):
     """
@@ -76,6 +81,7 @@ def load_animation(path):
 
     return frames
 
+
 def animation_width(animation):
     """ Determine the maximum frame width of an animation """
 
@@ -87,6 +93,7 @@ def animation_width(animation):
 
     return width
 
+
 def animation_height(animation):
     """ Determine the maximum frame height of an animation """
 
@@ -96,6 +103,7 @@ def animation_height(animation):
             height = len(frame)
 
     return height
+
 
 def draw_frame(frame, screen, x, y):
     """
@@ -109,6 +117,7 @@ def draw_frame(frame, screen, x, y):
         with l:
             screen.addstr(y + n, x, line)
         n += 1
+
 
 def blink(screen, duration, interval):
     """
@@ -141,6 +150,7 @@ def blink(screen, duration, interval):
         colour = 2 if colour == 1 else 1
         time.sleep(interval)
 
+
 def main(screen, username):
     res_dir = "."
     if not os.path.isdir("ascii_art"):
@@ -150,12 +160,9 @@ def main(screen, username):
 
     # preload all parts of the animation
     spark = load_animation(ascii_art_dir + "/spark.txt")
-    spark_w = animation_width(spark)
-    spark_h = animation_height(spark)
 
     numbers = load_animation(ascii_art_dir + "/numbers.txt")
     num_w = animation_width(numbers)
-    num_h = animation_height(numbers)
 
     bomb = load_animation(ascii_art_dir + "/bomb.txt")
     bomb_w = animation_width(bomb)
@@ -224,7 +231,7 @@ def main(screen, username):
 
 
 if __name__ == "__main__":
-    screen=curses.initscr()
+    screen = curses.initscr()
     curses.noecho()
     curses.cbreak()
     screen.keypad(1)
