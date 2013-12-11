@@ -10,6 +10,7 @@
 # 2) User email
 # 3) White rabbit riddle
 # 4) Startx
+#
 
 function usage
 {
@@ -22,6 +23,11 @@ function usage
     echo ""
 
     exit "$1"
+}
+
+function clean_stdin()
+{
+    read -t 1 -n 10000 discard
 }
 
 function linebreak
@@ -65,7 +71,8 @@ function disable_autostart
 function get_option
 {
     while true; do
-        read -e option
+        clean_stdin
+        read -p "Your choice: " -e option
         eval "$1=\"$option\""
         if [ -z "$option" ]; then
             typewriter_echo "You need to choose one option. Which one do you pick:"
@@ -137,12 +144,13 @@ sleep 1
 
 # Request user name and create user
 if [ "$stage" -le 1 ]; then
-    typewriter_echo "Hello!" 0.5
+    typewriter_echo "Hello!" 0 1
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2
-    typewriter_echo "What should I call you?"
+    typewriter_echo "What should I call you?" 0 1
 
     # Read the username
     while true; do
+        clean_stdin
         read -e username
         if [ -z "$username" ]; then
             typewriter_echo "Type a cool name:"
@@ -177,6 +185,7 @@ if [ "$stage" -le 2 ]; then
     typewriter_echo "Want to save your badges and games? Type your email address." 0 1
     typewriter_echo "Or just press [ENTER] to continue." 0 2
     while true; do
+        clean_stdin
         read -e email
         if [ -z "$email" ]; then
             break
@@ -203,7 +212,7 @@ fi
 numFails=0
 if [ "$stage" -le 3 ]; then
     echo -ne "\n"
-    typewriter_echo "$username, follow the white rabbit... " 1 2
+    typewriter_echo "$username, follow the white rabbit... " 0.5 1
     typewriter_echo "He's hiding somewhere on the computer. Can you find him?" 0 2
 
     while true; do
@@ -211,7 +220,6 @@ if [ "$stage" -le 3 ]; then
         typewriter_echo "  1) Animal" 0.1
         typewriter_echo "  2) Plant" 0.1
         typewriter_echo "  3) Machine" 0.1 2
-        typewriter_echo "Your choice:"
         get_option "picked_type"
         linebreak
 
@@ -219,7 +227,6 @@ if [ "$stage" -le 3 ]; then
         typewriter_echo "  1) Big" 0.1
         typewriter_echo "  2) Medium" 0.1
         typewriter_echo "  3) Small" 0.1 2
-        typewriter_echo "Your choice:"
         get_option "picked_size"
         linebreak
 
@@ -252,8 +259,7 @@ if [ "$stage" -le 3 ]; then
     done
 
     typewriter_echo "I'm good at remembering and combining things." 0.5
-    typewriter_echo "But, I need humans to help me make new things." 2 2
-    #typewriter_echo "I'm even smarter when I can talk to other computers on the Internet." 0.5 0
+    typewriter_echo "But, I need humans to help me make new things." 1 2
 
     clear
 
@@ -262,7 +268,7 @@ fi
 
 # Startx
 if [ "$stage" -le 4 ]; then
-    typewriter_echo "Uhoh..." 2
+    typewriter_echo "  Uhoh..." 2
     while true; do
         python -B $res_dir/bomb.py "$username"
         rv=$?
