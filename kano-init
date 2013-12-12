@@ -92,6 +92,18 @@ function get_username
     fi
 }
 
+function create_user
+{
+
+    USER_PASSWORD="kano"
+    USER_GROUPS="adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input"
+
+    # Create the new user
+    useradd -m -u 1000 -s /bin/bash "$1" 2>/dev/null
+    echo "$1:$USER_PASSWORD" | chpasswd 2>/dev/null
+    usermod -G "$USER_GROUPS" $username 2>/dev/null
+}
+
 # Check for root priviledges.
 if [ `id -u` -ne 0 ]; then
     echo "Error: kano-init must be executed with root privileges" 1>&2
@@ -164,13 +176,7 @@ if [ "$stage" -le 1 ]; then
         fi
     done
 
-    USER_PASSWORD="kano"
-    USER_GROUPS="adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input"
-
-    # Create the new user
-    useradd -m -u 1000 -s /bin/bash "$username" 2>/dev/null
-    echo "$username:$USER_PASSWORD" | chpasswd 2>/dev/null
-    usermod -G "$USER_GROUPS" $username 2>/dev/null
+    create_user "$username"
 
     set_autostart_stage 2
 else
@@ -281,6 +287,18 @@ if [ "$stage" -le 4 ]; then
             break
         fi
     done
+fi
+
+# Try creating the user again if the first time failed.
+created_user=`get_username`
+if [ -z "$created_user" ]; then
+    create_user "$username"
+
+    # If that failed then try creating the Kano user
+    created_user=`get_username`
+    if [ -z "$created_user" ]; then
+        create_user "Kano"
+    fi
 fi
 
 # Setup automatic login for this user on any subsequent reboot
