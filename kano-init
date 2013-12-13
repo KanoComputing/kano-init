@@ -297,6 +297,7 @@ if [ -z "$created_user" ]; then
     created_user=`get_username`
     if [ -z "$created_user" ]; then
         create_user "Kano"
+        username="Kano"
     fi
 fi
 
