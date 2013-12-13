@@ -94,7 +94,6 @@ function get_username
 
 function create_user
 {
-
     USER_PASSWORD="kano"
     USER_GROUPS="adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input"
 
