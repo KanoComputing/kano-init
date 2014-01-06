@@ -296,8 +296,8 @@ if [ -z "$created_user" ]; then
     # If that failed then try creating the Kano user
     created_user=`get_username`
     if [ -z "$created_user" ]; then
-        create_user "Kano"
         username="Kano"
+        create_user "$username"
     fi
 fi
 
