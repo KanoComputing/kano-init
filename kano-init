@@ -170,6 +170,8 @@ if [ "$stage" -le 1 ]; then
         elif [ -n "`grep "^$username\:" /etc/passwd`" ] && \
              [ ! "$username" == "$old_user" ]; then
             typewriter_echo "This one is already taken! Try again:"
+        elif [ ${#username} -gt 25 ]; then
+            typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again:"
         else
             break
         fi
