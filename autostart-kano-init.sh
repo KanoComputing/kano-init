@@ -7,9 +7,10 @@
 #
 # 0: Disabled
 # 1: Name
-# 2: Email
-# 3: Rabbit
-# 4: Bomb
+# 2: Country
+# 3: Email
+# 4: Rabbit
+# 5: Bomb
 
 STAGE=0
 
