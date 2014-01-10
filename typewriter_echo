@@ -15,6 +15,11 @@ function rand_wait
     echo "0$rv"
 }
 
+function clean_stdin
+{
+    read -t 1 -n 10000 discard
+}
+
 # params:
 #   $1: Sring to be printed
 #   $2: Wait time at the end of the line (optional)
@@ -59,5 +64,6 @@ stty -echo
 
 typewriter_echo "$1" "$2" "$3"
 
-# Enable terminal echo again
+# Clean input and enable terminal echo again
+clean_stdin
 stty $stty_orig
