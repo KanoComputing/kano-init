@@ -15,22 +15,63 @@ function rand_wait
     echo "0$rv"
 }
 
+function clean_stdin
+{
+    read -t 1 -n 10000 discard
+}
+
+# params:
+#   $1: Number of characters to use to pad
+function add_character_padding
+{
+    for i in `seq 1 $1`;
+        do
+            echo -n " "
+        done
+}
+
+function add_line_padding
+{
+    line_padding="1"
+    if [ -n "$1" ]; then
+        line_padding="$1"
+    fi
+
+    for n in `seq 1 $line_padding`; do
+        linebreak
+    done
+}
+
+function linebreak
+{
+    echo -ne "\n"
+}
+
 # params:
 #   $1: Sring to be printed
 #   $2: Wait time at the end of the line (optional)
 #   $3: Number of line breaks at the end (optional)
+#   $4: Number of characters to pad at the start of the line (optional)
+#   $5: Number of line breaks at the start (optional)
 function typewriter_echo
 {
     string="$1"
+
+    add_line_padding "$5"
+
+    if [ -n "$4" ]; then
+        add_character_padding $4
+    fi
+
     while test -n "$string"; do
         c=${string:0:1}
         echo -ne "$c"
         if [ "$c" == " " ]; then
-            sleep 0.07
+            sleep 0.06
         elif [ "$c" == "." ] || [ "$c" == "?" ]; then
-            sleep 0.05
+            sleep 0.04
         else
-            sleep 0.05
+            sleep 0.04
         fi
         string=${string:1}
     done
@@ -39,14 +80,7 @@ function typewriter_echo
         sleep `bc <<<"scale=4; ($2 / 4) * 3"`
     fi
 
-    line_size="1"
-    if [ -n "$3" ]; then
-        line_size="$3"
-    fi
-
-    for n in `seq 1 $line_size`; do
-        echo -ne "\n"
-    done
+    add_line_padding "$3"
 
     if [ -n "$2" ]; then
         sleep `bc <<<"scale=4; ($2 / 4)"`
@@ -57,7 +91,8 @@ function typewriter_echo
 stty_orig=`stty -g`
 stty -echo
 
-typewriter_echo "$1" "$2" "$3"
+typewriter_echo "$1" "$2" "$3" "$4" "$5"
 
-# Enable terminal echo again
+# Clean input and enable terminal echo again
+clean_stdin
 stty $stty_orig
