@@ -21,12 +21,28 @@ function clean_stdin
 }
 
 # params:
+#   $1: Number of characters to use to pad
+function add_padding
+{
+    for i in `seq 1 $1`;
+        do
+            echo -n " "
+        done
+}
+
+# params:
 #   $1: Sring to be printed
 #   $2: Wait time at the end of the line (optional)
 #   $3: Number of line breaks at the end (optional)
+#   $4: Number of characters to pad at the start of the line (optional)
 function typewriter_echo
 {
     string="$1"
+
+    if [ -n "$4" ]; then
+        add_padding $4
+    fi
+
     while test -n "$string"; do
         c=${string:0:1}
         echo -ne "$c"
@@ -62,7 +78,7 @@ function typewriter_echo
 stty_orig=`stty -g`
 stty -echo
 
-typewriter_echo "$1" "$2" "$3"
+typewriter_echo "$1" "$2" "$3" "$4"
 
 # Clean input and enable terminal echo again
 clean_stdin
