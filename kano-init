@@ -7,10 +7,9 @@
 #
 # A fun console script to set up Kanux
 # 1) User name
-# 2) User country
-# 3) User email
-# 4) White rabbit riddle
-# 5) Startx
+# 2) User email
+# 3) White rabbit riddle
+# 4) Startx
 #
 
 function usage
@@ -143,7 +142,7 @@ fi
 
 stage=1
 if [ -n "$1" ]; then
-    if [ -n "`grep [12345] <<<"$1"`" ]; then
+    if [ -n "`grep [1234] <<<"$1"`" ]; then
         stage="$1"
     else
         echo "Error: Unknown parameter '$1'"
@@ -184,16 +183,8 @@ else
     username="$old_user"
 fi
 
-# Request country and set keyboard
-if [ "$stage" -le 2 ]; then
-    # Call kano-keyboard with a parameter
-    python /usr/bin/kano-keyboard "boot"
-
-    set_autostart_stage 3
-fi
-
 # Request user email and store it temporarily
-if [ "$stage" -le 3 ]; then
+if [ "$stage" -le 2 ]; then
     # Read the email
     linebreak
     typewriter_echo "Want to save your badges and games? Type your email address." 0 1
@@ -219,12 +210,12 @@ if [ "$stage" -le 3 ]; then
 
     clear
 
-    set_autostart_stage 4
+    set_autostart_stage 3
 fi
 
 # White rabbit riddle
 numFails=0
-if [ "$stage" -le 4 ]; then
+if [ "$stage" -le 3 ]; then
     echo -ne "\n"
     typewriter_echo "$username, follow the white rabbit... " 0.5 1
     typewriter_echo "He's hiding somewhere on the computer. Can you find him?" 0 2
@@ -277,11 +268,11 @@ if [ "$stage" -le 4 ]; then
 
     clear
 
-    set_autostart_stage 5
+    set_autostart_stage 4
 fi
 
 # Startx
-if [ "$stage" -le 5 ]; then
+if [ "$stage" -le 4 ]; then
     typewriter_echo "  Uhoh..." 2
     while true; do
         python -B $res_dir/bomb.py "$username"
