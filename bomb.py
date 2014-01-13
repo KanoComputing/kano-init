@@ -19,6 +19,17 @@ keypos = 0
 l = Lock()
 
 
+def draw_fn(screen, x, y, msg, color=None):
+    try:
+        if color is None:
+            screen.addstr(y, x, msg)
+        else:
+            screen.addstr(y, x, msg, color)
+    except:
+        exit_curses(screen)
+        sys.exit(0)
+
+
 def user_input(cursorx, cursory):
     """
         Runs as a background thread to capture user input.
@@ -115,7 +126,7 @@ def draw_frame(frame, screen, x, y):
     n = 0
     for line in frame:
         with l:
-            screen.addstr(y + n, x, line)
+            draw_fn(screen, y + n, x, line)
         n += 1
 
 
@@ -142,13 +153,21 @@ def blink(screen, duration, interval):
     for n in range(0, repeats):
         for y in range(0, h):
             with l:
-                screen.addstr(y, 0, " " * (w - 1), curses.color_pair(colour))
+                draw_fn(screen, y, 0, " " * (w - 1), curses.color_pair(colour))
 
         with l:
             screen.refresh()
 
         colour = 2 if colour == 1 else 1
         time.sleep(interval)
+
+
+def exit_curses(screen):
+    curses.curs_set(2)
+    screen.keypad(0)
+    curses.echo()
+    curses.nocbreak()
+    curses.endwin()
 
 
 def main(screen, username):
@@ -193,7 +212,7 @@ def main(screen, username):
     draw_frame(bomb[0], screen, startx, starty)
 
     with l:
-        screen.addstr(msgy, msgx, msg)
+        draw_fn(screen, msgy, msgx, msg)
 
     cycle = 0
     spark_frame = 0
@@ -239,14 +258,9 @@ if __name__ == "__main__":
     user = "buddy"
     if len(sys.argv) > 1:
         user = sys.argv[1]
-
     try:
         status = main(screen, user)
     finally:
-        curses.curs_set(2)
-        screen.keypad(0)
-        curses.echo()
-        curses.nocbreak()
-        curses.endwin()
+        exit_curses(screen)
 
     sys.exit(status)
