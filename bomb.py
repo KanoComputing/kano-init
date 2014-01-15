@@ -13,13 +13,14 @@ import time
 import curses
 from threading import Thread, Lock
 
+screen = None
 key = "startx"
 keypos = 0
 
 l = Lock()
 
 
-def draw_fn(screen, x, y, msg, color=None):
+def draw_fn(y, x, msg, color=None):
     try:
         if color is None:
             screen.addstr(y, x, msg)
@@ -116,7 +117,7 @@ def animation_height(animation):
     return height
 
 
-def draw_frame(frame, screen, x, y):
+def draw_frame(frame, x, y):
     """
         Draw a sigle frame to a curses screen
 
@@ -126,11 +127,11 @@ def draw_frame(frame, screen, x, y):
     n = 0
     for line in frame:
         with l:
-            draw_fn(screen, y + n, x, line)
+            draw_fn(y + n, x, line)
         n += 1
 
 
-def blink(screen, duration, interval):
+def blink(duration, interval):
     """
         Blink the screen
 
@@ -153,7 +154,7 @@ def blink(screen, duration, interval):
     for n in range(0, repeats):
         for y in range(0, h):
             with l:
-                draw_fn(screen, y, 0, " " * (w - 1), curses.color_pair(colour))
+                draw_fn(y, 0, " " * (w - 1), curses.color_pair(colour))
 
         with l:
             screen.refresh()
@@ -162,15 +163,7 @@ def blink(screen, duration, interval):
         time.sleep(interval)
 
 
-def exit_curses(screen):
-    curses.curs_set(2)
-    screen.keypad(0)
-    curses.echo()
-    curses.nocbreak()
-    curses.endwin()
-
-
-def main(screen, username):
+def main(username):
     res_dir = "."
     if not os.path.isdir("ascii_art"):
         res_dir = "/usr/share/kano-init"
@@ -209,10 +202,10 @@ def main(screen, username):
     t.start()
 
     # initialize the bomb
-    draw_frame(bomb[0], screen, startx, starty)
+    draw_frame(bomb[0], startx, starty)
 
     with l:
-        draw_fn(screen, msgy, msgx, msg)
+        draw_fn(msgy, msgx, msg)
 
     cycle = 0
     spark_frame = 0
@@ -220,16 +213,16 @@ def main(screen, username):
     while True:
         # animate the countdown
         if cycle % 8 == 0:
-            draw_frame(numbers[numbers_frame], screen,
+            draw_frame(numbers[numbers_frame],
                        startx + 10 + bomb_w, starty + (bomb_h / 2) + 4)
 
             numbers_frame += 1
             if numbers_frame >= len(numbers):
-                blink(screen, 1.0, 0.08)
+                blink(1.0, 0.08)
                 return 1
 
         # animate the spark
-        draw_frame(spark[spark_frame], screen, startx, starty)
+        draw_frame(spark[spark_frame], startx, starty)
 
         spark_frame += 1
         if spark_frame >= len(spark):
@@ -249,18 +242,32 @@ def main(screen, username):
     return 0
 
 
-if __name__ == "__main__":
+def init_curses():
+    global screen
+
     screen = curses.initscr()
     curses.noecho()
     curses.cbreak()
     screen.keypad(1)
 
+
+def exit_curses():
+    curses.curs_set(2)
+    screen.keypad(0)
+    curses.echo()
+    curses.nocbreak()
+    curses.endwin()
+
+    
+if __name__ == "__main__":
+    
+    init_curses()
     user = "buddy"
     if len(sys.argv) > 1:
         user = sys.argv[1]
     try:
-        status = main(screen, user)
+        status = main(user)
     finally:
-        exit_curses(screen)
+        exit_curses()
 
     sys.exit(status)
