@@ -165,27 +165,27 @@ fi
 clear
 sleep 1
 
-whitespace=`add_character_padding 5`
+whitespace=`add_character_padding 3`
 
 # Request user name and create user
 if [ "$stage" -le 1 ]; then
     typewriter_echo "Hello!" 0 1 1 1 1
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
-    typewriter_echo "What should I call you?" 0 1 1 1
+    typewriter_echo "What should I call you?" 0 1 0 1
 
     # Read the username
     while true; do
         clean_stdin
-        read -p "Your name:" -e username
+        read -p "Your name: " -e username
         if [ -z "$username" ]; then
-            typewriter_echo "Type a cool name:" 0 1 1 1
+            typewriter_echo "Type a cool name." 0 1 1 1
         elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
-            typewriter_echo "Just one word, letters or numbers! Try again:" 0 1 1 1
+            typewriter_echo "Just one word, letters or numbers! Try again." 0 1 1 1
         elif [ -n "`grep "^$username\:" /etc/passwd`" ] && \
              [ ! "$username" == "$old_user" ]; then
-            typewriter_echo "This one is already taken! Try again:" 0 1 1 1
+            typewriter_echo "This one is already taken! Try again." 0 1 1 1
         elif [ ${#username} -gt 25 ]; then
-             typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again:" 0 1 1 1
+             typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 1 1
         else
             break
         fi
@@ -195,7 +195,7 @@ if [ "$stage" -le 1 ]; then
 
     set_autostart_stage 2
 else
-    typewriter_echo "Where was I? All right, I remember!" 0.5 2 1 0 1
+    typewriter_echo "Where was I? All right, I remember!" 0.5 1 1 0 1
     username="$old_user"
 fi
 
@@ -204,7 +204,7 @@ if [ "$stage" -le 2 ]; then
     # Read the email
     linebreak
     typewriter_echo "Want to save your badges and games? Type your email address." 0 1 1 1
-    typewriter_echo "Or just press [ENTER] to continue." 0 2 1 1
+    typewriter_echo "Or just press [ENTER] to continue." 0 2 0 1
     while true; do
         clean_stdin
         read -p "Your email:" -e email
@@ -213,7 +213,7 @@ if [ "$stage" -le 2 ]; then
         elif [ -z "`egrep "[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_.-]" <<<"$email"`" ]; then
             linebreak
             typewriter_echo "That doesn't look like a valid email address." 0 1 1 1
-            typewriter_echo "Try again or just press [ENTER] to continue." 0 2
+            typewriter_echo "Try again or just press [ENTER] to continue." 0 2 0 1
         else
             # Store the email in a temporary file
             echo $email > /home/$username/.email
@@ -275,7 +275,6 @@ if [ "$stage" -le 3 ]; then
                 2) typewriter_echo "I'll give you another hint, it's got big ears..." 0.5 3 1 1 ;;
                 *) typewriter_echo "It's a small animal, I think..." 0.5 3 1 1 ;;
             esac
-            linebreak
         fi
     done
 
