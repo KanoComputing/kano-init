@@ -49,12 +49,13 @@ function linebreak
 #   $2: Wait time at the end of the line (optional)
 #   $3: Number of line breaks at the end (optional)
 #   $4: Whether there is padding at the start of the line (1 or 0) (optional)
-#   $5:Whether there is padding at the start of the next line (1 or 0) (optional)
+#   $5: Whether there is padding at the start of the next line (1 or 0) (optional)
 #   $6: Number of line breaks at the start (optional)
 function typewriter_echo
 {
     string="$1"
 
+    # Amount of whitespace at used for padding
     whitespace=`add_character_padding 3`
 
     if [ -n "$6" ]; then
