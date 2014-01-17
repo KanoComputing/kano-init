@@ -207,7 +207,7 @@ if [ "$stage" -le 2 ]; then
     typewriter_echo "Or just press [ENTER] to continue." 0 2 0 1
     while true; do
         clean_stdin
-        read -p "Your email:" -e email
+        read -p "Your email: " -e email
         if [ -z "$email" ]; then
             break
         elif [ -z "`egrep "[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_.-]" <<<"$email"`" ]; then
