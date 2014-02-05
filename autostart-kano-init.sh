@@ -5,11 +5,12 @@
 # Copyright (C) 2014 Kano Computing Ltd.
 # License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
-# 0: Disabled
-# 1: Name
-# 2: Email
-# 4: Riddle
-# 9: Reset
+# stages:
+# 1) User name
+# 2) User email
+# 3) White rabbit riddle
+# 4) Startx
+# 9) Reset
 
 STAGE=0
 
