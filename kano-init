@@ -2,7 +2,7 @@
 
 # kano-init
 #
-# Copyright (C) 2013 Kano Computing Ltd.
+# Copyright (C) 2014 Kano Computing Ltd.
 # License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 # A fun console script to set up Kanux
@@ -10,7 +10,7 @@
 # 2) User email
 # 3) White rabbit riddle
 # 4) Startx
-#
+# 9) Reset
 
 function usage
 {
@@ -35,16 +35,27 @@ function linebreak
     echo -ne "\n"
 }
 
-
-function set_autologin_user
+function set_autologin_console
 {
-    # Set autologin in console
-    sed -i "s/\(1:2345:respawn:\).\+\$/\1\/sbin\/getty -n -o'-f $1' 38400 tty1/" \
-        /etc/inittab
+    sed -r -i.bak "s|^(1:2345:respawn:/sbin/getty).+|\1 -n -o'-f $1' 38400 tty1|" /etc/inittab
     init q
+}
 
+function disable_autologin_console
+{
+    sed -r -i.bak "s|^(1:2345:respawn:/sbin/getty).+|\1 38400 tty1|" /etc/inittab
+    init q
+}
+
+function set_autologin_gui
+{
     # Set autologin in lightdm
     /usr/lib/arm-linux-gnueabihf/lightdm/lightdm-set-defaults --autologin "$1"
+}
+
+function disable_autologin_gui
+{
+    sed -i.bak '/^autologin-user/d' /etc/lightdm/lightdm.conf
 }
 
 function enable_lxde_autostart
@@ -64,11 +75,6 @@ function set_autostart_stage
     sed -i "s/^\(STAGE\=\)[0-9]$/\1$1/" /etc/profile.d/autostart-kano-init.sh
 }
 
-function disable_autostart
-{
-    sed -i "s/^\(STAGE\=\)[0-9]$/\10/" /etc/profile.d/autostart-kano-init.sh
-}
-
 function get_option
 {
     while true; do
@@ -85,25 +91,6 @@ function get_option
     done
 }
 
-function get_username
-{
-    un=`grep "^[^:]*:[^:]*:1000:1000" /etc/passwd | awk -F ':' '{ print $1 }'`
-    if [ -n "$un" ]; then
-        echo "$un"
-    fi
-}
-
-function create_user
-{
-    USER_PASSWORD="kano"
-    USER_GROUPS="adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input"
-
-    # Create the new user
-    useradd -m -u 1000 -s /bin/bash "$1" 2>/dev/null
-    echo "$1:$USER_PASSWORD" | chpasswd 2>/dev/null
-    usermod -G "$USER_GROUPS" $username 2>/dev/null
-}
-
 # params:
 #   $1: Number of characters to use to pad
 function add_character_padding
@@ -115,6 +102,41 @@ function add_character_padding
     echo "${string}"
 }
 
+# new user kano-init setup
+function newuser
+{
+    set_autologin_console "root"
+    set_autostart_stage 1
+    disable_lxde_autostart
+    echo "kano-init scheduled for the next system reboot"
+}
+
+# setting up single-user / multiple-user mode
+function singlemulti 
+{
+    number_of_users=`kano-usertools number`
+
+    if [ $number_of_users -eq 0 ]; then
+        echo "no KANO users found"
+        newuser
+
+    elif [ $number_of_users -eq 1 ]; then
+        echo "single user mode"
+        username=`kano-usertools firstuser`
+        set_autologin_console "$username"
+        set_autologin_gui "$username"
+        enable_lxde_autostart
+
+    else
+        echo "multiuser mode"
+        disable_autologin_console
+        disable_autologin_gui
+        enable_lxde_autostart
+fi
+}
+
+# start
+
 # Check for root priviledges.
 if [ `id -u` -ne 0 ]; then
     echo "Error: kano-init must be executed with root privileges" 1>&2
@@ -125,16 +147,6 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     usage 0
 fi
 
-# Special case: With the 'autostart' argument, kano-init will set up
-# to be executed during the next reboot
-if [ "$1" == "reset" ]; then
-    set_autologin_user "root"
-    set_autostart_stage 1
-    disable_lxde_autostart
-    echo "kano-init scheduled for the next system reboot"
-    exit 0
-fi
-
 # Get the resources directory
 if [ -d "ascii_art" ]; then
     res_dir="."
@@ -142,19 +154,35 @@ else
     res_dir="/usr/share/kano-init/"
 fi
 
+# add new user mode
+if [ "$1" == "newuser" ]; then
+    newuser
+    exit 0
+fi
+
+# single-multi user autoconfig
+if [ "$1" == "singlemulti" ]; then
+    singlemulti
+    exit 0
+fi
+
+# reset: delete all users and trigger init
+if [ "$1" == "reset" ]; then
+    set_autologin_console "root"
+    set_autostart_stage 9
+    disable_lxde_autostart
+    echo "kano-init RESET scheduled for the next system reboot"
+    exit 0
+fi
+
 # Disable Ctrl+C and Ctrl+D in the console
 stty intr undef
 stty eof '?'
 
-# Remove the user with UID=1000 if it exists
-old_user=`get_username`
-if [ -n "$old_user" ]; then
-    userdel -r "$old_user" >/dev/null 2>/dev/null
-fi
-
+# checking parameters
 stage=1
 if [ -n "$1" ]; then
-    if [ -n "`grep [1234] <<<"$1"`" ]; then
+    if [ -n "`grep [12349] <<<"$1"`" ]; then
         stage="$1"
     else
         echo "Error: Unknown parameter '$1'"
@@ -167,8 +195,22 @@ sleep 1
 
 whitespace=`add_character_padding 3`
 
+
+
+# reset
+if [ "$stage" -eq 9 ]; then
+    kano-usertools deleteallusers
+    set_autostart_stage 1
+    stage=1
+fi
+
+
+
+# name
+
 # Request user name and create user
-if [ "$stage" -le 1 ]; then
+
+if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     typewriter_echo "Hello!" 0 1 1 1 1
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
     typewriter_echo "What should I call you?" 0 1 0 1
@@ -177,27 +219,41 @@ if [ "$stage" -le 1 ]; then
     while true; do
         clean_stdin
         read -p "Your name: " -e username
+
+        # username empty
         if [ -z "$username" ]; then
             typewriter_echo "Type a cool name." 0 1 1 1
+
+        # invalid characters    
         elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
             typewriter_echo "Just one word, letters or numbers! Try again." 0 1 1 1
-        elif [ -n "`grep "^$username\:" /etc/passwd`" ] && \
-             [ ! "$username" == "$old_user" ]; then
+
+        # already taken    
+        elif [ -n "`grep "^$username\:" /etc/passwd`" ]; then
             typewriter_echo "This one is already taken! Try again." 0 1 1 1
+
+        # too long
         elif [ ${#username} -gt 25 ]; then
              typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 1 1
+
+        # OK     
         else
             break
         fi
+        
     done
 
-    create_user "$username"
+    # save username to temp file
+    `kano-usertools savename $username`
 
     set_autostart_stage 2
 else
-    typewriter_echo "Where was I? All right, I remember!" 0.5 1 1 0 1
-    username="$old_user"
+    username=`kano-usertools loadname`
+    typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 1
 fi
+
+
+# email
 
 # Request user email and store it temporarily
 if [ "$stage" -le 2 ]; then
@@ -215,10 +271,8 @@ if [ "$stage" -le 2 ]; then
             typewriter_echo "That doesn't look like a valid email address." 0 1 1 1
             typewriter_echo "Try again or just press [ENTER] to continue." 0 2 0 1
         else
-            # Store the email in a temporary file
-            echo $email > /home/$username/.email
-            chown 1000:1000 /home/$username/.email
-            cp --preserve /home/$username/.email /home/$username/.useremail
+            # save email to temp file
+            `kano-usertools saveemail $email`
             typewriter_echo "Thank you!" 2 0 1
             break
         fi
@@ -227,7 +281,13 @@ if [ "$stage" -le 2 ]; then
     clear
 
     set_autostart_stage 3
+
+    # skip riddle and bomb
+    # stage=5
 fi
+
+
+# riddle
 
 # White rabbit riddle
 numFails=0
@@ -286,7 +346,23 @@ if [ "$stage" -le 3 ]; then
     set_autostart_stage 4
 fi
 
-# Startx
+
+
+# user creation
+
+# creating user
+kano-usertools createuser
+
+if [ $? -ne 0 ]; then
+    echo "Something happened with user creation"
+    exit 1
+fi
+
+
+
+# animation
+
+# startx
 if [ "$stage" -le 4 ]; then
     typewriter_echo "  Uhoh..." 2 0 1 0 1
     while true; do
@@ -303,23 +379,15 @@ if [ "$stage" -le 4 ]; then
     done
 fi
 
-# Try creating the user again if the first time failed.
-created_user=`get_username`
-if [ -z "$created_user" ]; then
-    create_user "$username"
 
-    # If that failed then try creating the Kano user
-    created_user=`get_username`
-    if [ -z "$created_user" ]; then
-        username="Kano"
-        create_user "$username"
-    fi
-fi
+# disable kano-init
+set_autostart_stage 0
 
-# Setup automatic login for this user on any subsequent reboot
-set_autologin_user "$username"
-enable_lxde_autostart
-disable_autostart
+singlemulti
+
+
+
+
 
 stty intr ^C
 stty eof ^D

@@ -3,3 +3,4 @@
 ./autostart-kano-init.sh /etc/profile.d
 ./ascii_art/*.txt /usr/share/kano-init/ascii_art/
 ./bomb.py /usr/share/kano-init/
+./kano-usertools /usr/bin
