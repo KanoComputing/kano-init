@@ -176,8 +176,8 @@ if [ "$1" == "reset" ]; then
 fi
 
 # Disable Ctrl+C and Ctrl+D in the console
-#stty intr undef
-#stty eof '?'
+stty intr undef
+stty eof '?'
 
 # checking parameters
 stage=1
@@ -283,7 +283,7 @@ if [ "$stage" -le 2 ]; then
     set_autostart_stage 3
 
     # skip riddle and bomb
-    stage=5
+    # stage=5
 fi
 
 
