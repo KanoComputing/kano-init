@@ -361,9 +361,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-
-
-# animation
+# disable kano-init
+set_autostart_stage 0
 
 # startx
 if [ "$stage" -le 4 ]; then
@@ -382,16 +381,10 @@ if [ "$stage" -le 4 ]; then
     done
 fi
 
-
-# disable kano-init
-set_autostart_stage 0
-
+# setting up single-multi user
 singlemulti
 
-
-
-
-
+# disabling Ctrl keys
 stty intr ^C
 stty eof ^D
 
