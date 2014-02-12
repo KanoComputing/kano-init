@@ -3,7 +3,7 @@
 # kano-init
 #
 # Copyright (C) 2014 Kano Computing Ltd.
-# License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 # A fun console script to set up Kanux
 # 1) User name
@@ -117,18 +117,15 @@ function singlemulti
     number_of_users=`kano-usertools number`
 
     if [ $number_of_users -eq 0 ]; then
-        echo "no KANO users found"
         newuser
 
     elif [ $number_of_users -eq 1 ]; then
-        echo "single user mode"
         username=`kano-usertools firstuser`
         set_autologin_console "$username"
         set_autologin_gui "$username"
         enable_lxde_autostart
 
     else
-        echo "multiuser mode"
         disable_autologin_console
         disable_autologin_gui
         enable_lxde_autostart
