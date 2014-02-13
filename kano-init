@@ -11,6 +11,7 @@
 # 3) White rabbit riddle
 # 4) Startx
 # 9) Reset
+#
 
 function usage
 {
@@ -133,7 +134,6 @@ fi
 }
 
 # start
-
 # Check for root priviledges.
 if [ `id -u` -ne 0 ]; then
     echo "Error: kano-init must be executed with root privileges" 1>&2
@@ -192,7 +192,6 @@ sleep 1
 
 whitespace=`add_character_padding 3`
 
-
 # reset
 if [ "$stage" -eq 9 ]; then
     kano-usertools deleteallusers
@@ -205,11 +204,7 @@ if [ `kano-usertools testname` -eq 0 ]; then
     stage=1
 fi
 
-
-# name
-
-# Request user name and create user
-
+# [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     typewriter_echo "Hello!" 0 1 1 1 1
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
@@ -223,26 +218,20 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
         # username empty
         if [ -z "$username" ]; then
             typewriter_echo "Type a cool name." 0 1 1 1
-
         # invalid characters    
         elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
             typewriter_echo "Just one word, letters or numbers! Try again." 0 1 1 1
-
         # already taken    
         elif [ -n "`grep "^$username\:" /etc/passwd`" ]; then
             typewriter_echo "This one is already taken! Try again." 0 1 1 1
-
         # too long
         elif [ ${#username} -gt 25 ]; then
              typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 1 1
-
         # OK     
         else
             break
         fi
-        
     done
-
     # save username to temp file
     `kano-usertools savename $username`
 
@@ -252,10 +241,7 @@ else
     typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 1
 fi
 
-
-# email
-
-# Request user email and store it temporarily
+# [Stage 2] Email: Request user email and store it temporarily
 if [ "$stage" -le 2 ]; then
     # Read the email
     linebreak
@@ -277,19 +263,11 @@ if [ "$stage" -le 2 ]; then
             break
         fi
     done
-
     clear
-
     set_autostart_stage 3
-
-    # skip riddle and bomb
-    # stage=5
 fi
 
-
-# riddle
-
-# White rabbit riddle
+# [Stage 3] Riddle: White rabbit riddle
 numFails=0
 if [ "$stage" -le 3 ]; then
     echo -ne "\n"
@@ -346,13 +324,8 @@ if [ "$stage" -le 3 ]; then
     set_autostart_stage 4
 fi
 
-
-
-# user creation
-
 # creating user
 kano-usertools createuser
-
 if [ $? -ne 0 ]; then
     echo "Something happened with user creation"
     exit 1

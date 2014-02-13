@@ -1,248 +1,250 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 # kano-usertools
 #
 # Copyright (C) 2014 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+
+import grp
+import pwd
+import sys
+import os
+import subprocess
+import shutil
+import json
 
 
-import grp, pwd, sys, os, subprocess, shutil, json
+def run(cmd):
+    return subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-def run( cmd ):
-	return subprocess.Popen( cmd, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
 
-def run_term_on_error( cmd ):
-	o,e = run( cmd )
-	if e:
-		print e
-		quit(1)
+def run_term_on_error(cmd):
+    o, e = run(cmd)
+    if e:
+        print e
+        quit(1)
 
-def delfile( filename ):
-	if os.path.exists( filename ):
-		os.remove( filename )
 
-def userexists( username ):
-	pwdall = pwd.getpwall()
-	names = [ u.pw_name for u in pwdall ]
-	return username in names
+def delfile(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
+
+
+def userexists(username):
+    pwdall = pwd.getpwall()
+    names = [u.pw_name for u in pwdall]
+    return username in names
+
 
 def get_new_kanouser_id():
-	users = pwd.getpwall()
-	uids = []
-	for u in users:
-		uids.append( u.pw_uid )
-	i = 1000
-	while i in uids:
-		i += 1	
-	return i		
+    users = pwd.getpwall()
+    uids = []
+    for u in users:
+        uids.append(u.pw_uid)
+    i = 1000
+    while i in uids:
+        i += 1
+    return i
 
-# start 
 
+# start
 tempfile = "/var/tmp/newuser"
-givencommand = ' '.join( sys.argv )
-kanogrp = grp.getgrnam( 'kanousers' )
+givencommand = ' '.join(sys.argv)
+kanogrp = grp.getgrnam('kanousers')
 kanomembers = kanogrp.gr_mem
 
 # check for wrong usage
-if len( sys.argv ) == 1:
-	print "wrong usage", givencommand
-	quit(1)
+if len(sys.argv) == 1:
+    print "wrong usage", givencommand
+    quit(1)
 
 # get kano user names
 if sys.argv[1] == 'names':
-	print ' '.join( kanomembers )
-
+    print ' '.join(kanomembers)
 # get number of kano users
 elif sys.argv[1] == 'number':
-	print len( kanomembers )
-
+    print len(kanomembers)
 # get first user's name
 elif sys.argv[1] == 'firstuser':
-	print kanomembers[0]
-
+    print kanomembers[0]
 # save new user's name
 elif sys.argv[1] == "savename":
 	
-	if len( sys.argv ) != 3:
-		print "wrong usage", givencommand
-		quit(1)
+    if len(sys.argv) != 3:
+        print "wrong usage", givencommand
+        quit(1)
 
-	delfile( tempfile )
-	data = {}
-	name = sys.argv[2]
-	data['name'] = name
+    delfile(tempfile)
+    data = {}
+    name = sys.argv[2]
+    data['name'] = name
 	
-	fout = json.dumps( data )
-	w = open( tempfile, 'w' )
-	w.write( fout )
-	w.close()
-
+    fout = json.dumps(data)
+    w = open(tempfile, 'w')
+    w.write(fout)
+    w.close()
 # load new user's name
 elif sys.argv[1] == "loadname":
-	
-	if len( sys.argv ) != 2:
-		print "wrong usage", givencommand
-		quit(1)
 
-	fin = open( tempfile ).read()
-	data = json.loads( fin )
-	print data['name']
+    if len(sys.argv) != 2:
+        print "wrong usage", givencommand
+        quit(1)
 
+    fin = open(tempfile).read()
+    data = json.loads(fin)
+    print data['name']
 # load new user's name
 elif sys.argv[1] == "testname":
-	
-	if len( sys.argv ) != 2:
-		print "wrong usage", givencommand
-		quit(1)
 
-	json_ok = True
-	try:
-		fin = open( tempfile ).read()
-		data = json.loads( fin )
-	except IOError, e:
-   		json_ok = False
-	except ValueError, e:
-   		json_ok = False
+    if len(sys.argv) != 2:
+        print "wrong usage", givencommand
+        quit(1)
 
-	returncode = int( json_ok and data.has_key( 'name' ) )
-	print( returncode )
+    json_ok = True
+    try:
+        fin = open(tempfile).read()
+        data = json.loads(fin)
+    except IOError, e:
+        json_ok = False
+    except ValueError, e:
+        json_ok = False
 
+    returncode = int(json_ok and data.has_key('name'))
+    print(returncode)
 # save new user's email
 elif sys.argv[1] == "saveemail":
 	
-	if len( sys.argv ) != 3:
-		print "wrong usage", givencommand
-		quit(1)
+    if len(sys.argv) != 3:
+        print "wrong usage", givencommand
+        quit(1)
 
-	email = sys.argv[2]
-	fin = open( tempfile ).read()
-	data = json.loads( fin )
-	data['email'] = email
+    email = sys.argv[2]
+    fin = open(tempfile).read()
+    data = json.loads(fin)
+    data['email'] = email
 
-	fout = json.dumps( data )
-	w = open( tempfile, 'w' )
-	w.write( fout )
-	w.close()
-
+    fout = json.dumps(data)
+    w = open(tempfile, 'w')
+    w.write(fout)
+    w.close()
 # create new user
 elif sys.argv[1] == "createuser":
 	
-	if len( sys.argv ) != 2:
-		print "wrong usage", givencommand
-		quit(1)
+    if len(sys.argv) != 2:
+        print "wrong usage", givencommand
+        quit(1)
 
-	if not os.path.exists( tempfile ):
-		print "temp file doesn't exists"
-		quit(1)
+    if not os.path.exists(tempfile):
+        print "temp file doesn't exists"
+        quit(1)
 
-	fin = open( tempfile ).read()
-	data = json.loads( fin )
+    fin = open(tempfile).read()
+    data = json.loads(fin)
 
-	# username
-	username = data['name']
-	if userexists( username ):
-		print "user already exists!"
-		quit(1)
+    # username
+    username = data['name']
+    if userexists(username):
+        print "user already exists!"
+        quit(1)
 
-	# id
-	userid = get_new_kanouser_id()
-	
-	# start creating the user
-	USER_PASSWORD = "kano"
-	USER_GROUPS = "adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input,kanousers"
+    # id
+    userid = get_new_kanouser_id()
+    # start creating the user
+    USER_PASSWORD = "kano"
+    USER_GROUPS = "adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input,kanousers"
 
-	# Create the new user
-	home = '/home/' + username
-	home_bak = '/home/' + username + '.bak'
+    # Create the new user
+    home = '/home/' + username
+    home_bak = '/home/' + username + '.bak'
 
-	if os.path.exists( '/home/' + username ):
-		print "home folder exists, moving {} to {}".format( home, home_bak )
-		shutil.move( home, home_bak )
+    if os.path.exists('/home/' + username):
+        print "home folder exists, moving {} to {}".format(home, home_bak)
+        shutil.move(home, home_bak)
 
-	cmd = 'useradd -m -u {} -s /bin/bash {}'.format( userid, username )
-	run_term_on_error( cmd )
+    cmd = 'useradd -m -u {} -s /bin/bash {}'.format(userid, username)
+    run_term_on_error(cmd)
 
-	cmd = 'echo "{}:{}" | chpasswd'.format( username, USER_PASSWORD )
-	run_term_on_error( cmd )
+    cmd = 'echo "{}:{}" | chpasswd'.format(username, USER_PASSWORD)
+    run_term_on_error(cmd)
 
-	cmd = 'usermod -G "{}" {}'.format( USER_GROUPS, username )
-	run_term_on_error( cmd )
+    cmd = 'usermod -G "{}" {}'.format(USER_GROUPS, username)
+    run_term_on_error(cmd)
 
-	# email
-	if data.has_key( 'email' ):
-		useremail = data['email']
+    # email
+    if data.has_key('email'):
+        useremail = data['email']
 
-		cmd = 'echo {} > /home/{}/.email'.format( useremail, username )
-		run( cmd )
+        cmd = 'echo {} > /home/{}/.email'.format(useremail, username)
+        run(cmd)
 
-		cmd = 'chown {}:{} /home/{}/.email'.format( userid, userid, username )
-		run( cmd )
+        cmd = 'chown {}:{} /home/{}/.email'.format(userid, userid, username)
+        run(cmd)
 
-		cmd = 'cp --preserve /home/{}/.email /home/{}/.useremail'.format( username, username )
-		run( cmd )
+        cmd = 'cp --preserve /home/{}/.email /home/{}/.useremail'.format(username, username)
+        run(cmd)
 
-	delfile( tempfile )
-
+    delfile(tempfile)
 # delete user
 elif sys.argv[1] == 'deleteuser':
 	
-	if not kanomembers:
-		print "No users to delete"
-		quit(1)
+    if not kanomembers:
+        print "No users to delete"
+        quit(1)
 
-	print 'users: ' +  ', '.join( kanomembers )
+    print 'users: ' + ', '.join(kanomembers)
 	
-	user = ''
-	while not user:
-		user = raw_input( 'Which user: ' )
-		if user not in kanomembers:
-			print "Sorry, you mistyped something, please try again!"
-			user = ''
+    user = ''
+    while not user:
+        user = raw_input('Which user: ')
+        if user not in kanomembers:
+            print "Sorry, you mistyped something, please try again!"
+            user = ''
 
-	# killing all process from user
-	cmd = 'killall -KILL -u {}'.format( user )
-	run( cmd )
+    # killing all process from user
+    cmd = 'killall -KILL -u {}'.format(user)
+    run(cmd)
 
-	deletehome = ''
-	if os.path.exists( '/home/' + user ):
-		while not deletehome:
-			deletehome = raw_input( "Do you also want to delete the user's home folder?\n"
-									"This includes all saved games and changes kept locally!\n"
-									"Y (yes) / N (no): " )
-			deletehome = deletehome.lower()
-			if deletehome not in [ 'y','n' ]:
-				print "Sorry, you mistyped something, please try again!"
-				deletehome = ''
+    deletehome = ''
+    if os.path.exists('/home/' + user):
+        while not deletehome:
+            deletehome = raw_input("Do you also want to delete the user's home folder?\n"
+                                   "This includes all saved games and changes kept locally!\n"
+                                   "Y (yes) / N (no): ")
+            deletehome = deletehome.lower()
+            if deletehome not in ['y', 'n']:
+                print "Sorry, you mistyped something, please try again!"
+                deletehome = ''
 	
-	if deletehome == 'y':
-		cmd = 'userdel -r {}'.format( user )
-	else:	
-		cmd = 'userdel {}'.format( user )
+    if deletehome == 'y':
+        cmd = 'userdel -r {}'.format(user)
+    else:
+        cmd = 'userdel {}'.format(user)
 
-	o,e = run( cmd )
-	if '/var/mail' not in e:
-			print e
+    o, e = run(cmd)
+    if '/var/mail' not in e:
+        print e
 
-	o,e = run( 'kano-init.sh singlemulti' )
-	print o,e
+    o, e = run('kano-init.sh singlemulti')
+    print o, e
 
 # deleting all users, needed for reset
 elif sys.argv[1] == 'deleteallusers':
 
-	for user in kanomembers:
-		# killing all process from user
-		cmd = 'killall -KILL -u {}'.format( user )
-		run( cmd )
+    for user in kanomembers:
+        # killing all process from user
+        cmd = 'killall -KILL -u {}'.format(user)
+        run(cmd)
 
-		# removing user and home folder
-		cmd = 'userdel -r {}'.format( user )
-		o,e = run( cmd )
-		if '/var/mail' not in e:
-			print e
+        # removing user and home folder
+        cmd = 'userdel -r {}'.format(user)
+        o, e = run(cmd)
+        if '/var/mail' not in e:
+            print e
 
-	run( 'rm -rf /home/*' )
+    run('rm -rf /home/*')
 
 # mistyped command
 else:
-	print "wrong usage", givencommand
-	quit(1)
+    print "wrong usage", givencommand
+    quit(1)
