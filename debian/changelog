@@ -1,3 +1,9 @@
+kano-init (1.0-40) unstable; urgency=low
+
+  * Package rebuilt, updated to revision 6dd288aa.
+
+ -- Team Kano <dev@kano.me>  Fri, 14 Feb 2014 21:00:33 +0000
+
 kano-init (1.0-39) unstable; urgency=low
 
   * Package rebuilt, updated to revision 191be3a0.
