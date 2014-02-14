@@ -48,11 +48,23 @@ def get_new_kanouser_id():
     return i
 
 
+# super-safe solution to make sure kanousers group always exists
+run('groupadd kanousers -f')
+
 # start
 tempfile = "/var/tmp/newuser"
 givencommand = ' '.join(sys.argv)
-kanogrp = grp.getgrnam('kanousers')
-kanomembers = kanogrp.gr_mem
+kanomembers = grp.getgrnam('kanousers').gr_mem
+
+# migrate from old environment, where kanouser was UID=1000
+try:
+    old_user = pwd.getpwuid(1000).pw_name
+    if old_user not in kanomembers:
+        # print old_user + " not in kano users, adding"
+        run('usermod -a -G kanousers {}'.format(old_user))
+        kanomembers = grp.getgrnam('kanousers').gr_mem
+except:
+    pass
 
 # check for wrong usage
 if len(sys.argv) == 1:
@@ -70,7 +82,7 @@ elif sys.argv[1] == 'firstuser':
     print kanomembers[0]
 # save new user's name
 elif sys.argv[1] == "savename":
-	
+
     if len(sys.argv) != 3:
         print "wrong usage", givencommand
         quit(1)
@@ -79,7 +91,7 @@ elif sys.argv[1] == "savename":
     data = {}
     name = sys.argv[2]
     data['name'] = name
-	
+
     fout = json.dumps(data)
     w = open(tempfile, 'w')
     w.write(fout)
@@ -114,7 +126,7 @@ elif sys.argv[1] == "testname":
     print(returncode)
 # save new user's email
 elif sys.argv[1] == "saveemail":
-	
+
     if len(sys.argv) != 3:
         print "wrong usage", givencommand
         quit(1)
@@ -130,7 +142,7 @@ elif sys.argv[1] == "saveemail":
     w.close()
 # create new user
 elif sys.argv[1] == "createuser":
-	
+
     if len(sys.argv) != 2:
         print "wrong usage", givencommand
         quit(1)
@@ -187,13 +199,13 @@ elif sys.argv[1] == "createuser":
     delfile(tempfile)
 # delete user
 elif sys.argv[1] == 'deleteuser':
-	
+
     if not kanomembers:
         print "No users to delete"
         quit(1)
 
     print 'users: ' + ', '.join(kanomembers)
-	
+
     user = ''
     while not user:
         user = raw_input('Which user: ')
@@ -215,7 +227,7 @@ elif sys.argv[1] == 'deleteuser':
             if deletehome not in ['y', 'n']:
                 print "Sorry, you mistyped something, please try again!"
                 deletehome = ''
-	
+
     if deletehome == 'y':
         cmd = 'userdel -r {}'.format(user)
     else:
