@@ -113,7 +113,7 @@ function newuser
 }
 
 # setting up single-user / multiple-user mode
-function singlemulti 
+function singlemulti
 {
     number_of_users=`kano-usertools number`
 
@@ -199,6 +199,7 @@ if [ "$stage" -eq 9 ]; then
     stage=1
 fi
 
+# test case for failed SD-card writing of temporary user name
 if [ `kano-usertools testname` -eq 0 ]; then
     set_autostart_stage 1
     stage=1
@@ -218,16 +219,16 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
         # username empty
         if [ -z "$username" ]; then
             typewriter_echo "Type a cool name." 0 1 1 1
-        # invalid characters    
+        # invalid characters
         elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
             typewriter_echo "Just one word, letters or numbers! Try again." 0 1 1 1
-        # already taken    
+        # already taken
         elif [ -n "`grep "^$username\:" /etc/passwd`" ]; then
             typewriter_echo "This one is already taken! Try again." 0 1 1 1
         # too long
         elif [ ${#username} -gt 25 ]; then
              typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 1 1
-        # OK     
+        # OK
         else
             break
         fi
@@ -331,6 +332,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# setting up single-multi user
+singlemulti
+
 # disable kano-init
 set_autostart_stage 0
 
@@ -350,9 +354,6 @@ if [ "$stage" -le 4 ]; then
         fi
     done
 fi
-
-# setting up single-multi user
-singlemulti
 
 # disabling Ctrl keys
 stty intr ^C

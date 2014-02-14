@@ -157,8 +157,7 @@ elif sys.argv[1] == "createuser":
     # username
     username = data['name']
     if userexists(username):
-        print "user already exists!"
-        quit(1)
+        quit(0)
 
     # id
     userid = get_new_kanouser_id()
