@@ -207,6 +207,7 @@ fi
 
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
+    clean_stdin
     typewriter_echo "Hello!" 0 1 1 1 1
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
     typewriter_echo "What should I call you?" 0 1 0 1
@@ -245,6 +246,7 @@ fi
 # [Stage 2] Email: Request user email and store it temporarily
 if [ "$stage" -le 2 ]; then
     # Read the email
+    clean_stdin
     linebreak
     typewriter_echo "Want to save your badges and games? Type your email address." 0 1 1 1
     typewriter_echo "Or just press [ENTER] to continue." 0 2 0 1
@@ -271,11 +273,13 @@ fi
 # [Stage 3] Riddle: White rabbit riddle
 numFails=0
 if [ "$stage" -le 3 ]; then
-    echo -ne "\n"
+    clean_stdin
+    linebreak
     typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
     typewriter_echo "He's hiding somewhere on the computer. Can you find him?" 0 2 0 1
 
     while true; do
+        clean_stdin
         typewriter_echo "Pick a type [1-3]:" 0.1 1 0 1
         typewriter_echo "  1) Animal" 0.1 1 0 1
         typewriter_echo "  2) Plant" 0.1 1 0 1
@@ -342,6 +346,7 @@ set_autostart_stage 0
 if [ "$stage" -le 4 ]; then
     typewriter_echo "  Uhoh..." 2 0 1 0 1
     while true; do
+        clean_stdin
         python -B $res_dir/bomb.py "$username"
         rv=$?
 
