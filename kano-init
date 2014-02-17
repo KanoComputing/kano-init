@@ -81,6 +81,7 @@ function get_option
     while true; do
         clean_stdin
         read -p "Your choice: " -e option
+        option=${option:0:1}
         eval "$1=\"$option\""
         if [ -z "$option" ]; then
             typewriter_echo "You need to choose one option. Which one do you pick:" 0 1 1 1
