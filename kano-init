@@ -15,12 +15,16 @@
 
 function usage
 {
-    echo "Usage: kano-init [stage|reset]"
+    echo "Usage: kano-init [stage|reset|newuser|singlemulti]"
     echo ""
-    echo "    stage     The stage to start the init procedure from."
-    echo "              Values from 1 to 5 are supported."
+    echo "    stage         The stage to start the init procedure from."
+    echo "                  Values from 1 to 4 are supported."
     echo ""
-    echo "    reset     Reset the kano-kit to it's initial state."
+    echo "    reset         Reset the kano-kit to it's initial state."
+    echo ""
+    echo "    newuser       Schedules a new user creation."
+    echo ""
+    echo "    singlemulti   Set autologin depending on number of users."
     echo ""
 
     exit "$1"
