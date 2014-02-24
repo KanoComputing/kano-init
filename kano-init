@@ -347,6 +347,9 @@ singlemulti
 # disable kano-init
 set_autostart_stage 0
 
+# flush disk cache to system disk
+sync
+
 # startx
 if [ "$stage" -le 4 ]; then
     typewriter_echo "  Uhoh..." 2 0 1 0 1
