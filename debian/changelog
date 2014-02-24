@@ -1,3 +1,15 @@
+kano-init (1.0-44) unstable; urgency=low
+
+  * Package rebuilt, updated to revision 0c172c6a.
+
+ -- Team Kano <dev@kano.me>  Mon, 24 Feb 2014 21:00:27 +0000
+
+kano-init (1.0-43) unstable; urgency=low
+
+  * Package rebuilt, updated to revision 8e4e6dae.
+
+ -- Team Kano <dev@kano.me>  Mon, 24 Feb 2014 17:50:35 +0000
+
 kano-init (1.0-42) unstable; urgency=low
 
   * Package rebuilt, updated to revision 334ee169.
