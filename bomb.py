@@ -2,10 +2,11 @@
 
 # bomb.py
 #
-# Copyright (C) 2013 Kano Computing Ltd.
-# License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# Copyright (C) 2014 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 # Startx exercise
+#
 
 import os
 import sys
@@ -202,7 +203,8 @@ def main(username):
     t.start()
 
     # initialize the bomb
-    draw_frame(bomb[0], startx, starty)
+    with l:
+        draw_frame(bomb[0], startx, starty)
 
     with l:
         draw_fn(msgy, msgx, msg)
