@@ -348,7 +348,9 @@ singlemulti
 set_autostart_stage 0
 
 # flush disk cache to system disk
-sync
+# TODO: this call takes far too long, although it is needed 
+# to avoid corruption, not sure if it is worthy
+# sync
 
 # startx
 if [ "$stage" -le 4 ]; then
