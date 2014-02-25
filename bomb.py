@@ -198,16 +198,17 @@ def main(username):
     cursorx = msgx + len(msg) / 2 - 3
     cursory = msgy + 2
 
+    # initialize the bomb
+    draw_frame(bomb[0], startx, starty)
+    with l:
+        draw_fn(msgy, msgx, msg)
+    # Avoids problems with the thread moving the cursor too early
+    time.sleep(0.5)
+
+    # Start the thread for the input functionality
     t = Thread(target=user_input, args=(cursorx, cursory))
     t.daemon = True
     t.start()
-
-    # initialize the bomb
-    with l:
-        draw_frame(bomb[0], startx, starty)
-
-    with l:
-        draw_fn(msgy, msgx, msg)
 
     cycle = 0
     spark_frame = 0
