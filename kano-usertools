@@ -74,12 +74,15 @@ if len(sys.argv) == 1:
 # get kano user names
 if sys.argv[1] == 'names':
     print ' '.join(kanomembers)
+
 # get number of kano users
 elif sys.argv[1] == 'number':
     print len(kanomembers)
+
 # get first user's name
 elif sys.argv[1] == 'firstuser':
     print kanomembers[0]
+
 # save new user's name
 elif sys.argv[1] == "savename":
 
@@ -96,6 +99,7 @@ elif sys.argv[1] == "savename":
     w = open(tempfile, 'w')
     w.write(fout)
     w.close()
+
 # load new user's name
 elif sys.argv[1] == "loadname":
 
@@ -106,6 +110,7 @@ elif sys.argv[1] == "loadname":
     fin = open(tempfile).read()
     data = json.loads(fin)
     print data['name']
+
 # load new user's name
 elif sys.argv[1] == "testname":
 
@@ -122,8 +127,9 @@ elif sys.argv[1] == "testname":
     except ValueError, e:
         json_ok = False
 
-    returncode = int(json_ok and data.has_key('name'))
+    returncode = int(json_ok and 'name' in data)
     print(returncode)
+
 # save new user's email
 elif sys.argv[1] == "saveemail":
 
@@ -140,6 +146,7 @@ elif sys.argv[1] == "saveemail":
     w = open(tempfile, 'w')
     w.write(fout)
     w.close()
+
 # create new user
 elif sys.argv[1] == "createuser":
 
@@ -183,7 +190,7 @@ elif sys.argv[1] == "createuser":
     run_term_on_error(cmd)
 
     # email
-    if data.has_key('email'):
+    if 'email' in data:
         useremail = data['email']
 
         cmd = 'echo {} > /home/{}/.email'.format(useremail, username)
@@ -196,6 +203,7 @@ elif sys.argv[1] == "createuser":
         run(cmd)
 
     delfile(tempfile)
+
 # delete user
 elif sys.argv[1] == 'deleteuser':
 
