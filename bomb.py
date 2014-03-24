@@ -28,7 +28,7 @@ def draw_fn(y, x, msg, color=None):
         else:
             screen.addstr(y, x, msg, color)
     except:
-        exit_curses(screen)
+        exit_curses()
         sys.exit(0)
 
 
