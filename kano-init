@@ -7,9 +7,8 @@
 #
 # A fun console script to set up Kanux
 # 1) User name
-# 2) User email
-# 3) White rabbit riddle
-# 4) Startx
+# 2) White rabbit riddle
+# 3) Startx
 # 9) Reset
 #
 
@@ -18,7 +17,7 @@ function usage
     echo "Usage: kano-init [stage|reset|newuser|singlemulti]"
     echo ""
     echo "    stage         The stage to start the init procedure from."
-    echo "                  Values from 1 to 4 are supported."
+    echo "                  Values from 1 to 3 are supported."
     echo ""
     echo "    reset         Reset the kano-kit to it's initial state."
     echo ""
@@ -184,7 +183,7 @@ stty eof '?'
 # checking parameters
 stage=1
 if [ -n "$1" ]; then
-    if [ -n "`grep [12349] <<<"$1"`" ]; then
+    if [ -n "`grep [1239] <<<"$1"`" ]; then
         stage="$1"
     else
         echo "Error: Unknown parameter '$1'"
@@ -248,36 +247,9 @@ else
     typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 1
 fi
 
-# [Stage 2] Email: Request user email and store it temporarily
-if [ "$stage" -le 2 ]; then
-    # Read the email
-    clean_stdin
-    linebreak
-    typewriter_echo "Want to save your badges and games? Type your email address." 0 1 1 1
-    typewriter_echo "Or just press [ENTER] to continue." 0 2 0 1
-    while true; do
-        clean_stdin
-        read -p "Your email: " -e email
-        if [ -z "$email" ]; then
-            break
-        elif [ -z "`egrep "[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_.-]" <<<"$email"`" ]; then
-            linebreak
-            typewriter_echo "That doesn't look like a valid email address." 0 1 1 1
-            typewriter_echo "Try again or just press [ENTER] to continue." 0 2 0 1
-        else
-            # save email to temp file
-            `kano-usertools saveemail $email`
-            typewriter_echo "Thank you!" 2 0 1
-            break
-        fi
-    done
-    clear
-    set_autostart_stage 3
-fi
-
-# [Stage 3] Riddle: White rabbit riddle
+# [Stage 2] Riddle: White rabbit riddle
 numFails=0
-if [ "$stage" -le 3 ]; then
+if [ "$stage" -le 2 ]; then
     clean_stdin
     linebreak
     typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
@@ -331,7 +303,7 @@ if [ "$stage" -le 3 ]; then
 
     clear
 
-    set_autostart_stage 4
+    set_autostart_stage 3
 fi
 
 # creating user
@@ -348,12 +320,12 @@ singlemulti
 set_autostart_stage 0
 
 # flush disk cache to system disk
-# TODO: this call takes far too long, although it is needed 
+# TODO: this call takes far too long, although it is needed
 # to avoid corruption, not sure if it is worthy
 # sync
 
 # startx
-if [ "$stage" -le 4 ]; then
+if [ "$stage" -le 3 ]; then
     typewriter_echo "  Uhoh..." 2 0 1 0 1
     while true; do
         clean_stdin

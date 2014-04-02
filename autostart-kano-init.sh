@@ -7,8 +7,7 @@
 #
 # stages:
 # 1) User name
-# 2) User email
-# 3) White rabbit riddle
+# 2) White rabbit riddle
 # 4) Startx
 # 9) Reset
 

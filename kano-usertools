@@ -130,23 +130,6 @@ elif sys.argv[1] == "testname":
     returncode = int(json_ok and 'name' in data)
     print(returncode)
 
-# save new user's email
-elif sys.argv[1] == "saveemail":
-
-    if len(sys.argv) != 3:
-        print "wrong usage", givencommand
-        quit(1)
-
-    email = sys.argv[2]
-    fin = open(tempfile).read()
-    data = json.loads(fin)
-    data['email'] = email
-
-    fout = json.dumps(data)
-    w = open(tempfile, 'w')
-    w.write(fout)
-    w.close()
-
 # create new user
 elif sys.argv[1] == "createuser":
 
@@ -188,19 +171,6 @@ elif sys.argv[1] == "createuser":
 
     cmd = 'usermod -G "{}" {}'.format(USER_GROUPS, username)
     run_term_on_error(cmd)
-
-    # email
-    if 'email' in data:
-        useremail = data['email']
-
-        cmd = 'echo {} > /home/{}/.email'.format(useremail, username)
-        run(cmd)
-
-        cmd = 'chown {}:{} /home/{}/.email'.format(userid, userid, username)
-        run(cmd)
-
-        cmd = 'cp --preserve /home/{}/.email /home/{}/.useremail'.format(username, username)
-        run(cmd)
 
     delfile(tempfile)
 
