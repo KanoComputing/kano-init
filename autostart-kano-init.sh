@@ -9,6 +9,7 @@
 # 1) User name
 # 2) White rabbit riddle
 # 4) Startx
+# 8) Delete user
 # 9) Reset
 
 STAGE=0
@@ -17,5 +18,3 @@ if [ `id -u` -eq 0 -a "$STAGE" -gt 0 ]; then
     kano-init "$STAGE"
     kill -HUP $PPID
 fi
-
-

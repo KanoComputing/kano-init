@@ -14,7 +14,7 @@
 
 function usage
 {
-    echo "Usage: kano-init [stage|reset|newuser|singlemulti]"
+    echo "Usage: kano-init [stage|reset|newuser|deleteuser|singlemulti]"
     echo ""
     echo "    stage         The stage to start the init procedure from."
     echo "                  Values from 1 to 3 are supported."
@@ -22,6 +22,8 @@ function usage
     echo "    reset         Reset the kano-kit to it's initial state."
     echo ""
     echo "    newuser       Schedules a new user creation."
+    echo ""
+    echo "    deleteuser    Removes the current user during the next boot."
     echo ""
     echo "    singlemulti   Set autologin depending on number of users."
     echo ""
@@ -148,32 +150,38 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     usage 0
 fi
 
-# Get the resources directory
-if [ -d "ascii_art" ]; then
-    res_dir="."
-else
-    res_dir="/usr/share/kano-init/"
-fi
+
 
 # add new user mode
 if [ "$1" == "newuser" ]; then
     newuser
     exit 0
-fi
-
 # single-multi user autoconfig
-if [ "$1" == "singlemulti" ]; then
+elif [ "$1" == "singlemulti" ]; then
     singlemulti
     exit 0
-fi
-
+# delete a single user
+elif [ "$1" == "deleteuser" ]; then
+    # Add user name to the end of autostart-kano-init.sh script
+    os.system("echo #$USER >> /etc/profile.d/autostart-kano-init.sh")
+    set_autologin_console "root"
+    set_autostart_stage 8
+    disable_lxde_autostart
+    exit 0
 # reset: delete all users and trigger init
-if [ "$1" == "reset" ]; then
+elif [ "$1" == "reset" ]; then
     set_autologin_console "root"
     set_autostart_stage 9
     disable_lxde_autostart
     echo "kano-init RESET scheduled for the next system reboot"
     exit 0
+fi
+
+# Get the resources directory
+if [ -d "ascii_art" ]; then
+    res_dir="."
+else
+    res_dir="/usr/share/kano-init/"
 fi
 
 # Disable Ctrl+C and Ctrl+D in the console
@@ -195,6 +203,28 @@ clear
 sleep 1
 
 whitespace=`add_character_padding 3`
+
+# delete user
+if [ "$stage" -eq 8 ]; then
+    kano-usertools deleteuser
+    number_of_users=`kano-usertools number`
+    if [ $number_of_users -eq 0 ]; then
+        # Create a user
+        set_autostart_stage 1
+        stage=1
+    elif [ $number_of_users -eq 1 ]; then
+        username=`kano-usertools firstuser`
+        set_autologin_console "$username"
+        set_autologin_gui "$username"
+        enable_lxde_autostart
+        exit 0
+    else
+        disable_autologin_console
+        disable_autologin_gui
+        enable_lxde_autostart
+        exit 0
+    fi
+fi
 
 # reset
 if [ "$stage" -eq 9 ]; then

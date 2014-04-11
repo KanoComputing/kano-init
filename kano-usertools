@@ -174,8 +174,25 @@ elif sys.argv[1] == "createuser":
 
     delfile(tempfile)
 
-# delete user
+# delete user at boot
 elif sys.argv[1] == 'deleteuser':
+
+    # Get user from last line of /etc/profile.d/autostart-kano-init.sh file
+    user, _ = run('tail -1 /etc/profile.d/autostart-kano-init.sh')
+    # Remove the #
+    user = user[1:]
+    if (not kanomembers) or (user not in kanomembers):
+        # user not found
+        return 1
+
+    # Delete user
+    cmd = 'userdel -r {}'.format(user)
+    run(cmd)
+    # Remove user from last line of /etc/profile.d/autostart-kano-init.sh file
+    run('sed -i \'$ d\' /etc/profile.d/autostart-kano-init.sh')
+
+# delete user in an interactive way
+elif sys.argv[1] == 'deleteuser-interactive':
 
     if not kanomembers:
         print "No users to delete"
