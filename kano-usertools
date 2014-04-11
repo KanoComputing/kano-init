@@ -183,7 +183,7 @@ elif sys.argv[1] == 'deleteuser':
     user = user[1:]
     if (not kanomembers) or (user not in kanomembers):
         # user not found
-        return 1
+        quit(1)
 
     # Delete user
     cmd = 'userdel -r {}'.format(user)
