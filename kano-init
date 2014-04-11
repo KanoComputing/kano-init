@@ -163,7 +163,7 @@ elif [ "$1" == "singlemulti" ]; then
 # delete a single user
 elif [ "$1" == "deleteuser" ]; then
     # Add user name to the end of autostart-kano-init.sh script
-    os.system("echo #$USER >> /etc/profile.d/autostart-kano-init.sh")
+    echo "#$SUDO_USER" >> /etc/profile.d/autostart-kano-init.sh
     set_autologin_console "root"
     set_autostart_stage 8
     disable_lxde_autostart
