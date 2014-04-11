@@ -191,7 +191,7 @@ stty eof '?'
 # checking parameters
 stage=1
 if [ -n "$1" ]; then
-    if [ -n "`grep [1239] <<<"$1"`" ]; then
+    if [ -n "`grep [12389] <<<"$1"`" ]; then
         stage="$1"
     else
         echo "Error: Unknown parameter '$1'"
