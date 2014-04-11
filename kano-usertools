@@ -180,11 +180,13 @@ elif sys.argv[1] == 'deleteuser':
     # Get user from last line of /etc/profile.d/autostart-kano-init.sh file
     user, _ = run('tail -1 /etc/profile.d/autostart-kano-init.sh')
     # Remove the #
-    user = user[1:]
+    user = user[1:].strip()
     if (not kanomembers) or (user not in kanomembers):
         # user not found
         quit(1)
-
+    # kill all process from user
+    cmd = 'killall -KILL -u {}'.format(user)
+    run(cmd)
     # Delete user
     cmd = 'userdel -r {}'.format(user)
     run(cmd)
@@ -207,7 +209,7 @@ elif sys.argv[1] == 'deleteuser-interactive':
             print "Sorry, you mistyped something, please try again!"
             user = ''
 
-    # killing all process from user
+    # kill all process from user
     cmd = 'killall -KILL -u {}'.format(user)
     run(cmd)
 

@@ -217,11 +217,13 @@ if [ "$stage" -eq 8 ]; then
         set_autologin_console "$username"
         set_autologin_gui "$username"
         enable_lxde_autostart
+        set_autostart_stage 0
         exit 0
     else
         disable_autologin_console
         disable_autologin_gui
         enable_lxde_autostart
+        set_autostart_stage 0
         exit 0
     fi
 fi
