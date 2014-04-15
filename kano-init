@@ -166,7 +166,10 @@ elif [ "$1" == "deleteuser" ]; then
     echo "#$2" >> /etc/profile.d/autostart-kano-init.sh
     set_autologin_console "root"
     set_autostart_stage 8
-    disable_lxde_autostart
+    number_of_users=`kano-usertools number`
+    if [ $number_of_users -neq 2 ]; then
+        disable_lxde_autostart
+    fi
     exit 0
 # reset: delete all users and trigger init
 elif [ "$1" == "reset" ]; then
