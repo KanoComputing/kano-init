@@ -45,6 +45,9 @@ def user_input(cursorx, cursory):
     # main thread can position the cursor correctly.
     global keypos
 
+    # Avoids problems with the thread moving the cursor too early
+    time.sleep(0.5)
+
     with l:
         win = curses.newwin(1, 8, cursory, cursorx)
 
@@ -202,8 +205,6 @@ def main(username):
     draw_frame(bomb[0], startx, starty)
     with l:
         draw_fn(msgy, msgx, msg)
-    # Avoids problems with the thread moving the cursor too early
-    time.sleep(0.5)
 
     # Start the thread for the input functionality
     t = Thread(target=user_input, args=(cursorx, cursory))
