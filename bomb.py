@@ -50,9 +50,9 @@ def user_input(cursorx, cursory):
 
     while True:
         c = win.getch(0, keypos)
-        if c != curses.ERR and chr(c) == key[keypos]:
+        if c != curses.ERR and chr(c).lower() == key[keypos]:
             with l:
-                win.addstr(0, keypos, chr(c))
+                win.addstr(0, keypos, chr(c).lower())
                 win.refresh()
                 keypos += 1
             if keypos >= len(key):
