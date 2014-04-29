@@ -8,6 +8,7 @@
 # Startx exercise
 #
 
+import re
 import os
 import sys
 import time
@@ -15,7 +16,6 @@ import curses
 from threading import Thread, Lock
 
 screen = None
-key = "startx"
 keypos = 0
 
 cursorx = 0
@@ -52,17 +52,11 @@ def user_input(cursorx, cursory):
     time.sleep(0.5)
 
     with l:
-        win = curses.newwin(1, 8, cursory, cursorx)
+        win = curses.newwin(1, 25, cursory, cursorx)
 
-    while True:
-        c = win.getch(0, keypos)
-        if c != curses.ERR and chr(c).lower() == key[keypos]:
-            with l:
-                win.addstr(0, keypos, chr(c).lower())
-                win.refresh()
-                keypos += 1
-            if keypos >= len(key):
-                return
+        curses.echo()
+
+    s = win.getstr(0,0,25)
 
 
 def load_animation(path):
@@ -176,8 +170,6 @@ def debug(msg):
         f.write(str(msg) + '\n')
 
 def typewriter(text, startx, starty, pos):
-    global cursorx, cursory
-
     x = y = 0
 
     for line in text:
@@ -194,15 +186,13 @@ def typewriter(text, startx, starty, pos):
     with l:
         draw_fn(starty + y, startx + x, text[y][x])
 
-    cursorx = startx + x + 1
-    cursory = starty + y
+    with l:
+        screen.move(starty + y, startx + x + 1)
 
     return False
 
 def main(username):
     global cursorx, cursory
-
-    debug("---")
 
     res_dir = "."
     if not os.path.isdir("ascii_art"):
@@ -235,12 +225,13 @@ def main(username):
     judoka_frame = 0
     judoka_wink = 0
 
-    cursorx = consolex
-    cursory = consoley
-
     text_pos = 0
     t = None
+
     while True:
+        #with l:
+            #cy, cx = screen.getyx()
+
         if cycle % 8 == 0:
             # animate the judoka
             draw_frame(judoka[judoka_frame], startx, starty)
@@ -253,22 +244,25 @@ def main(username):
             if judoka_wink == 10:
                 judoka_frame = len(judoka) - 1
                 judoka_wink = 0
+        #with l:
+            #screen.move(cy, cx)
 
         done = typewriter(console_text, consolex, consoley, text_pos)
+
         if not done:
             text_pos += 1
         else:
             if not t:
-                cursorx = consolex
-                cursory = consoley + 4
+                #cursorx = consolex
+                #cursory = consoley + 4
+                screen.move(consoley + 4, consolex)
 
                 # Start the thread for the input functionality
-                t = Thread(target=user_input, args=(cursorx, cursory))
+                t = Thread(target=user_input, args=(consolex, consoley + 4))
                 t.daemon = True
                 t.start()
 
         with l:
-            screen.move(cursory, cursorx + keypos)
             screen.refresh()
 
         # stop when user enters the key
