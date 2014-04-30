@@ -17,6 +17,8 @@ from threading import Thread, Lock
 
 screen = None
 keypos = 0
+user_name = ""
+error = ""
 
 cursorx = 0
 cursory = 0
@@ -46,18 +48,34 @@ def user_input(cursorx, cursory):
 
     # Current position in the key phrase. Must be global so the
     # main thread can position the cursor correctly.
-    global keypos
+    global user_name
 
     # Avoids problems with the thread moving the cursor too early
     time.sleep(0.5)
 
     with l:
-        win = curses.newwin(1, 25, cursory, cursorx)
+        win = curses.newwin(1, 45, cursory, cursorx)
 
         curses.echo()
 
-    s = win.getstr(0,0,25)
+    user_name = win.getstr(0,0,25)
 
+def validate(user_name):
+    global error
+    if len(user_name) == 0:
+        error = "Type a cool name."
+        return False
+    elif re.search("[^a-zA-Z0-9]", user_name):
+        error = "Just one word, letters or numbers! Try again."
+        return False
+
+    with open("/etc/passwd") as f:
+        for line in f:
+            if re.match("^{}\:".format(user_name), line) != None:
+                error = "This one is already taken! Try again."
+                return False
+
+    return True
 
 def load_animation(path):
     """
@@ -191,7 +209,7 @@ def typewriter(text, startx, starty, pos):
 
     return False
 
-def main(username):
+def main():
     global cursorx, cursory
 
     res_dir = "."
@@ -205,10 +223,10 @@ def main(username):
     judoka_w = animation_width(judoka)
     judoka_h = animation_height(judoka)
 
-    msg = "Quick, %s, type startx to escape!" % username
-    console_text = ["Hi, I'm KANO. Thanks for bringing me to life.",
-                    " ",
-                    "What should I call you?"]
+    console_text = ["Hello!", "",
+                    "I'm KANO. Thanks for bringing me to life.", "",
+                    "What should I call you?", "",
+                    "> "]
 
     with l:
         h, w = screen.getmaxyx()
@@ -228,10 +246,13 @@ def main(username):
     text_pos = 0
     t = None
 
-    while True:
-        #with l:
-            #cy, cx = screen.getyx()
+    # 1: writing message
+    # 2: user input
+    # 3: error               <---,
+    # 4: repeated user input  ---'
+    state = 1
 
+    while True:
         if cycle % 8 == 0:
             # animate the judoka
             draw_frame(judoka[judoka_frame], startx, starty)
@@ -244,33 +265,57 @@ def main(username):
             if judoka_wink == 10:
                 judoka_frame = len(judoka) - 1
                 judoka_wink = 0
-        #with l:
-            #screen.move(cy, cx)
 
-        done = typewriter(console_text, consolex, consoley, text_pos)
-
-        if not done:
-            text_pos += 1
-        else:
+        debug(state)
+        if state == 1:
+            if typewriter(console_text, consolex, consoley, text_pos):
+                state = 2
+                text_pos = 0
+                curses.curs_set(0)
+            else:
+                text_pos += 1
+        elif state == 2:
             if not t:
-                #cursorx = consolex
-                #cursory = consoley + 4
-                screen.move(consoley + 4, consolex)
-
                 # Start the thread for the input functionality
-                t = Thread(target=user_input, args=(consolex, consoley + 4))
+                t = Thread(target=user_input, args=(consolex+2, consoley+6))
                 t.daemon = True
                 t.start()
+            else:
+                if not t.is_alive():
+                    if (validate(user_name)):
+                        debug(user_name)
+                        break
+                    else:
+                        state = 3
+                        t = None
+        elif state == 3:
+            if typewriter([error], consolex, consoley+8, text_pos):
+                state = 4
+                text_pos = 0
+                draw_fn(consoley+6, consolex, "> " + " "*50)
+            else:
+                text_pos += 1
+        elif state == 4:
+            if not t:
+                # Start the thread for the input functionality
+                t = Thread(target=user_input, args=(consolex+2, consoley+6))
+                t.daemon = True
+                t.start()
+                curses.curs_set(0)
+            else:
+                if not t.is_alive():
+                    if (validate(user_name)):
+                        break
+                    else:
+                        state = 3
+                        t = None
+                        draw_fn(consoley+8, consolex, "> " + " "*50)
 
         with l:
             screen.refresh()
 
-        # stop when user enters the key
-        if t and not t.is_alive():
-            break
-
         cycle += 1
-        time.sleep(0.06)#0.125)
+        time.sleep(0.05)#0.125)
 
     return 0
 
@@ -294,11 +339,8 @@ def exit_curses():
 
 if __name__ == "__main__":
     init_curses()
-    user = "buddy"
-    if len(sys.argv) > 1:
-        user = sys.argv[1]
     try:
-        status = main(user)
+        status = main()
     finally:
         exit_curses()
 
