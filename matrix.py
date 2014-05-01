@@ -114,7 +114,7 @@ def draw_fn(y, x, msg, color=None):
 def draw_frame(frame, x, y, mask):
     for n in mask:
         with l:
-            draw_fn(y + n, x, frame[n], 5)
+            draw_fn(y + n, x, frame[n], curses.color_pair(5))
 
 def debug(msg):
     log = 'curses-log'
@@ -164,7 +164,7 @@ def main(duration):
     facex = (w - face_width) / 2
     facey = (h - len(face)) / 2
 
-    tick = 0.05
+    tick = 0.025
     elapsed = 0
 
     drops = []
