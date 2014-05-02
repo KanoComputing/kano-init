@@ -4,4 +4,5 @@
 ./bomb.py /usr/share/kano-init/
 ./matrix.py /usr/share/kano-init/
 ./judoka.py /usr/share/kano-init/
+./rabbit.py /usr/share/kano-init/
 ./kano-usertools /usr/bin

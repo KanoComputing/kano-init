@@ -249,6 +249,7 @@ $res_dir/matrix.py 10 "yes"
 
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
+    clear
     clean_stdin
     typewriter_echo "Hello!" 0 1 1 1 1
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
