@@ -1,5 +1,6 @@
-. .bashrc
 cd
+. .bashrc
+cd ..
 
 function disabled
 {

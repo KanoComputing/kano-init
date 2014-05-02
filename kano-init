@@ -300,16 +300,17 @@ singlemulti
 numFails=0
 if [ "$stage" -le 2 ]; then
     $res_dir/rabbit.py 2
+    clear
     clean_stdin
 
     linebreak
     typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
     typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 1 1 1
-    typewriter_echo "Type: cd $username/rabbithole" 0 2 0 1
+    typewriter_echo "Type: cd $username/rabbithole" 0.5 1 1 1 1
 
-    mkdir -p ~/rabbithole
+    mkdir -p /home/$username/rabbithole
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
-    rm -rf ~/rabbithole
+    rm -rf /home/$username/rabbithole
 
     $res_dir/rabbit.py 1
 

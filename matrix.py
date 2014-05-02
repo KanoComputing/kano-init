@@ -157,6 +157,7 @@ class Face(object):
         self._pending_lines = range(0, len(self._face))
         self._mask = []
 
+
     def draw_next(self):
         if len(self._pending_lines) > 0:
             n = randint(0, len(self._pending_lines)-1)
@@ -224,7 +225,7 @@ def main(duration, show_face):
         time.sleep(tick)
 
     if show_face:
-        time.sleep(2)
+        time.sleep(1)
 
     return 0
 
