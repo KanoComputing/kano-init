@@ -13,17 +13,21 @@ import os
 import sys
 import time
 import curses
-from threading import Thread, Lock
 from random import randint
 
 screen = None
 
-l = Lock()
 
+def draw_fn(y, x, msg, color=None):
+    try:
+        if color is None:
+            screen.addstr(y, x, msg)
+        else:
+            screen.addstr(y, x, msg, color)
+    except:
+        exit_curses()
+        sys.exit(0)
 
-# Drop
-# Light-up
-# Disappear
 
 class Drop(object):
     def __init__(self, posx=0, posy=0, drop_length=50,
@@ -101,74 +105,86 @@ class Drop(object):
             self._phase = 3
             self._cycles_per_char = 1
 
-def draw_fn(y, x, msg, color=None):
-    try:
-        if color is None:
-            screen.addstr(y, x, msg)
-        else:
-            screen.addstr(y, x, msg, color)
-    except:
-        exit_curses()
-        sys.exit(0)
 
-def draw_frame(frame, x, y, mask):
-    for n in mask:
-        with l:
-            draw_fn(y + n, x, frame[n], curses.color_pair(5))
+class Face(object):
+    _face = [
+        "                                            ",
+        "               ?KKKKKKKKKKKKKK~             ",
+        "            KKKKKK$.        $KKKKD=         ",
+        "         ,KKKKI                KKKK:        ",
+        "       ~KKKK                     7KKK       ",
+        "      KKKK                        .KKK      ",
+        "     KKKKKK,                        KK8     ",
+        "   .KKK  OKKK                       .KK.    ",
+        "  .KKK    KKKKK.                     8KK.   ",
+        "  KKK    KKK KKKK=                    KK.   ",
+        "  KK.   .KK.   KKKKK                  KKK.  ",
+        "  KK.   KKK       KKKKKKK             IKK.  ",
+        "  KK. DKKK           KKKKKKKKKK        KK.  ",
+        "  KK?KKK                   KKKKKKKK    KK.  ",
+        "  DKKK8      KK=           .KK..KKKKK .KK~  ",
+        "  .KKKZ     KKKK           ?KKK.   KKK:KK   ",
+        "   .KKK                             ?KKKK.  ",
+        "    .KK?                            8KKKK.  ",
+        "     IKK        KKKKKKKKKKK.        KKKK.   ",
+        "      KKK.      DKK     KKK        KKK K    ",
+        "       KKK.      KKKKIKKKK       :KKK       ",
+        "        DKKK      IKKKKK$      .KKK$        ",
+        "          KKKK                KKKK          ",
+        "           .KKKKKK        KKKKKK            ",
+        "              .DKKKKKKKKKKKKD               ",
+        "                                            "
+    ]
+
+    def __init__(self, x=None, y=None, colour=None):
+        h, w = screen.getmaxyx()
+        if x:
+            self._x = x
+        else:
+            face_width = 0
+            for line in self._face:
+                if len(line) > face_width:
+                    face_width = len(line)
+
+            self._x = (w - face_width) / 2
+
+        if y:
+            self._y = y
+        else:
+            self._y = (h - len(self._face)) / 2
+
+        self._colour = colour
+        self._pending_lines = range(0, len(self._face))
+        self._mask = []
+
+    def draw_next(self):
+        if len(self._pending_lines) > 0:
+            n = randint(0, len(self._pending_lines)-1)
+            self._mask.append(self._pending_lines[n])
+            del self._pending_lines[n]
+
+        for n in self._mask:
+            draw_fn(self._y + n, self._x, self._face[n], self._colour)
+
 
 def debug(msg):
     log = 'curses-log'
     with open(log, 'a') as f:
         f.write(str(msg) + '\n')
 
-def main(duration):
+def main(duration, show_face):
     h, w = screen.getmaxyx()
 
-    face = [
-"                                            ",
-"               ?KKKKKKKKKKKKKK~             ",
-"            KKKKKK$.        $KKKKD=         ",
-"         ,KKKKI                KKKK:        ",
-"       ~KKKK                     7KKK       ",
-"      KKKK                        .KKK      ",
-"     KKKKKK,                        KK8     ",
-"   .KKK  OKKK                       .KK.    ",
-"  .KKK    KKKKK.                     8KK.   ",
-"  KKK    KKK KKKK=                    KK.   ",
-"  KK.   .KK.   KKKKK                  KKK.  ",
-"  KK.   KKK       KKKKKKK             IKK.  ",
-"  KK. DKKK           KKKKKKKKKK        KK.  ",
-"  KK?KKK                   KKKKKKKK    KK.  ",
-"  DKKK8      KK=           .KK..KKKKK .KK~  ",
-"  .KKKZ     KKKK           ?KKK.   KKK:KK   ",
-"   .KKK                             ?KKKK.  ",
-"    .KK?                            8KKKK.  ",
-"     IKK        KKKKKKKKKKK.        KKKK.   ",
-"      KKK.      DKK     KKK        KKK K    ",
-"       KKK.      KKKKIKKKK       :KKK       ",
-"        DKKK      IKKKKK$      .KKK$        ",
-"          KKKK                KKKK          ",
-"           .KKKKKK        KKKKKK            ",
-"              .DKKKKKKKKKKKKD               ",
-"                                            "]
+    drops = []
 
-
-    face_width = 0
-    for line in face:
-        if len(line) > face_width:
-            face_width = len(line)
-
-    to_display = range(0, len(face))
-    mask = []
-
-    facex = (w - face_width) / 2
-    facey = (h - len(face)) / 2
+    if show_face:
+        face = Face(None, None, curses.color_pair(5))
 
     tick = 0.025
     elapsed = 0
-
-    drops = []
+    started_at = time.time()
     while True:
+        elapsed = time.time() - started_at
         if elapsed < duration:
             length = randint(5,h-1)
             xpos = randint(0, w-1)
@@ -200,18 +216,15 @@ def main(duration):
                 del drops[i]
             i += 1
 
-        if elapsed > duration:
-            if len(to_display) > 0:
-                n = randint(0, len(to_display)-1)
-                mask.append(to_display[n])
-                del to_display[n]
-
-            draw_frame(face, facex, facey, mask)
+        if show_face and elapsed > duration:
+            face.draw_next()
 
         screen.refresh()
 
         time.sleep(tick)
-        elapsed += tick
+
+    if show_face:
+        time.sleep(2)
 
     return 0
 
@@ -233,14 +246,20 @@ def init_curses():
             curses.init_color(curses.COLOR_CYAN, 611, 529, 419)
             curses.init_color(curses.COLOR_WHITE, 1000, 905, 541)
             curses.init_color(curses.COLOR_RED, 1000, 1000, 1000)
+
+            curses.init_pair(1, curses.COLOR_GREEN, 0)
+            curses.init_pair(2, curses.COLOR_BLUE, 0)
+            curses.init_pair(3, curses.COLOR_CYAN, 0)
+            curses.init_pair(4, curses.COLOR_WHITE, 0)
+            curses.init_pair(5, curses.COLOR_RED, 0)
         else:
             curses.use_default_colors()
 
-        curses.init_pair(1, curses.COLOR_GREEN, 0)
-        curses.init_pair(2, curses.COLOR_BLUE, 0)
-        curses.init_pair(3, curses.COLOR_CYAN, 0)
-        curses.init_pair(4, curses.COLOR_WHITE, 0)
-        curses.init_pair(5, curses.COLOR_RED, 0)
+            curses.init_pair(1, curses.COLOR_GREEN, 0)
+            curses.init_pair(2, curses.COLOR_BLUE, 0)
+            curses.init_pair(3, curses.COLOR_CYAN, 0)
+            curses.init_pair(4, curses.COLOR_WHITE, 0)
+            curses.init_pair(5, curses.COLOR_RED, 0)
 
 def exit_curses():
     curses.curs_set(2)
@@ -252,11 +271,17 @@ def exit_curses():
 
 if __name__ == "__main__":
     init_curses()
+
     duration = 10
+    show_face = False
+
     if len(sys.argv) > 1:
         duration = int(sys.argv[1])
+    if len(sys.argv) > 2:
+        show_face = (sys.argv[2] == "yes")
+
     try:
-        status = main(duration)
+        status = main(duration, show_face)
     finally:
         exit_curses()
 
