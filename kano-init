@@ -314,6 +314,11 @@ if [ "$stage" -le 2 ]; then
 
     $res_dir/rabbit.py 1
 
+    clear
+    linebreak
+    typewriter_echo "Oh no! Watch out, $username, it was a trap!" 2 1 1 1 1
+    sleep 2
+
     set_autostart_stage 3
 fi
 

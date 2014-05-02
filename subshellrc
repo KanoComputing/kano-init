@@ -22,8 +22,6 @@ function override_cd
     rv=$?
 
     if [ $rv -eq 1 ]; then
-        echo "There he is ..."
-        sleep 3
         \exit >/dev/null 2>/dev/null
     else
         disabled
