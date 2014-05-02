@@ -1,7 +1,7 @@
 cd
 . .bashrc
 
-export $PS1="    $PS1"
+export PS1="    $PS1"
 
 function disabled
 {

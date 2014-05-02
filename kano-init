@@ -306,7 +306,7 @@ if [ "$stage" -le 2 ]; then
     linebreak
     typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
     typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 1 1 1
-    typewriter_echo "Type: cd rabbithole" 0.5 2 1 1 1
+    typewriter_echo "Type 'cd rabbithole'" 0.5 2 1 0 1
 
     mkdir -p /home/$username/rabbithole
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
@@ -317,7 +317,6 @@ if [ "$stage" -le 2 ]; then
     clear
     linebreak
     typewriter_echo "Oh no! Watch out, $username, it was a trap!" 2 1 1 1 1
-    sleep 2
 
     set_autostart_stage 3
 fi
