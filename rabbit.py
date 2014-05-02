@@ -167,7 +167,10 @@ def main(max_cycles):
 
         offsetx += offset_diff
 
-        if startx + offsetx > w:
+        if max_cycles == 0 and startx + offsetx >= (cx - rabbit_w/2):
+            time.sleep(0.5)
+            break
+        elif startx + offsetx > w:
             rabbit = rabbit_rl
             offset_diff = -offset_diff
             starty = randint(0, h - rabbit_h - 1)

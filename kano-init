@@ -244,6 +244,9 @@ if [ `kano-usertools testname` -eq 0 ]; then
     stage=1
 fi
 
+# Run the matrix animation for 10 seconds and show the Judoka face
+$res_dir/matrix.py 10 "yes"
+
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     clean_stdin
@@ -282,65 +285,6 @@ else
     typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 1
 fi
 
-# [Stage 2] Riddle: White rabbit riddle
-numFails=0
-if [ "$stage" -le 2 ]; then
-    clean_stdin
-    linebreak
-    typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
-    typewriter_echo "He's hiding somewhere on the computer. Can you find him?" 0 2 0 1
-
-    while true; do
-        clean_stdin
-        typewriter_echo "Pick a type [1-3]:" 0.1 1 0 1
-        typewriter_echo "  1) Animal" 0.1 1 0 1
-        typewriter_echo "  2) Plant" 0.1 1 0 1
-        typewriter_echo "  3) Machine" 0.1 2 0 1
-        get_option "picked_type"
-        linebreak
-
-        typewriter_echo "Pick a size [1-3]:" 0.1 1 1 1
-        typewriter_echo "  1) Big" 0.1 1 0 1
-        typewriter_echo "  2) Medium" 0.1 1 0 1
-        typewriter_echo "  3) Small" 0.1 2 0 1
-        get_option "picked_size"
-        linebreak
-
-        ascii_art_dir="$res_dir/ascii_art"
-        case "$picked_type$picked_size" in
-            11) cat "$ascii_art_dir/elephant.txt" ;;
-            12) cat "$ascii_art_dir/human.txt" ;;
-            13) cat "$ascii_art_dir/rabbit.txt" ;;
-            21) cat "$ascii_art_dir/tree.txt" ;;
-            22) cat "$ascii_art_dir/potato-head.txt" ;;
-            23) cat "$ascii_art_dir/flower.txt" ;;
-            31) cat "$ascii_art_dir/car.txt" ;;
-            32) cat "$ascii_art_dir/robot.txt" ;;
-            33) cat "$ascii_art_dir/chip.txt" ;;
-        esac
-        linebreak
-
-        if [ "$picked_type$picked_size" -eq 13 ]; then
-            typewriter_echo "You win..." 0.5 2 1
-            break
-        else
-            numFails=$(($numFails+1))
-            case "$numFails" in
-                1) typewriter_echo "Computers rule! Follow the white... what was it again?" 0.5 3 1 1 ;;
-                2) typewriter_echo "I'll give you another hint, it's got big ears..." 0.5 3 1 1 ;;
-                *) typewriter_echo "It's a small animal, I think..." 0.5 3 1 1 ;;
-            esac
-        fi
-    done
-
-    typewriter_echo "I'm good at remembering and combining things." 0.5 1 1 1
-    typewriter_echo "But, I need humans to help me make new things." 1 2
-
-    clear
-
-    set_autostart_stage 3
-fi
-
 # creating user
 kano-usertools createuser
 if [ $? -ne 0 ]; then
@@ -350,6 +294,26 @@ fi
 
 # setting up single-multi user
 singlemulti
+
+# [Stage 2] Riddle: White rabbit riddle
+numFails=0
+if [ "$stage" -le 2 ]; then
+    $res_dir/rabbit.py 2
+    clean_stdin
+
+    linebreak
+    typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
+    typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 1 1 1
+    typewriter_echo "Type: cd $username/rabbithole" 0 2 0 1
+
+    mkdir -p ~/rabbithole
+    sudo -u "$username" -H bash --init-file $res_dir/subshellrc
+    rm -rf ~/rabbithole
+
+    $res_dir/rabbit.py 1
+
+    set_autostart_stage 3
+fi
 
 # disable kano-init
 set_autostart_stage 0
@@ -361,7 +325,8 @@ set_autostart_stage 0
 
 # startx
 if [ "$stage" -le 3 ]; then
-    typewriter_echo "  Uhoh..." 2 0 1 0 1
+    $res_dir/matrix.py 5 "no"
+
     while true; do
         clean_stdin
         python -B $res_dir/bomb.py "$username"
