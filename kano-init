@@ -312,6 +312,8 @@ if [ "$stage" -le 2 ]; then
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
     rm -rf /home/$username/rabbithole
 
+    $res_dir/matrix.py 5 "no"
+
     $res_dir/rabbit.py 1
 
     clear
@@ -331,8 +333,6 @@ set_autostart_stage 0
 
 # startx
 if [ "$stage" -le 3 ]; then
-    $res_dir/matrix.py 5 "no"
-
     while true; do
         clean_stdin
         python -B $res_dir/bomb.py "$username"
