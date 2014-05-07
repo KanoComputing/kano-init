@@ -32,5 +32,7 @@ function override_cd
 alias cd=override_cd
 alias exit=disabled
 alias reboot=disabled
-alias logout=dsabled
+alias logout=disabled
 alias halt=disabled
+alias sudo=disabled
+alias startx=disabled
