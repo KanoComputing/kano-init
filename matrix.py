@@ -183,9 +183,7 @@ def main(duration, show_face):
 
     tick = 0.025
     elapsed = 0
-    #started_at = time.time()
     while True:
-        #elapsed = time.time() - started_at
         elapsed += tick
         if elapsed < duration:
             length = randint(5,h-1)
