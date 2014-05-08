@@ -115,12 +115,9 @@ def draw_frame(frame, x, y, animation_width):
         if right_clip > animation_width:
             right_clip = animation_width
 
-    debug("lclip = {}, rclip = {}".format(left_clip, animation_width - right_clip))
-
     n = 0
     for line in frame:
         clipped_line = line[left_clip:(animation_width - right_clip)]
-        debug("'{}'".format(clipped_line))
         if len(clipped_line) > 0:
             draw_fn(y + n, x, clipped_line)
             n += 1
@@ -159,7 +156,6 @@ def main(max_cycles):
             draw_fn(starty + n, 0, " "*(w-1))
             n += 1
 
-        debug("{} {} {}".format(startx+offsetx, starty, rabbit_w))
         draw_frame(rabbit[frame], startx + offsetx, starty, rabbit_w)
         frame += 1
         if frame >= len(rabbit):
