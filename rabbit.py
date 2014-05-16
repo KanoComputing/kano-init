@@ -142,7 +142,7 @@ def main(max_cycles):
     cx, cy = w/2, h/2
 
     startx = -rabbit_w
-    starty = cy
+    starty = randint(0, h - rabbit_h - 1)
 
     rabbit = rabbit_lr
 

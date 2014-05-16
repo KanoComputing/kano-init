@@ -299,7 +299,7 @@ singlemulti
 # [Stage 2] Riddle: White rabbit riddle
 numFails=0
 if [ "$stage" -le 2 ]; then
-    $res_dir/rabbit.py 2
+    $res_dir/rabbit.py 1
     clear
     clean_stdin
 
@@ -312,13 +312,13 @@ if [ "$stage" -le 2 ]; then
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
     rm -rf /home/$username/rabbithole
 
-    $res_dir/matrix.py 5 "no"
+    $res_dir/matrix.py 3 "no"
 
     $res_dir/rabbit.py 1
 
     clear
     linebreak
-    typewriter_echo "Oh no! Watch out, $username, it was a trap!" 2 1 1 1 1
+    typewriter_echo "$username, it was a trap!" 2 1 1 1 1
 
     set_autostart_stage 3
 fi
