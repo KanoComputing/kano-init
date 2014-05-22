@@ -167,7 +167,7 @@ elif [ "$1" == "deleteuser" ]; then
     set_autologin_console "root"
     set_autostart_stage 8
     number_of_users=`kano-usertools number`
-    if [ $number_of_users -neq 2 ]; then
+    if [ $number_of_users -ne 2 ]; then
         disable_lxde_autostart
     fi
     exit 0
