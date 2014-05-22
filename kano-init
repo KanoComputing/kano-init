@@ -187,9 +187,10 @@ else
     res_dir="/usr/share/kano-init/"
 fi
 
-# Disable Ctrl+C and Ctrl+D in the console
+# Disable Ctrl+C, Ctrl+D, Ctrl-S, Ctrl-Q in the console
 stty intr undef
 stty eof '?'
+stty -ixon
 
 # checking parameters
 stage=1
@@ -348,9 +349,10 @@ if [ "$stage" -le 3 ]; then
     done
 fi
 
-# disabling Ctrl keys
+# disabling Ctrl keys and XON/XOFF
 stty intr ^C
 stty eof ^D
+stty -ixon
 
 # Start LXDE
 service lightdm start
