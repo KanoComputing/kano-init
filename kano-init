@@ -191,6 +191,7 @@ fi
 stty intr undef
 stty eof '?'
 stty -ixon
+stty susp undef
 
 # checking parameters
 stage=1
