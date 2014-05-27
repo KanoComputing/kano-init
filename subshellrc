@@ -36,3 +36,6 @@ alias logout=disabled
 alias halt=disabled
 alias sudo=disabled
 alias startx=disabled
+alias su=disabled
+alias rm=disabled
+alias find=disabled
