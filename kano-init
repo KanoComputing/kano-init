@@ -6,9 +6,12 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 # A fun console script to set up Kanux
+# Matrix animation
 # 1) User name
 # 2) White rabbit riddle
+# Matrix animation
 # 3) Startx
+# 8) Delete user
 # 9) Reset
 #
 
@@ -246,7 +249,7 @@ if [ `kano-usertools testname` -eq 0 ]; then
     stage=1
 fi
 
-# Run the matrix animation for 10 seconds and show the Judoka face
+# Run the matrix animation for 4 seconds and show the Judoka face
 $res_dir/matrix.py 4 "yes"
 
 # [Stage 1] Name: Request user name and create user
@@ -314,6 +317,7 @@ if [ "$stage" -le 2 ]; then
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
     rm -rf /home/$username/rabbithole
 
+    # Run the matrix animation for 3 seconds with no judoka
     $res_dir/matrix.py 3 "no"
 
     $res_dir/rabbit.py 1
@@ -328,12 +332,7 @@ fi
 # disable kano-init
 set_autostart_stage 0
 
-# flush disk cache to system disk
-# TODO: this call takes far too long, although it is needed
-# to avoid corruption, not sure if it is worthy
-# sync
-
-# startx
+# [Stage 3] startx
 if [ "$stage" -le 3 ]; then
     while true; do
         clean_stdin

@@ -6,11 +6,14 @@
 # License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 #
 # stages:
+# Matrix animation
 # 1) User name
 # 2) White rabbit riddle
-# 4) Startx
+# Matrix animation
+# 3) Startx
 # 8) Delete user
 # 9) Reset
+#
 
 STAGE=0
 
