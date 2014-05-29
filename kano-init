@@ -249,8 +249,8 @@ if [ `kano-usertools testname` -eq 0 ]; then
     stage=1
 fi
 
-# Run the matrix animation for 4 seconds and show the Judoka face
-$res_dir/matrix.py 4 "yes"
+# Run the matrix animation for 2 seconds and show the Judoka face
+$res_dir/matrix.py 2 "yes"
 
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
