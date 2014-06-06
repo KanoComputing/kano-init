@@ -304,7 +304,7 @@ singlemulti
 # [Stage 2] Riddle: White rabbit riddle
 numFails=0
 if [ "$stage" -le 2 ]; then
-    $res_dir/rabbit.py 1
+    $res_dir/rabbit.py 1 left-to-right
     clear
     clean_stdin
 
@@ -320,7 +320,7 @@ if [ "$stage" -le 2 ]; then
     # Run the matrix animation for 3 seconds with no judoka
     $res_dir/matrix.py 3 "no"
 
-    $res_dir/rabbit.py 1
+    $res_dir/rabbit.py 1 right-to-left
 
     clear
     linebreak

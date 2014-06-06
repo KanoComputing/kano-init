@@ -122,7 +122,13 @@ def draw_frame(frame, x, y, animation_width):
             draw_fn(y + n, x, clipped_line)
             n += 1
 
-def main(max_cycles):
+def rabbit_lr():
+    pass
+
+def rabbit_rl():
+    pass
+
+def main(max_cycles, start_direction):
     res_dir = "."
     if not os.path.isdir("ascii_art"):
         res_dir = "/usr/share/kano-init"
@@ -141,19 +147,25 @@ def main(max_cycles):
     # screen centre
     cx, cy = w/2, h/2
 
-    startx = -rabbit_w
+
+    if start_direction == "left-to-right":
+        startx = -rabbit_w
+        rabbit = rabbit_lr
+        offset_diff = 10
+    else:
+        startx = w
+        rabbit = rabbit_rl
+        offset_diff = -10
+
     starty = randint(0, h - rabbit_h - 1)
 
-    rabbit = rabbit_lr
-
     frame = 0
-    offsetx = offsety = 0
-    offset_diff = 10
     cycle = 0
+    offsetx = offsety = 0
     while True:
         n = 0
         while n < rabbit_h:
-            draw_fn(starty + n, 0, " "*(w-1))
+            draw_fn(starty + n, 0, " "*(w))
             n += 1
 
         draw_frame(rabbit[frame], startx + offsetx, starty, rabbit_w)
@@ -166,6 +178,7 @@ def main(max_cycles):
         if max_cycles == 0 and startx + offsetx >= (cx - rabbit_w/2):
             time.sleep(0.5)
             break
+        # invert the direction lr -> rl
         elif startx + offsetx > w:
             rabbit = rabbit_rl
             offset_diff = -offset_diff
@@ -173,6 +186,7 @@ def main(max_cycles):
             cycle += 1
             if cycle >= max_cycles:
                 break
+        # invert the direction rl -> lr
         elif startx + offsetx < -rabbit_w:
             rabbit = rabbit_lr
             offset_diff = -offset_diff
@@ -211,8 +225,13 @@ if __name__ == "__main__":
     max_cycles = 3
     if len(sys.argv) > 1:
         max_cycles = int(sys.argv[1])
+
+    start_direction = "left-to-right"
+    if len(sys.argv) > 2 and sys.argv[2] == "right-to-left":
+        start_direction = "right-to-left"
+
     try:
-        status = main(max_cycles)
+        status = main(max_cycles, start_direction)
     finally:
         exit_curses()
 
