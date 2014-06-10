@@ -88,7 +88,7 @@ function get_option
 {
     while true; do
         clean_stdin
-        read -p "Your choice: " -e option
+        read -p "Your choice: " option
         option=${option:0:1}
         eval "$1=\"$option\""
         if [ -z "$option" ]; then
@@ -263,7 +263,7 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     # Read the username
     while true; do
         clean_stdin
-        read -p "Your name: " -e username
+        read -p "Your name: " username
 
         # username empty
         if [ -z "$username" ]; then
