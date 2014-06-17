@@ -317,8 +317,8 @@ if [ "$stage" -le 2 ]; then
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
     rm -rf /home/$username/rabbithole
 
-    # Run the matrix animation for 3 seconds with no judoka
-    $res_dir/matrix.py 3 "no"
+    # Run the matrix animation for 2 seconds with no judoka
+    $res_dir/matrix.py 2 "no"
 
     $res_dir/rabbit.py 1 right-to-left
 
