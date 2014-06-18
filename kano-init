@@ -324,7 +324,7 @@ if [ "$stage" -le 2 ]; then
 
     clear
     linebreak
-    typewriter_echo "$username, It's a trap!" 2 1 1 1 1
+    typewriter_echo "$username, it's a trap!" 2 1 1 1 1
 
     set_autostart_stage 3
 fi
