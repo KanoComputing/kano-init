@@ -184,7 +184,7 @@ def main(username):
     bomb_w = animation_width(bomb)
     bomb_h = animation_height(bomb)
 
-    msg = "Quick, %s, type {{1startx}} to escape!" % username
+    msg = "Quick, %s, type startx to escape!" % username
 
     with l:
         h, w = screen.getmaxyx()
