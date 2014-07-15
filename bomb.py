@@ -145,11 +145,6 @@ def blink(duration, interval):
     """
 
     with l:
-        # initialize colours for blinking
-        curses.start_color()
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
-
         curses.curs_set(0)
         h, w = screen.getmaxyx()
 
@@ -184,9 +179,17 @@ def main(username):
     bomb_w = animation_width(bomb)
     bomb_h = animation_height(bomb)
 
-    msg = "Quick, %s, type startx to escape!" % username
+    msg1 = "Quick, %s, type" % username
+    msg2 = " startx "
+    msg3 = "to escape!"
 
     with l:
+        # initialize colours
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
+        curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
         h, w = screen.getmaxyx()
 
     # position of the bomb
@@ -198,13 +201,18 @@ def main(username):
     msgy = starty + bomb_h + 2
 
     # initial position of the cursor
-    cursorx = msgx + len(msg) / 2 - 3
+    cursorx = msgx + len(msg1 + msg2 + msg3) / 2 - 3
     cursory = msgy + 2
 
     # initialize the bomb
     draw_frame(bomb[0], startx, starty)
     with l:
-        draw_fn(msgy, msgx, msg)
+        x = msgx
+        draw_fn(msgy, x, msg1)
+        x += len(msg1)
+        draw_fn(msgy, x, msg2, curses.color_pair(3))
+        x += len(msg2)
+        draw_fn(msgy, x, msg3)
 
     # Start the thread for the input functionality
     t = Thread(target=user_input, args=(cursorx, cursory))
