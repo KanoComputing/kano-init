@@ -39,3 +39,4 @@ alias startx=disabled
 alias su=disabled
 alias rm=disabled
 alias find=disabled
+alias bc=disabled
