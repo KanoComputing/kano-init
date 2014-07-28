@@ -210,8 +210,6 @@ fi
 clear
 sleep 1
 
-whitespace=`add_character_padding 3`
-
 # delete user
 if [ "$stage" -eq 8 ]; then
     kano-usertools deleteuser
@@ -252,11 +250,14 @@ fi
 # Run the matrix animation for 2 seconds and show the Judoka face
 $res_dir/matrix.py 2 "yes"
 
+# Number of breakline above the first string on the screen
+$TOP_PADDING=3
+
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     clear
     clean_stdin
-    typewriter_echo "Hello!" 0 1 1 1 1
+    typewriter_echo "Hello!" 0 1 1 1 $TOP_PADDING
     typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
     typewriter_echo "What should I call you?" 0 1 0 1
 
@@ -288,7 +289,7 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     set_autostart_stage 2
 else
     username=`kano-usertools loadname`
-    typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 1
+    typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 $TOP_PADDING
 fi
 
 # creating user
@@ -309,7 +310,7 @@ if [ "$stage" -le 2 ]; then
     clean_stdin
 
     linebreak
-    typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 1
+    typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 $TOP_PADDING
     typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 1 1 1
     typewriter_echo "Type{{9 cd rabbithole }}" 0.5 2 1 0 1
 
@@ -324,7 +325,7 @@ if [ "$stage" -le 2 ]; then
 
     clear
     linebreak
-    typewriter_echo "$username, it's a trap!" 2 1 1 1 1
+    typewriter_echo "$username, it's a trap!" 2 1 1 1 $TOP_PADDING
 
     set_autostart_stage 3
 fi
@@ -342,7 +343,7 @@ if [ "$stage" -le 3 ]; then
         clear
         if [ $rv -ne 0 ]; then
             sleep 1
-            typewriter_echo "Try again!" 2 0 1 0 1
+            typewriter_echo "Try again!" 2 0 1 0 $TOP_PADDING
         else
             break
         fi
