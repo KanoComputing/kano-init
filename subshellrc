@@ -1,11 +1,11 @@
 cd
 . .bashrc
 
-export PS1="    $PS1"
+export PS1="          $PS1"
 
 function disabled
 {
-    echo "There's no rabbit here, try again!"
+    echo "          There's no rabbit here, try again!"
 }
 
 function in_rabbit_hole

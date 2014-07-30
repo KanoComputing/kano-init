@@ -251,7 +251,7 @@ fi
 $res_dir/matrix.py 2 "yes"
 
 # Number of breakline above the first string on the screen
-$TOP_PADDING=3
+TOP_PADDING=4
 
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
