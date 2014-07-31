@@ -92,9 +92,9 @@ function get_option
         option=${option:0:1}
         eval "$1=\"$option\""
         if [ -z "$option" ]; then
-            typewriter_echo "You need to choose one option. Which one do you pick:" 0 1 1 1
+            typewriter_echo "You need to choose one option. Which one do you pick:" 0 1 9 1
         elif [ -z "`grep "^[123]$" <<<"$option"`" ]; then
-            typewriter_echo "The options are 1, 2, or 3. Which one do you pick:" 0 1 1 1
+            typewriter_echo "The options are 1, 2, or 3. Which one do you pick:" 0 1 9 1
         else
             break
         fi
@@ -252,14 +252,15 @@ $res_dir/matrix.py 2 "yes"
 
 # Number of breakline above the first string on the screen
 TOP_PADDING=4
+LEFT_PADDING=9
 
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     clear
     clean_stdin
-    typewriter_echo "Hello!" 0 1 1 1 $TOP_PADDING
-    typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 0 1
-    typewriter_echo "What should I call you?" 0 1 0 1
+    typewriter_echo "Hello!" 0 1 $LEFT_PADDING 0 $TOP_PADDING
+    typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 $LEFT_PADDING 0
+    typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 1
 
     # Read the username
     while true; do
@@ -268,16 +269,16 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
 
         # username empty
         if [ -z "$username" ]; then
-            typewriter_echo "Type a cool name." 0 1 1 1
+            typewriter_echo "Type a cool name." 0 1 $LEFT_PADDING 1
         # invalid characters
         elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
-            typewriter_echo "Just one word, letters or numbers! Try again." 0 1 1 1
+            typewriter_echo "Just one word, letters or numbers! Try again." 0 1 $LEFT_PADDING 1
         # already taken
         elif [ -n "`grep "^$username\:" /etc/passwd`" ]; then
-            typewriter_echo "This one is already taken! Try again." 0 1 1 1
+            typewriter_echo "This one is already taken! Try again." 0 1 $LEFT_PADDING 1
         # too long
         elif [ ${#username} -gt 25 ]; then
-             typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 1 1
+             typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 $LEFT_PADDING 1
         # OK
         else
             break
@@ -289,7 +290,7 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     set_autostart_stage 2
 else
     username=`kano-usertools loadname`
-    typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 1 0 $TOP_PADDING
+    typewriter_echo "Where was I $username? All right, I remember!" 0.5 1 $LEFT_PADDING 0 $TOP_PADDING
 fi
 
 # creating user
@@ -310,9 +311,9 @@ if [ "$stage" -le 2 ]; then
     clean_stdin
 
     linebreak
-    typewriter_echo "$username, follow the white rabbit... " 0.5 1 1 1 $TOP_PADDING
-    typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 1 1 1
-    typewriter_echo "Type{{9 cd rabbithole }}" 0.5 2 1 0 1
+    typewriter_echo "$username, follow the white rabbit... " 0.5 1 $LEFT_PADDING 0 $TOP_PADDING
+    typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 $LEFT_PADDING 0 1
+    typewriter_echo "Type{{9 cd rabbithole }}" 0.5 2 $LEFT_PADDING 0 1
 
     mkdir -p /home/$username/rabbithole
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
@@ -325,7 +326,7 @@ if [ "$stage" -le 2 ]; then
 
     clear
     linebreak
-    typewriter_echo "$username, it's a trap!" 2 1 1 1 $TOP_PADDING
+    typewriter_echo "$username, it's a trap!" 2 1 $LEFT_PADDING 0 $TOP_PADDING
 
     set_autostart_stage 3
 fi
@@ -343,7 +344,7 @@ if [ "$stage" -le 3 ]; then
         clear
         if [ $rv -ne 0 ]; then
             sleep 1
-            typewriter_echo "Try again!" 2 0 1 0 $TOP_PADDING
+            typewriter_echo "Try again!" 2 0 $LEFT_PADDING 0 $TOP_PADDING
         else
             break
         fi
