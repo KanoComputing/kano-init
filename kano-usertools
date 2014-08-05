@@ -17,6 +17,7 @@ import json
 from kano_settings.keyboard.keyboard_config import set_keyboard
 from kano_settings.config_file import file_replace
 from kano_settings.boot_config import set_config_value, set_config_comment
+from kano.utils import write_json
 
 
 def run(cmd):
@@ -260,13 +261,15 @@ elif sys.argv[1] == 'deleteallusers':
 elif sys.argv[1] == 'restorefactory':
 
     # removing wifi settings
-    try:
-        os.unlink('/etc/kwifiprompt-cache.conf')
-    except:
-        pass
+    default_wifi_cache = {
+        "enckey": "kanuxpass",
+        "encryption": "wpa",
+        "essid": "kanux"
+    }
+    write_json('/etc/kwifiprompt-cache.conf', default_wifi_cache)
 
     # set the keyboard to default
-    set_keyboard('', 'generic')
+    set_keyboard('en_US', 'generic')
 
     # setting the audio to analogue
     amixer_from = "amixer -c 0 cset numid=3 [0-9]"
