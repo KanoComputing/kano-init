@@ -179,6 +179,7 @@ elif [ "$1" == "reset" ]; then
     set_autologin_console "root"
     set_autostart_stage 9
     disable_lxde_autostart
+    kano-usertools restorefactory
     echo "kano-init RESET scheduled for the next system reboot"
     exit 0
 fi
