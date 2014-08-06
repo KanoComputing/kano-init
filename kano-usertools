@@ -14,6 +14,11 @@ import subprocess
 import shutil
 import json
 
+from kano_settings.keyboard.keyboard_config import set_keyboard
+from kano_settings.config_file import file_replace
+from kano_settings.boot_config import set_config_value, set_config_comment
+from kano.utils import write_json
+
 
 def run(cmd):
     return subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
@@ -251,6 +256,45 @@ elif sys.argv[1] == 'deleteallusers':
             print e
 
     run('rm -rf /home/*')
+
+# restoring factory settings
+elif sys.argv[1] == 'restorefactory':
+
+    # removing wifi settings
+    default_wifi_cache = {
+        "enckey": "kanuxpass",
+        "encryption": "wpa",
+        "essid": "kanux"
+    }
+    write_json('/etc/kwifiprompt-cache.conf', default_wifi_cache)
+
+    # set the keyboard to default
+    set_keyboard('en_US', 'generic')
+
+    # setting the audio to analogue
+    amixer_from = "amixer -c 0 cset numid=3 [0-9]"
+    amixer_to = "amixer -c 0 cset numid=3 1"
+
+    file_replace("/etc/rc.audio", amixer_from, amixer_to)
+    set_config_value('hdmi_ignore_edid_audio', 1)
+    set_config_value('hdmi_drive', None)
+
+    # resetting HDMI settings
+    set_config_value('disable_overscan', 1)
+    set_config_value('overscan_left', 0)
+    set_config_value('overscan_right', 0)
+    set_config_value('overscan_top', 0)
+    set_config_value('overscan_bottom', 0)
+    set_config_value('hdmi_pixel_encoding', 2)
+    set_config_value('hdmi_group', None)
+    set_config_value('hdmi_mode', None)
+    set_config_comment('kano_screen_used', 'xxx')
+
+    # resetting overclocking settings
+    set_config_value('arm_freq', 950)
+    set_config_value('core_freq', 450)
+    set_config_value('sdram_freq', 450)
+    set_config_value('over_voltage', 6)
 
 # mistyped command
 else:
