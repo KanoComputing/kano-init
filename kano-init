@@ -314,7 +314,7 @@ if [ "$stage" -le 2 ]; then
     linebreak
     typewriter_echo "$username, follow the white rabbit... " 0.5 1 $LEFT_PADDING 0 $TOP_PADDING
     typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 $LEFT_PADDING 0 1
-    typewriter_echo "Type{{9 cd rabbithole }}" 0.5 2 $LEFT_PADDING 0 1
+    typewriter_echo "Type{{9 cd rabbithole }}" 0 2 $LEFT_PADDING 0 1
 
     mkdir -p /home/$username/rabbithole
     sudo -u "$username" -H bash --init-file $res_dir/subshellrc
