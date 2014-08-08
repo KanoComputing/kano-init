@@ -17,7 +17,6 @@ import json
 from kano_settings.keyboard.keyboard_config import set_keyboard
 from kano_settings.config_file import file_replace
 from kano_settings.boot_config import set_config_value, set_config_comment
-from kano.utils import write_json
 
 
 def run(cmd):
@@ -260,13 +259,11 @@ elif sys.argv[1] == 'deleteallusers':
 # restoring factory settings
 elif sys.argv[1] == 'restorefactory':
 
-    # removing wifi settings
-    default_wifi_cache = {
-        "enckey": "kanuxpass",
-        "encryption": "wpa",
-        "essid": "kanux"
-    }
-    write_json('/etc/kwifiprompt-cache.conf', default_wifi_cache)
+    # removing wifi cache
+    try:
+        os.remove('/etc/kwifiprompt-cache.conf')
+    except Exception:
+        pass
 
     # set the keyboard to default
     set_keyboard('en_US', 'generic')
