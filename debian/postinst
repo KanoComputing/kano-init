@@ -5,7 +5,20 @@
 # Copyright (C) 2014 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
 
-groupadd kanousers -f
+TMP_FILE=/tmp/kano-init_conf
+
+case "$1" in
+    configure)
+        groupadd kanousers -f
+
+        # Create custom sudoers file
+        echo "%sudo   ALL=(root) NOPASSWD: /usr/bin/kano-init" > $TMP_FILE
+        chown root:root $TMP_FILE
+        mv $TMP_FILE /etc/sudoers.d/
+
+        ;;
+esac
+
 
 #DEBHELPER#
 
