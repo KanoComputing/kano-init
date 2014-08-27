@@ -31,6 +31,11 @@ function usage
     echo "    singlemulti   Set autologin depending on number of users."
     echo ""
 
+    # The following one is being called at the end of kano-init-flow
+    # to indicate that the setup has been finalized.
+    echo "    finalise      Finalize the kit init process"
+    echo ""
+
     exit "$1"
 }
 
@@ -128,18 +133,12 @@ function singlemulti
 
     if [ $number_of_users -eq 0 ]; then
         newuser
-
-    elif [ $number_of_users -eq 1 ]; then
+    else
         username=`kano-usertools firstuser`
         set_autologin_console "$username"
         set_autologin_gui "$username"
         enable_lxde_autostart
-
-    else
-        disable_autologin_console
-        disable_autologin_gui
-        enable_lxde_autostart
-fi
+    fi
 }
 
 # start
@@ -181,6 +180,12 @@ elif [ "$1" == "reset" ]; then
     disable_lxde_autostart
     kano-usertools restorefactory
     echo "kano-init RESET scheduled for the next system reboot"
+    exit 0
+elif [ "$1" == "finalise" ]; then
+    number_of_users=`kano-usertools number`
+    if [ $number_of_users -gt 1 ]; then
+        disable_autologin_console
+        disable_autologin_gui
     exit 0
 fi
 
