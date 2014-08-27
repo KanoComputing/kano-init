@@ -134,9 +134,8 @@ function singlemulti
     if [ $number_of_users -eq 0 ]; then
         newuser
     else
-        username=`kano-usertools firstuser`
-        set_autologin_console "$username"
-        set_autologin_gui "$username"
+        set_autologin_console "$1"
+        set_autologin_gui "$1"
         enable_lxde_autostart
     fi
 }
@@ -160,7 +159,7 @@ if [ "$1" == "newuser" ]; then
     exit 0
 # single-multi user autoconfig
 elif [ "$1" == "singlemulti" ]; then
-    singlemulti
+    singlemulti "`kano-usertools firstuser`"
     exit 0
 # delete a single user
 elif [ "$1" == "deleteuser" ]; then
@@ -183,7 +182,7 @@ elif [ "$1" == "reset" ]; then
     exit 0
 elif [ "$1" == "finalise" ]; then
     number_of_users=`kano-usertools number`
-    if [ $number_of_users -gt 1 ]; then
+    if [ "$number_of_users" -gt "1" ]; then
         disable_autologin_console
         disable_autologin_gui
     fi
@@ -308,7 +307,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # setting up single-multi user
-singlemulti
+singlemulti "$username"
 
 # [Stage 2] Riddle: White rabbit riddle
 numFails=0
