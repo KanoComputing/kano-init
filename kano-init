@@ -186,6 +186,7 @@ elif [ "$1" == "finalise" ]; then
     if [ $number_of_users -gt 1 ]; then
         disable_autologin_console
         disable_autologin_gui
+    fi
     exit 0
 fi
 
