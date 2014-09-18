@@ -7,6 +7,7 @@ Build-Depends: debhelper (>=9.0.0)
 
 Package: kano-init
 Architecture: all
-Depends: ${misc:Depends}, kano-motd, kano-toolset (>= 1.0-58)
+Depends: ${misc:Depends}, kano-motd, kano-toolset (>= 1.0-58),
+         kano-settings (>=1.2.2-1)
 Description: Initialize Kanux installation on a Kano kit
  This script asks for the user name, expands the root partition, and more.
