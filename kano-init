@@ -254,12 +254,13 @@ if [ `kano-usertools testname` -eq 0 ]; then
 fi
 
 # Load the init configuration from /boot
+INIT_CONF=/boot/init.conf
 FULL_FLOW="true"
-if [ -e /boot/init.conf ]; then
-    SKIP=`json-get /boot/init.conf skip_cli_flow`
+if [ -e $INIT_CONF ]; then
+    SKIP=`json-get $INIT_CONF skip_cli_flow`
     rv=$?
     if [ "$rv" -ne 0 ]; then
-        if [ "$SKIP" != "true" ]; then
+        if [ "$SKIP" != "True" ]; then
             FULL_FLOW="false"
         fi
     fi
