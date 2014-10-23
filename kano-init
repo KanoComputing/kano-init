@@ -253,8 +253,22 @@ if [ `kano-usertools testname` -eq 0 ]; then
     stage=1
 fi
 
+# Load the init configuration from /boot
+FULL_FLOW="true"
+if [ -e /boot/init.conf ]; then
+    SKIP=`json-get /boot/init.conf skip_cli_flow`
+    rv=$?
+    if [ "$rv" -ne 0 ]; then
+        if [ "$SKIP" != "true" ]; then
+            FULL_FLOW="false"
+        fi
+    fi
+fi
+
 # Run the matrix animation for 2 seconds and show the Judoka face
-$res_dir/matrix.py 2 "yes"
+if [ "$FULL_FLOW" == "true" ]; then
+    $res_dir/matrix.py 2 "yes"
+fi
 
 # Number of breakline above the first string on the screen
 TOP_PADDING=4
@@ -264,8 +278,11 @@ LEFT_PADDING=9
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     clear
     clean_stdin
-    typewriter_echo "Hello!" 0 1 $LEFT_PADDING 0 $TOP_PADDING
-    typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 $LEFT_PADDING 0
+
+    if [ "$FULL_FLOW" == "true" ]; then
+        typewriter_echo "Hello!" 0 1 $LEFT_PADDING 0 $TOP_PADDING
+        typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 $LEFT_PADDING 0
+    fi
     typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 1
 
     # Read the username
@@ -310,29 +327,30 @@ fi
 singlemulti "$username"
 
 # [Stage 2] Riddle: White rabbit riddle
-numFails=0
 if [ "$stage" -le 2 ]; then
-    $res_dir/rabbit.py 1 left-to-right
-    clear
-    clean_stdin
+    if [ "$FULL_FLOW" == "true" ]; then
+        $res_dir/rabbit.py 1 left-to-right
+        clear
+        clean_stdin
 
-    linebreak
-    typewriter_echo "$username, follow the white rabbit... " 0.5 1 $LEFT_PADDING 0 $TOP_PADDING
-    typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 $LEFT_PADDING 0 1
-    typewriter_echo "Type{{9 cd rabbithole }}" 0 2 $LEFT_PADDING 0 1
+        linebreak
+        typewriter_echo "$username, follow the white rabbit... " 0.5 1 $LEFT_PADDING 0 $TOP_PADDING
+        typewriter_echo "He's hiding in my memory. Can you find him?" 0.5 1 $LEFT_PADDING 0 1
+        typewriter_echo "Type{{9 cd rabbithole }}" 0 2 $LEFT_PADDING 0 1
 
-    mkdir -p /home/$username/rabbithole
-    sudo -u "$username" -H bash --init-file $res_dir/subshellrc
-    rm -rf /home/$username/rabbithole
+        mkdir -p /home/$username/rabbithole
+        sudo -u "$username" -H bash --init-file $res_dir/subshellrc
+        rm -rf /home/$username/rabbithole
 
-    # Run the matrix animation for 2 seconds with no judoka
-    $res_dir/matrix.py 2 "no"
+        # Run the matrix animation for 2 seconds with no judoka
+        $res_dir/matrix.py 2 "no"
 
-    $res_dir/rabbit.py 1 right-to-left
+        $res_dir/rabbit.py 1 right-to-left
 
-    clear
-    linebreak
-    typewriter_echo "$username, it's a trap!" 2 1 $LEFT_PADDING 0 $TOP_PADDING
+        clear
+        linebreak
+        typewriter_echo "$username, it's a trap!" 2 1 $LEFT_PADDING 0 $TOP_PADDING
+    fi
 
     set_autostart_stage 3
 fi
@@ -341,7 +359,7 @@ fi
 set_autostart_stage 0
 
 # [Stage 3] startx
-if [ "$stage" -le 3 ]; then
+if [ "$stage" -le 3 ] && [ "$FULL_FLOW" == "true" ]; then
     while true; do
         clean_stdin
         python -B $res_dir/bomb.py "$username"
