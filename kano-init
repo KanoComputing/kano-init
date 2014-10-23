@@ -281,18 +281,18 @@ LEFT_PADDING=9
 
 # [Stage 1] Name: Request user name and create user
 if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
-    clear
-    clean_stdin
-
-    if [ "$FULL_FLOW" == "true" ]; then
-        typewriter_echo "Hello!" 0 1 $LEFT_PADDING 0 $TOP_PADDING
-        typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 $LEFT_PADDING 0
-        typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 1
-    else
-        typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 0 $TOP_PADDING
-    fi
-
     if [ -z "$username" ]; then
+        clear
+        clean_stdin
+
+        if [ "$FULL_FLOW" == "true" ]; then
+            typewriter_echo "Hello!" 0 1 $LEFT_PADDING 0 $TOP_PADDING
+            typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 $LEFT_PADDING 0
+            typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 1
+        else
+            typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 0 $TOP_PADDING
+        fi
+
         # Read the username
         while true; do
             clean_stdin
