@@ -257,7 +257,7 @@ fi
 INIT_CONF=/boot/init.conf
 FULL_FLOW="true"
 if [ -e $INIT_CONF ]; then
-    SKIP=`json-get $INIT_CONF skip_cli_flow`
+    SKIP=`json-get $INIT_CONF kano_init.skip`
     rv=$?
     if [ "$rv" -eq 0 ] && [ "$SKIP" == "True" ]; then
         FULL_FLOW="false"
@@ -281,8 +281,10 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
     if [ "$FULL_FLOW" == "true" ]; then
         typewriter_echo "Hello!" 0 1 $LEFT_PADDING 0 $TOP_PADDING
         typewriter_echo "I'm KANO. Thanks for bringing me to life." 0.5 2 $LEFT_PADDING 0
+        typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 1
+    else
+        typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 0 $TOP_PADDING
     fi
-    typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 1
 
     # Read the username
     while true; do
