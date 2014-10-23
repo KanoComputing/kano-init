@@ -262,6 +262,12 @@ if [ -e $INIT_CONF ]; then
     if [ "$rv" -eq 0 ] && [ "$SKIP" == "True" ]; then
         FULL_FLOW="false"
     fi
+
+    username=`json-get $INIT_CONF kano_init.user`
+    rv=$?
+    if [ "$rv" -ne 0 ] || [ -z "$username" ]; then
+        unset username
+    fi
 fi
 
 # Run the matrix animation for 2 seconds and show the Judoka face
@@ -286,28 +292,31 @@ if [ "$stage" -le 1 ] && [ `kano-usertools testname` -ne 1 ]; then
         typewriter_echo "What should I call you?" 0 1 $LEFT_PADDING 0 $TOP_PADDING
     fi
 
-    # Read the username
-    while true; do
-        clean_stdin
-        read -p "Your name: " username
+    if [ -z "$username" ]; then
+        # Read the username
+        while true; do
+            clean_stdin
+            read -p "Your name: " username
 
-        # username empty
-        if [ -z "$username" ]; then
-            typewriter_echo "Type a cool name." 0 1 $LEFT_PADDING 1
-        # invalid characters
-        elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
-            typewriter_echo "Just one word, letters or numbers! Try again." 0 1 $LEFT_PADDING 1
-        # already taken
-        elif [ -n "`grep "^$username\:" /etc/passwd`" ]; then
-            typewriter_echo "This one is already taken! Try again." 0 1 $LEFT_PADDING 1
-        # too long
-        elif [ ${#username} -gt 25 ]; then
-             typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 $LEFT_PADDING 1
-        # OK
-        else
-            break
-        fi
-    done
+            # username empty
+            if [ -z "$username" ]; then
+                typewriter_echo "Type a cool name." 0 1 $LEFT_PADDING 1
+            # invalid characters
+            elif [ -z "`grep "^[a-zA-Z0-9]\+$" <<<"$username"`" ]; then
+                typewriter_echo "Just one word, letters or numbers! Try again." 0 1 $LEFT_PADDING 1
+            # already taken
+            elif [ -n "`grep "^$username\:" /etc/passwd`" ]; then
+                typewriter_echo "This one is already taken! Try again." 0 1 $LEFT_PADDING 1
+            # too long
+            elif [ ${#username} -gt 25 ]; then
+                 typewriter_echo "This one is too long by "`expr ${#username} - 25`" characters! Try again." 0 1 $LEFT_PADDING 1
+            # OK
+            else
+                break
+            fi
+        done
+    fi
+
     # save username to temp file
     `kano-usertools savename $username`
 
