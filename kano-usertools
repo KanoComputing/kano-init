@@ -157,7 +157,7 @@ elif sys.argv[1] == "createuser":
     userid = get_new_kanouser_id()
     # start creating the user
     USER_PASSWORD = "kano"
-    USER_GROUPS = "adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input,kanousers"
+    USER_GROUPS = "tty,adm,dialout,cdrom,audio,users,sudo,video,games,plugdev,input,kanousers"
 
     # Create the new user
     home = '/home/' + username
