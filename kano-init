@@ -51,13 +51,13 @@ function linebreak
 
 function set_autologin_console
 {
-    sed -r -i.bak "s|^(1:2345:respawn:/sbin/getty).+|\1 -n -o'-f $1' 38400 tty1|" /etc/inittab
+    sed -r -i.bak "s|^(1:2345:respawn:/sbin/a?getty).+|\1 -n -o'-f $1' 38400 tty1|" /etc/inittab
     init q
 }
 
 function disable_autologin_console
 {
-    sed -r -i.bak "s|^(1:2345:respawn:/sbin/getty).+|\1 38400 tty1|" /etc/inittab
+    sed -r -i.bak "s|^(1:2345:respawn:/sbin/a?getty).+|\1 38400 tty1|" /etc/inittab
     init q
 }
 
@@ -167,10 +167,8 @@ elif [ "$1" == "deleteuser" ]; then
     echo "#$2" >> /etc/profile.d/autostart-kano-init.sh
     set_autologin_console "root"
     set_autostart_stage 8
-    number_of_users=`kano-usertools number`
-    if [ $number_of_users -ne 2 ]; then
-        disable_lxde_autostart
-    fi
+    disable_lxde_autostart
+    echo "Please reboot to finalise the removal of the '$2' user"
     exit 0
 # reset: delete all users and trigger init
 elif [ "$1" == "reset" ]; then
@@ -226,16 +224,19 @@ if [ "$stage" -eq 8 ]; then
         stage=1
     elif [ $number_of_users -eq 1 ]; then
         username=`kano-usertools firstuser`
+        disable_autologin_console
         set_autologin_console "$username"
         set_autologin_gui "$username"
         enable_lxde_autostart
         set_autostart_stage 0
+        service lightdm start
         exit 0
     else
         disable_autologin_console
         disable_autologin_gui
         enable_lxde_autostart
         set_autostart_stage 0
+        service lightdm start
         exit 0
     fi
 fi
