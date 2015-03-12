@@ -167,7 +167,10 @@ elif sys.argv[1] == "createuser":
         print "home folder exists, moving {} to {}".format(home, home_bak)
         shutil.move(home, home_bak)
 
-    cmd = 'useradd -m -u {} -s /bin/bash {}'.format(userid, username)
+    # The umask force is used to blind the actual /home/username folder from other users
+    umask_override='0077'
+
+    cmd = 'useradd -m -u {} -K UMASK={} -s /bin/bash {}'.format(userid, umask_override, username)
     run_term_on_error(cmd)
 
     cmd = 'echo "{}:{}" | chpasswd'.format(username, USER_PASSWORD)
