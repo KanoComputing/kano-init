@@ -17,6 +17,8 @@ import json
 from kano_settings.system.keyboard_config import set_keyboard
 from kano_settings.config_file import file_replace
 from kano_settings.boot_config import set_config_value, set_config_comment
+from kano_settings.system.overclock import set_default_overclock_values
+from kano.utils import is_model_2_b
 
 
 def run(cmd):
@@ -291,10 +293,8 @@ elif sys.argv[1] == 'restorefactory':
     set_config_comment('kano_screen_used', 'xxx')
 
     # resetting overclocking settings
-    set_config_value('arm_freq', 950)
-    set_config_value('core_freq', 450)
-    set_config_value('sdram_freq', 450)
-    set_config_value('over_voltage', 6)
+    set_default_overclock_values(is_model_2_b())
+
 
 # mistyped command
 else:
