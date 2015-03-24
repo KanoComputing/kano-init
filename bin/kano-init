@@ -34,8 +34,14 @@ if __name__ == '__main__' and __package__ is None:
 from kano.utils import enforce_root
 from kano.logging import logger
 
+from kano_init.terminal import typewriter_echo
+
 def main():
-    pass
+    msg = 'ERROR: Administrator priviledges are required to ' + \
+          'perform this operation'
+    enforce_root(msg)
+
+    return 0
 
 if __name__ == '__main__':
     sys.exit(main())
