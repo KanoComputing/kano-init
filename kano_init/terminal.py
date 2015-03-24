@@ -17,10 +17,37 @@
 
 import sys
 import time
+import termios
+import atexit
 
+
+original_state = None
 SPEED_FACTOR = 1
 
+
+def restore_original_state():
+    if original_state:
+        fd = sys.stdin.fileno()
+        termios.tcsetattr(fd, termios.TCSADRAIN, original_state)
+
+
+def save_original_state():
+    global original_state
+
+    if not original_state:
+        fd = sys.stdin.fileno()
+        original_state = termios.tcgetattr(fd)
+
+        atexit.register(restore_original_state)
+
+
+# Store the original state of the terminal and make sure we restore it
+save_original_state()
+
+
 def typewriter_echo(string):
+    set_echo(False)
+
     for c in string:
         if c == ' ':
             # Sleep for a little longer between words
@@ -36,10 +63,29 @@ def typewriter_echo(string):
     time.sleep(0.25 * SPEED_FACTOR)
     _write_flush('\n')
 
+    set_echo(True)
+    discard_input()
+
 
 def _write_flush(string):
     sys.stdout.write(string)
     sys.stdout.flush()
+
+
+def set_echo(enabled=True):
+    fd = sys.stdin.fileno()
+    attrs = termios.tcgetattr(fd)
+
+    if enabled:
+        attrs[3] = attrs[3] | termios.ECHO
+    else:
+        attrs[3] = attrs[3] & ~termios.ECHO
+
+    termios.tcsetattr(fd, termios.TCSADRAIN, attrs)
+
+
+def discard_input():
+    termios.tcflush(sys.stdin.fileno(), termios.TCIOFLUSH)
 
 
 if __name__ == '__main__':
