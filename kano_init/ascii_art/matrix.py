@@ -2,14 +2,14 @@
 
 # matrix.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
-# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# Copyright (C) 2014, 2015 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# Startx exercise
+# A basic matrix animation showed during the init flow
 #
 
-import re
-import os
+# TODO: Needs a LOT of refactoring ...
+
 import sys
 import time
 import curses
@@ -25,7 +25,7 @@ def draw_fn(y, x, msg, color=None):
         else:
             screen.addstr(y, x, msg, color)
     except:
-        exit_curses()
+        shutdown_curses()
         sys.exit(0)
 
 
@@ -73,7 +73,7 @@ class Drop(object):
     def _phase_one(self):
         if self._cycle % self._cycles_per_char == 0:
             draw_fn(self._posy + self._charpos, self._posx,
-                          chr(randint(97, 122)), self._colour1)
+                    chr(randint(97, 122)), self._colour1)
             self._charpos += 1
 
             if self._charpos < self._length-1:
@@ -85,7 +85,7 @@ class Drop(object):
     def _phase_two(self):
         if self._cycle % self._cycles_per_char == 0:
             draw_fn(self._posy + self._charpos, self._posx,
-                          chr(randint(65, 90)), self._colour2)
+                    chr(randint(65, 90)), self._colour2)
             self._charpos += 1
 
         self._cycle += 1
@@ -157,7 +157,6 @@ class Face(object):
         self._pending_lines = range(0, len(self._face))
         self._mask = []
 
-
     def draw_next(self):
         if len(self._pending_lines) > 0:
             n = randint(0, len(self._pending_lines)-1)
@@ -173,6 +172,7 @@ def debug(msg):
     with open(log, 'a') as f:
         f.write(str(msg) + '\n')
 
+
 def main(duration, show_face):
     h, w = screen.getmaxyx()
 
@@ -186,20 +186,20 @@ def main(duration, show_face):
     while True:
         elapsed += tick
         if elapsed < duration:
-            length = randint(5,h-1)
+            length = randint(5, h-1)
             xpos = randint(0, w-1)
             ypos = randint(0, h-length-1)
             drop = Drop(xpos, ypos, length, randint(1, 2),
-                        curses.color_pair(randint(1,3)),
-                        curses.color_pair(randint(1,3)))
+                        curses.color_pair(randint(1, 3)),
+                        curses.color_pair(randint(1, 3)))
             drops.append(drop)
 
-            length = randint(5,h-1)
+            length = randint(5, h-1)
             xpos = randint(0, w-1)
             ypos = randint(0, h-length-1)
             drop = Drop(xpos, ypos, length, randint(1, 2),
-                        curses.color_pair(randint(1,3)),
-                        curses.color_pair(randint(1,3)))
+                        curses.color_pair(randint(1, 3)),
+                        curses.color_pair(randint(1, 3)))
             drops.append(drop)
         else:
             for drop in drops:
@@ -233,6 +233,8 @@ def init_curses():
     global screen
 
     screen = curses.initscr()
+    screen.clear()
+    screen.refresh()
     curses.curs_set(0)
     curses.noecho()
     curses.cbreak()
@@ -261,7 +263,8 @@ def init_curses():
             curses.init_pair(4, curses.COLOR_WHITE, 0)
             curses.init_pair(5, curses.COLOR_RED, 0)
 
-def exit_curses():
+
+def shutdown_curses():
     curses.curs_set(2)
     screen.keypad(0)
     curses.echo()
@@ -269,9 +272,20 @@ def exit_curses():
     curses.endwin()
 
 
-if __name__ == "__main__":
-    init_curses()
+def matrix(duration=10, show_face=False):
+    status = 1
 
+    try:
+        init_curses()
+        status = main(duration, show_face)
+    finally:
+        shutdown_curses()
+
+    return status
+
+
+# For testing only
+if __name__ == "__main__":
     duration = 10
     show_face = False
 
@@ -280,9 +294,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 2:
         show_face = (sys.argv[2] == "yes")
 
-    try:
-        status = main(duration, show_face)
-    finally:
-        exit_curses()
-
-    sys.exit(status)
+    rv = matrix(duration, show_face)
+    sys.exit(rv)

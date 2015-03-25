@@ -1,11 +1,12 @@
-#!/usr/bin/env python
-
+#
 # bomb.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
-# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# Copyright (C) 2014, 2015 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# Startx exercise
+# The 'startx' exercise with the bomb.
+#
+# TODO: Needs a LOT of refactoring.
 #
 
 import os
@@ -28,7 +29,7 @@ def draw_fn(y, x, msg, color=None):
         else:
             screen.addstr(y, x, msg, color)
     except:
-        exit_curses()
+        shutdown_curses()
         sys.exit(0)
 
 
@@ -258,12 +259,14 @@ def init_curses():
     global screen
 
     screen = curses.initscr()
+    screen.clear()
+    screen.refresh()
     curses.noecho()
     curses.cbreak()
     screen.keypad(1)
 
 
-def exit_curses():
+def shutdown_curses():
     curses.curs_set(2)
     screen.keypad(0)
     curses.echo()
@@ -271,15 +274,20 @@ def exit_curses():
     curses.endwin()
 
 
-if __name__ == "__main__":
+def bomb(user="buddy"):
+    rv = 1
+    try:
+        init_curses()
+        rv = main(user)
+    finally:
+        shutdown_curses()
 
-    init_curses()
+    return rv
+
+
+if __name__ == "__main__":
     user = "buddy"
     if len(sys.argv) > 1:
         user = sys.argv[1]
-    try:
-        status = main(user)
-    finally:
-        exit_curses()
 
-    sys.exit(status)
+    sys.exit(bomb(user))

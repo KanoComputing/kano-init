@@ -24,6 +24,8 @@ import atexit
 original_state = None
 SPEED_FACTOR = 1
 
+TOP_PADDING = 4
+LEFT_PADDING = 9
 
 def restore_original_state():
     if original_state:
@@ -45,29 +47,37 @@ def save_original_state():
 save_original_state()
 
 
-def typewriter_echo(string):
+def clear_screen():
+    sys.stderr.write("\x1b[2J\x1b[H")
+    print TOP_PADDING * '\n'
+    sys.stderr.flush()
+
+
+def typewriter_echo(string, sleep=0, trailing_linebreaks=1):
     set_echo(False)
+
+    write_flush(LEFT_PADDING * ' ')
 
     for c in string:
         if c == ' ':
             # Sleep for a little longer between words
-            time.sleep(0.06 * SPEED_FACTOR)
+            time.sleep(0.075 * SPEED_FACTOR)
         elif c in ['.', ',', '?', '!']:
             # The sleep is a little longer for punctuation
-            time.sleep(0.04 * SPEED_FACTOR)
+            time.sleep(0.05 * SPEED_FACTOR)
         else:
-            time.sleep(0.02 * SPEED_FACTOR)
+            time.sleep(0.025 * SPEED_FACTOR)
 
-        _write_flush(c)
+        write_flush(c)
 
-    time.sleep(0.25 * SPEED_FACTOR)
-    _write_flush('\n')
+    time.sleep(sleep + 0.3 * SPEED_FACTOR)
+    write_flush(trailing_linebreaks * '\n')
 
     set_echo(True)
     discard_input()
 
 
-def _write_flush(string):
+def write_flush(string):
     sys.stdout.write(string)
     sys.stdout.flush()
 
@@ -83,11 +93,16 @@ def set_echo(enabled=True):
 
     termios.tcsetattr(fd, termios.TCSADRAIN, attrs)
 
+def user_input(prompt):
+    typewriter_echo(prompt, trailing_linebreaks=0)
+    discard_input()
+    return raw_input()
+
 
 def discard_input():
     termios.tcflush(sys.stdin.fileno(), termios.TCIOFLUSH)
 
 
 if __name__ == '__main__':
-    typewriter_echo("Hello there Mr. Anderson, how are you today?")
-    typewriter_echo("Woooooooooooooot? No, I don't mean that.")
+    typewriter_echo("Hello!")
+    typewriter_echo("I'm KANO. Thanks for bringing me to life.")

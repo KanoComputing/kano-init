@@ -13,6 +13,8 @@ kano-init can create new users and initialise the OS for them.
 
 Usage:
   kano-init reset
+  kano-init user (add|delete)
+  kano-init flow [<stage>]
 
 Options:
   -h, --help       Show this message.
@@ -35,11 +37,19 @@ from kano.utils import enforce_root
 from kano.logging import logger
 
 from kano_init.terminal import typewriter_echo
+from kano_init.flow import flow
 
 def main():
     msg = 'ERROR: Administrator priviledges are required to ' + \
           'perform this operation'
     enforce_root(msg)
+
+    # TODO: put the version somewhere nicer
+    version = 2.0
+    args = docopt.docopt(__doc__, version=str(version))
+
+    if args['flow']:
+        flow(args['<stage>'])
 
     return 0
 
