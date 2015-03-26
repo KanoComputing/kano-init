@@ -267,6 +267,8 @@ def init_curses():
 def shutdown_curses():
     curses.curs_set(2)
     screen.keypad(0)
+    screen.clear()
+    screen.refresh()
     curses.echo()
     curses.nocbreak()
     curses.endwin()

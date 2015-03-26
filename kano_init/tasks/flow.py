@@ -27,8 +27,8 @@ from kano_init.utils import reconfigure_autostart_policy
 
 def do_username_stage():
     matrix(2, True)
-
     clear_screen()
+
     typewriter_echo('Hello!', trailing_linebreaks=2)
     typewriter_echo('I\'m KANO. Thanks for bringing me to life.',
                     sleep=0.5, trailing_linebreaks=2)
@@ -50,6 +50,7 @@ def do_white_rabbit_stage():
 
     clear_screen()
     rabbit(1, 'left-to-right')
+    clear_screen()
 
     msg = "{}, follow the white rabbit ...".format(init_status.username)
     typewriter_echo(msg, trailing_linebreaks=2)
