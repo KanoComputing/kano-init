@@ -9,6 +9,7 @@
 
 
 from kano.logging import logger
+from kano.utils import get_user_unsudoed
 
 from kano_init.status import Status, StatusError
 from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
@@ -16,7 +17,7 @@ from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
 from kano_init.user import delete_user, user_exists
 
 
-def schedule_delete_user(name):
+def schedule_delete_user(name=None):
     status = Status.get_instance()
 
     if status.stage != Status.DISABLED_STAGE:
@@ -24,13 +25,16 @@ def schedule_delete_user(name):
               "finish the task before scheduling another one."
         raise StatusError(msg)
 
-    status.stage = Status.DELETE_USER_STAGE
-    status.username = name
-    status.save()
+    if not name:
+        name = get_user_unsudoed()
 
     disable_ldm_autostart()
     unset_ldm_autologin()
     enable_console_autologin('root')
+
+    status.stage = Status.DELETE_USER_STAGE
+    status.username = name
+    status.save()
 
     print "The '{}' user will be deleted on the next reboot.".format(name)
 

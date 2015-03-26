@@ -21,14 +21,14 @@ def schedule_add_user():
               "finish the task before scheduling another one."
         raise StatusError(msg)
 
-    status.stage = Status.USERNAME_STAGE
-    status.save()
-
     disable_ldm_autostart()
     unset_ldm_autologin()
     enable_console_autologin('root')
 
     print "New user creation scheduled for the next system reboot"
+
+    status.stage = Status.ADD_USER_STAGE
+    status.save()
 
 
 def do_add_user():

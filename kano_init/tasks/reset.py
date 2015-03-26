@@ -22,12 +22,14 @@ def schedule_reset():
               "finish the task before scheduling another one."
         raise StatusError(msg)
 
-    init_status.stage = Status.RESET_STAGE
-    init_status.save()
-
     disable_ldm_autostart()
     unset_ldm_autologin()
     enable_console_autologin('root')
+
+    init_status.stage = Status.RESET_STAGE
+    init_status.save()
+
+    print 'kano-init RESET scheduled for the next system reboot'
 
 
 def do_reset():

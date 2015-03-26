@@ -12,8 +12,7 @@
 kano-init can create new users and initialise the OS for them.
 
 Usage:
-  kano-init reset
-  kano-init schedule (reset|new-user|delete-user [<name>])
+  kano-init schedule (reset|add-user|delete-user [<name>])
   kano-init boot
 
 Options:
@@ -36,10 +35,10 @@ if __name__ == '__main__' and __package__ is None:
 from kano.utils import enforce_root
 from kano.logging import logger
 
-from kano_init.status import Status
-from kano_init.tasks.add_user import do_add_user
-from kano_init.tasks.delete_user import do_delete_user
-from kano_init.tasks.reset import do_reset
+from kano_init.status import Status, StatusError
+from kano_init.tasks.add_user import do_add_user, schedule_add_user
+from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
+from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_startx_stage
 
@@ -70,6 +69,18 @@ def main():
                 do_white_rabbit_stage()
             elif status.stage == Status.STARTX_STAGE:
                 do_startx_stage()
+    elif args['schedule']:
+        try:
+            if args['reset']:
+                schedule_reset()
+            elif args['add-user']:
+                schedule_add_user()
+            elif args['delete-user']:
+                schedule_delete_user(args['<name>'])
+        except StatusError as e:
+            msg = "ERROR: {}".format(str(e))
+            logger.error(msg)
+            sys.exit(msg)
 
     return 0
 
