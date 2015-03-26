@@ -2,22 +2,13 @@
 
 # autostart-kano-init.sh
 #
-# Copyright (C) 2014 Kano Computing Ltd.
-# License:   http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
-#
-# stages:
-# Matrix animation
-# 1) User name
-# 2) White rabbit riddle
-# Matrix animation
-# 3) Startx
-# 8) Delete user
-# 9) Reset
+# Copyright (C) 2014, 2015 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 
-STAGE=0
+STATUS_FILE="/var/cache/kano-init/status.json"
 
-if [ `id -u` -eq 0 -a "$STAGE" -gt 0 ]; then
-    kano-init "$STAGE"
+if [ `id -u` -eq 0 -a "`json-get $STATUS_FILE stage`" != "disabled" ]; then
+    kano-init run
     kill -HUP $PPID
 fi

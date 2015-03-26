@@ -67,9 +67,8 @@ def user_input(cursorx, cursory):
             if keypos >= len(key):
                 return
 
-        with l:
-            if terminate:
-                return
+        if terminate:
+            return
 
 
 def load_animation(path):
@@ -173,7 +172,10 @@ def blink(duration, interval):
 
 
 def main(username):
-    global terminate
+    global terminate, keypos, terminate
+
+    keypos = 0
+    terminate = False
 
     # preload all parts of the animation
     spark = load_animation(ASCII_RES_PATH + "/spark.txt")
@@ -257,9 +259,8 @@ def main(username):
         cycle += 1
         time.sleep(0.125)
 
-    with l:
-        terminate = True
-        t.join()
+    terminate = True
+    t.join()
 
     terminate = False
 

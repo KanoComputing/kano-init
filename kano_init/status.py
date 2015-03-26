@@ -19,6 +19,10 @@ class StatusError(Exception):
 
 
 class Status(object):
+    DISABLED_STAGE = 'disabled'
+    RESET_STAGE = 'reset'
+    DELETE_USER_STAGE = 'delete-user'
+    ADD_USER_STAGE = 'add-user'
     USERNAME_STAGE = 'username-stage'
     WHITE_RABBIT_STAGE = 'white-rabbit-stage'
     STARTX_STAGE = 'startx-stage'
@@ -26,7 +30,11 @@ class Status(object):
     stages = [
         USERNAME_STAGE,
         WHITE_RABBIT_STAGE,
-        STARTX_STAGE
+        STARTX_STAGE,
+        DISABLED_STAGE,
+        RESET_STAGE,
+        DELETE_USER_STAGE,
+        ADD_USER_STAGE
     ]
 
     _status_file = STATUS_FILE_PATH
