@@ -58,7 +58,7 @@ class Status(object):
         self._initialise_status_file()
 
     def _initialise_variables(self):
-        self._stage = self.stages[0]
+        self._stage = self.DISABLED_STAGE
         self._username = None
 
     def _initialise_status_file(self):

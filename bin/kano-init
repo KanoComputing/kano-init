@@ -12,7 +12,8 @@
 kano-init can create new users and initialise the OS for them.
 
 Usage:
-  kano-init schedule (reset|add-user|delete-user [<name>])
+  kano-init schedule (reset|add-user)
+  kano-init schedule delete-user [<name>]
   kano-init boot
 
 Options:
