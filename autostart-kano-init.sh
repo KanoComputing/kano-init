@@ -9,6 +9,6 @@
 STATUS_FILE="/var/cache/kano-init/status.json"
 
 if [ `id -u` -eq 0 -a "`json-get $STATUS_FILE stage`" != "disabled" ]; then
-    kano-init run
+    kano-init boot
     kill -HUP $PPID
 fi
