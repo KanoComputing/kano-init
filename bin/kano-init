@@ -56,7 +56,7 @@ def main():
     if args['boot']:
         status = Status.get_instance()
         # TODO: Debugging only
-        status.stage = Status.USERNAME_STAGE
+        #status.stage = Status.USERNAME_STAGE
         while status.stage != Status.DISABLED_STAGE:
             if status.stage == Status.ADD_USER_STAGE:
                 do_add_user()
