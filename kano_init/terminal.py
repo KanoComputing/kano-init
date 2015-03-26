@@ -47,9 +47,10 @@ def save_original_state():
 save_original_state()
 
 
-def clear_screen():
+def clear_screen(top_padding=True):
     sys.stderr.write("\x1b[2J\x1b[H")
-    print TOP_PADDING * '\n'
+    if top_padding:
+        print TOP_PADDING * '\n'
     sys.stderr.flush()
 
 

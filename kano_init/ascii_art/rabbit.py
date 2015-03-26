@@ -16,6 +16,8 @@ import curses
 
 from random import randint
 
+from kano_init.paths import ASCII_RES_PATH
+
 screen = None
 
 
@@ -130,18 +132,12 @@ def rabbit_rl():
     pass
 
 def main(max_cycles, start_direction):
-    res_dir = "."
-    if not os.path.isdir("ascii_art"):
-        res_dir = "/usr/share/kano-init"
-
-    ascii_art_dir = res_dir + "/ascii_art"
-
     # preload all parts of the animation
-    rabbit_lr = load_animation(ascii_art_dir + "/rabbit-animation.txt")
+    rabbit_lr = load_animation(ASCII_RES_PATH + "/rabbit-animation.txt")
     rabbit_w = animation_width(rabbit_lr)
     rabbit_h = animation_height(rabbit_lr)
 
-    rabbit_rl = load_animation(ascii_art_dir + "/rabbit-animation-reversed.txt")
+    rabbit_rl = load_animation(ASCII_RES_PATH + "/rabbit-animation-reversed.txt")
 
     h, w = screen.getmaxyx()
 

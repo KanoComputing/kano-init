@@ -15,9 +15,12 @@ import time
 import curses
 from threading import Thread, Lock
 
+from kano_init.paths import ASCII_RES_PATH
+
 screen = None
 key = "startx"
 keypos = 0
+terminate = False
 
 l = Lock()
 
@@ -51,15 +54,21 @@ def user_input(cursorx, cursory):
 
     with l:
         win = curses.newwin(1, 8, cursory, cursorx)
+        win.clear()
+        win.timeout(100)
 
     while True:
         c = win.getch(0, keypos)
-        if c != curses.ERR and chr(c).lower() == key[keypos]:
+        if c != curses.ERR and c > 0 and chr(c).lower() == key[keypos]:
             with l:
                 win.addstr(0, keypos, chr(c).lower())
                 win.refresh()
                 keypos += 1
             if keypos >= len(key):
+                return
+
+        with l:
+            if terminate:
                 return
 
 
@@ -164,19 +173,15 @@ def blink(duration, interval):
 
 
 def main(username):
-    res_dir = "."
-    if not os.path.isdir("ascii_art"):
-        res_dir = "/usr/share/kano-init"
-
-    ascii_art_dir = res_dir + "/ascii_art"
+    global terminate
 
     # preload all parts of the animation
-    spark = load_animation(ascii_art_dir + "/spark.txt")
+    spark = load_animation(ASCII_RES_PATH + "/spark.txt")
 
-    numbers = load_animation(ascii_art_dir + "/numbers.txt")
+    numbers = load_animation(ASCII_RES_PATH + "/numbers.txt")
     num_w = animation_width(numbers)
 
-    bomb = load_animation(ascii_art_dir + "/bomb.txt")
+    bomb = load_animation(ASCII_RES_PATH + "/bomb.txt")
     bomb_w = animation_width(bomb)
     bomb_h = animation_height(bomb)
 
@@ -251,6 +256,12 @@ def main(username):
 
         cycle += 1
         time.sleep(0.125)
+
+    with l:
+        terminate = True
+        t.join()
+
+    terminate = False
 
     return 0
 

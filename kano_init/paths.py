@@ -13,3 +13,5 @@ PACKAGE_PATH = os.path.dirname(__file__)
 DATA_PATH = os.path.join(PACKAGE_PATH, 'data')
 
 SUBSHELLRC_PATH = os.path.join(DATA_PATH, 'subshellrc')
+
+ASCII_RES_PATH = os.path.join(PACKAGE_PATH, 'ascii_art/resources')

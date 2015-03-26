@@ -112,7 +112,7 @@ def startx_stage():
     #init_status.save()
 
     while True:
-        clear_screen()
+        clear_screen(False)
 
         if bomb(init_status.username) == 0:
             break
