@@ -26,6 +26,7 @@ class Status(object):
     USERNAME_STAGE = 'username-stage'
     WHITE_RABBIT_STAGE = 'white-rabbit-stage'
     STARTX_STAGE = 'startx-stage'
+    UI_INIT_STAGE = 'ui-init-stage'
 
     stages = [
         USERNAME_STAGE,
