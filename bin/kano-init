@@ -59,7 +59,7 @@ def main():
         status = Status.get_instance()
         # TODO: Debugging only
         #status.stage = Status.USERNAME_STAGE
-        while status.stage != Status.DISABLED_STAGE:
+        while True:
             if status.stage == Status.ADD_USER_STAGE:
                 do_add_user()
             elif status.stage == Status.DELETE_USER_STAGE:
@@ -72,6 +72,8 @@ def main():
                 do_white_rabbit_stage()
             elif status.stage == Status.STARTX_STAGE:
                 do_startx_stage()
+            else:
+                break
     elif args['schedule']:
         try:
             if args['reset']:
