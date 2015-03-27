@@ -90,6 +90,7 @@ def main():
         # This is called from kano-uixinit in kano-desktop to notify
         # that the initflow has been completed and the kit can be
         # switched to multiuser mode.
+        logger.info('kano-init finalise called')
         status = Status.get_instance()
         if status.stage == Status.UI_INIT_STAGE:
             unset_ldm_autologin()
