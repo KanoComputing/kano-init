@@ -17,6 +17,8 @@ from kano_settings.system.overclock import set_default_overclock_values
 from kano.utils import is_model_2_b
 
 from kano_init.user import get_group_members
+from kano_init.status import Status
+
 
 def enable_console_autologin(username):
     sed('^(1:2345:respawn:/sbin/a?getty).+',
@@ -53,7 +55,6 @@ def reconfigure_autostart_policy():
         enable_console_autologin('root')
         unset_ldm_autologin()
         disable_ldm_autostart()
-        return
     elif len(kanousers) == 1:
         enable_console_autologin(kanousers[0])
         set_ldm_autologin(kanousers[0])
@@ -95,3 +96,8 @@ def restore_factory_settings():
 
     # resetting overclocking settings
     set_default_overclock_values(is_model_2_b())
+
+
+def is_any_task_scheduled():
+    status = Status.get_instance()
+    return status.stage != Status.DISABLED_STAGE
