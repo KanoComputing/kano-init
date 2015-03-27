@@ -101,7 +101,7 @@ def do_startx_stage():
     # Force autologin for this user until he goes through the graphic
     # init flow. At the end of it, kano-uixinit should call kano-init
     # to finalise the process and switch the kit to multiuser.
-    set_autologin_gui(init_status.username)
+    set_ldm_autologin(init_status.username)
 
     init_status.stage = Status.UI_INIT_STAGE
     init_status.save()
