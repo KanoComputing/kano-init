@@ -14,6 +14,7 @@ kano-init can create new users and initialise the OS for them.
 Usage:
   kano-init schedule (reset|add-user)
   kano-init schedule delete-user [<name>]
+  kano-init finalise
   kano-init boot
 
 Options:
@@ -42,6 +43,7 @@ from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_startx_stage
+from kano_init.utils import unset_autologin_gui
 
 
 def main():
@@ -82,6 +84,21 @@ def main():
             msg = "ERROR: {}".format(str(e))
             logger.error(msg)
             sys.exit(msg)
+    elif args['finalise']:
+        # This is called from kano-uixinit in kano-desktop to notify
+        # that the initflow has been completed and the kit can be
+        # switched to multiuser mode.
+        status = Status.get_instance()
+        if status.stage == Status.UI_INIT_STAGE:
+            unset_autologin_gui()
+
+            status.stage = Status.DISABLED_STAGE
+            status.username = None
+            status.save()
+        else:
+            logger.warn('kano-init finalise called from the wrong stage ' +
+                        status.stage)
+            return 1
 
     return 0
 

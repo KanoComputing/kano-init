@@ -34,7 +34,8 @@ class Status(object):
         DISABLED_STAGE,
         RESET_STAGE,
         DELETE_USER_STAGE,
-        ADD_USER_STAGE
+        ADD_USER_STAGE,
+        UI_INIT_STAGE
     ]
 
     _status_file = STATUS_FILE_PATH

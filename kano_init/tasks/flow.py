@@ -22,7 +22,7 @@ from kano_init.ascii_art.matrix import matrix
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.bomb import bomb
 from kano_init.user import user_exists, create_user
-from kano_init.utils import reconfigure_autostart_policy
+from kano_init.utils import reconfigure_autostart_policy, set_autologin_gui
 
 
 def do_username_stage():
@@ -89,8 +89,12 @@ def do_startx_stage():
 
     reconfigure_autostart_policy()
 
-    init_status.stage = Status.DISABLED_STAGE
-    init_status.username = None
+    # Force autologin for this user until he goes through the graphic
+    # init flow. At the end of it, kano-uixinit should call kano-init
+    # to finalise the process and switch the kit to multiuser.
+    set_autologin_gui(init_status.username)
+
+    init_status.stage = Status.UI_INIT_STAGE
     init_status.save()
 
     run_cmd('service lightdm start')
