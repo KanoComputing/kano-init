@@ -4,8 +4,10 @@
 # Copyright (C) 2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# A collection of functions to manipulate users on the OS.
-#
+
+"""
+    A collection of functions to manipulate users on the OS.
+"""
 
 import os
 import grp
@@ -26,6 +28,16 @@ class UserError(Exception):
 
 
 def user_exists(name):
+    """
+        A predicate to test whether an user of certain name exists.
+
+        :param name: The name of the user.
+        :type name: str
+
+        :return: True if it exists
+        :rtype: bool
+    """
+
     try:
         user = pwd.getpwnam(name)
     except KeyError:
@@ -35,6 +47,16 @@ def user_exists(name):
 
 
 def group_exists(name):
+    """
+        A predicate to test whether a group of certain name exists.
+
+        :param name: The name of the group.
+        :type name: str
+
+        :return: True if it exists
+        :rtype: bool
+    """
+
     try:
         group = grp.getgrnam(name)
     except KeyError:
@@ -44,11 +66,33 @@ def group_exists(name):
 
 
 def get_group_members(name):
+    """
+        Returns a list of all the members of the group.
+
+        :param name: The name of the group.
+        :type name: str
+
+        :return: A list of its members.
+        :rtype: list
+    """
+
     group = grp.getgrnam(name)
     return group.gr_mem
 
 
 def create_user(username):
+    """
+        Create and initialise an account for a new user. The user will be
+        added to several default groups, including kanousers.
+
+        This function requires root permissions to run properly.
+
+        Will rase in case of an error.
+
+        :param username: The name of the new user
+        :type name: str
+    """
+
     if user_exists(username):
         raise UserError("The user '{}' already exists".format(username))
 
@@ -94,6 +138,16 @@ def create_user(username):
 
 
 def delete_user(username):
+    """
+        Terminates all processes of the user in question using SIGKILL
+        and removes the user.
+
+        Requires root permissions to run properly.
+
+        :param username: The name of the user to be deleted.
+        :type name: str
+    """
+
     # kill all process from the user
     run_cmd("killall -KILL -u {}".format(username))
 
@@ -103,6 +157,16 @@ def delete_user(username):
 
 
 def delete_all_users():
+    """
+        Terminates all processes of the user in question using SIGKILL
+        and removes the user.
+
+        Requires root permissions to run properly.
+
+        :param username: The name of the user to be deleted.
+        :type name: str
+    """
+
     if group_exists('kanousers'):
         for user in get_group_members('kanousers'):
             delete_user(user)

@@ -43,7 +43,7 @@ from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_startx_stage
-from kano_init.utils import unset_autologin_gui
+from kano_init.utils import unset_ldm_autologin
 
 
 def main():
@@ -92,7 +92,7 @@ def main():
         # switched to multiuser mode.
         status = Status.get_instance()
         if status.stage == Status.UI_INIT_STAGE:
-            unset_autologin_gui()
+            unset_ldm_autologin()
 
             status.stage = Status.DISABLED_STAGE
             status.username = None

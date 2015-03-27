@@ -4,8 +4,14 @@
 # Copyright (C) 2015 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# The initialisation procedure for the user
-#
+
+"""
+    This file contains the three stages that constitute the initialisation
+    procedure when creating a user during boot via kano-init.
+
+    Each of the do_* functions represents a stage from the flow. It will
+    do its task and schedule the subsequent stage.
+"""
 
 import re
 import os
@@ -22,10 +28,13 @@ from kano_init.ascii_art.matrix import matrix
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.bomb import bomb
 from kano_init.user import user_exists, create_user
-from kano_init.utils import reconfigure_autostart_policy, set_autologin_gui
+from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
 
 
 def do_username_stage():
+    """
+    """
+
     matrix(2, True)
     clear_screen()
 
