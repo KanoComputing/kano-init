@@ -113,7 +113,7 @@ def main():
         print status.stage
     elif args['reset']:
         if args['-f']:
-            # force into the disabled stage so we can schedule reset
+            # force into the disabled stage so we can schedule reset
             status = Status.get_instance()
             status.stage = Status.DISABLED_STAGE
             status.username = None
