@@ -8,6 +8,7 @@
 #
 
 import os
+import json
 
 from kano.utils import sed, run_cmd
 from kano_settings.system.keyboard_config import set_keyboard
@@ -16,6 +17,7 @@ from kano_settings.boot_config import set_config_value, set_config_comment
 from kano_settings.system.overclock import set_default_overclock_values
 from kano.utils import is_model_2_b
 
+from kano_init.paths import INIT_CONF_PATH
 from kano_init.user import get_group_members
 from kano_init.status import Status
 
@@ -101,3 +103,27 @@ def restore_factory_settings():
 def is_any_task_scheduled():
     status = Status.get_instance()
     return status.stage != Status.DISABLED_STAGE
+
+
+def load_init_conf():
+    """
+        Load the init configuration from the boot partition.
+
+        :return: The config in a dictionary.
+        :rtype: dict
+    """
+
+    flow_params = {}
+    if os.path.exists(INIT_CONF_PATH):
+        with open(INIT_CONF_PATH, 'r') as init_conf:
+            init_conf_data = json.load(init_conf)
+
+            # The old convention with an underscore
+            if 'kano_init' in init_conf_data:
+                flow_params = init_conf_data['kano_init']
+
+            # A hyphen with a bigger priority
+            if 'kano-init' in init_conf_data:
+                flow_params = init_conf_data['kano-init']
+
+    return flow_params

@@ -45,7 +45,7 @@ from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_startx_stage
-from kano_init.utils import reconfigure_autostart_policy
+from kano_init.utils import reconfigure_autostart_policy, load_init_conf
 
 
 def main():
@@ -59,6 +59,9 @@ def main():
 
     if args['boot']:
         status = Status.get_instance()
+
+        flow_params = load_init_conf()
+
         # TODO: Debugging only
         #status.stage = Status.USERNAME_STAGE
         while True:
@@ -69,11 +72,11 @@ def main():
             elif status.stage == Status.RESET_STAGE:
                 do_reset()
             elif status.stage == Status.USERNAME_STAGE:
-                do_username_stage()
+                do_username_stage(flow_params)
             elif status.stage == Status.WHITE_RABBIT_STAGE:
-                do_white_rabbit_stage()
+                do_white_rabbit_stage(flow_params)
             elif status.stage == Status.STARTX_STAGE:
-                do_startx_stage()
+                do_startx_stage(flow_params)
             else:
                 break
     elif args['schedule']:

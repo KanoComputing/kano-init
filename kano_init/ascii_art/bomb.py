@@ -277,6 +277,9 @@ def init_curses():
     curses.cbreak()
     screen.keypad(1)
 
+    if curses.has_colors():
+        curses.use_default_colors()
+
 
 def shutdown_curses():
     curses.curs_set(2)

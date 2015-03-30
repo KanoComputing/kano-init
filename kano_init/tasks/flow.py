@@ -27,23 +27,32 @@ from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.bomb import bomb
-from kano_init.user import user_exists, create_user
+from kano_init.user import user_exists, create_user, make_username_unique
 from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
 
 
-def do_username_stage():
+def do_username_stage(flow_params):
     """
     """
 
-    matrix(2, True)
-    clear_screen()
+    if 'skip' in flow_params and flow_params['skip']:
+        # Skip the interactive flow and create the user automatically
+        if 'user' in flow_params:
+            username = flow_params['user']
+        else:
+            username = 'kano'
 
-    typewriter_echo('Hello!', trailing_linebreaks=2)
-    typewriter_echo('I\'m KANO. Thanks for bringing me to life.',
-                    sleep=0.5, trailing_linebreaks=2)
-    typewriter_echo('What should I call you?', trailing_linebreaks=2)
+        username = make_username_unique(username)
+    else:
+        matrix(2, True)
+        clear_screen()
 
-    username = _get_username()
+        typewriter_echo('Hello!', trailing_linebreaks=2)
+        typewriter_echo('I\'m KANO. Thanks for bringing me to life.',
+                        sleep=0.5, trailing_linebreaks=2)
+        typewriter_echo('What should I call you?', trailing_linebreaks=2)
+
+        username = _get_username()
 
     create_user(username)
 
@@ -54,47 +63,49 @@ def do_username_stage():
     init_status.save()
 
 
-def do_white_rabbit_stage():
+def do_white_rabbit_stage(flow_params):
     init_status = Status.get_instance()
 
-    clear_screen()
-    rabbit(1, 'left-to-right')
-    clear_screen()
+    if not 'skip' in flow_params or not flow_params['skip']:
+        clear_screen()
+        rabbit(1, 'left-to-right')
+        clear_screen()
 
-    msg = "{}, follow the white rabbit ...".format(init_status.username)
-    typewriter_echo(msg, trailing_linebreaks=2)
+        msg = "{}, follow the white rabbit ...".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
 
-    typewriter_echo('He\'s hiding in my memory. Can you find him?',
-                    trailing_linebreaks=2)
+        typewriter_echo('He\'s hiding in my memory. Can you find him?',
+                        trailing_linebreaks=2)
 
-    command = decorate_with_preset('cd rabbithole', 'code')
-    typewriter_echo("Type {}".format(command), trailing_linebreaks=2)
+        command = decorate_with_preset('cd rabbithole', 'code')
+        typewriter_echo("Type {}".format(command), trailing_linebreaks=2)
 
-    # TODO: open shell
-    rabbithole = "/home/{}/rabbithole".format(init_status.username)
-    ensure_dir(rabbithole)
-    cmd = "sudo -u {} -H bash --init-file {}".format(init_status.username,
-                                                     SUBSHELLRC_PATH)
-    os.system(cmd)
-    delete_dir(rabbithole)
+        # TODO: open shell
+        rabbithole = "/home/{}/rabbithole".format(init_status.username)
+        ensure_dir(rabbithole)
+        cmd = "sudo -u {} -H bash --init-file {}".format(init_status.username,
+                                                         SUBSHELLRC_PATH)
+        os.system(cmd)
+        delete_dir(rabbithole)
 
-    matrix(2, False)
+        matrix(2, False)
 
     init_status.stage = Status.STARTX_STAGE
     init_status.save()
 
 
-def do_startx_stage():
+def do_startx_stage(flow_params):
     init_status = Status.get_instance()
 
-    while True:
-        clear_screen(False)
+    if not 'skip' in flow_params or not flow_params['skip']:
+        while True:
+            clear_screen(False)
 
-        if bomb(init_status.username) == 0:
-            break
+            if bomb(init_status.username) == 0:
+                break
 
-        time.sleep(1)
-        typewriter_echo('Try again!', sleep=2)
+            time.sleep(1)
+            typewriter_echo('Try again!', sleep=2)
 
     reconfigure_autostart_policy()
 

@@ -137,6 +137,30 @@ def create_user(username):
     _, _, rv = run_cmd_log(cmd)
 
 
+def make_username_unique(username_base):
+    """
+        Returns an unique username derived from the base.
+
+        It appends an increasing number to the username until one that
+        doesn't exist has been found. It stops after 1,000,000 tries and
+        returns None in that case.
+
+        :param username_base: The initial part of the username.
+        :type username_base: str
+
+        :returns: An unique username.
+        :rtype: str
+    """
+
+    n = 1
+    username = username_base
+    while user_exists(username) and n <= 1000000:
+        username = "{}{}".format(username_base, n)
+        n += 1
+
+    return username
+
+
 def delete_user(username):
     """
         Terminates all processes of the user in question using SIGKILL
