@@ -15,6 +15,7 @@ Usage:
   kano-init schedule (reset|add-user)
   kano-init schedule delete-user [<name>]
   kano-init finalise
+  kano-init status
   kano-init boot
 
 Options:
@@ -43,7 +44,7 @@ from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_startx_stage
-from kano_init.utils import unset_ldm_autologin
+from kano_init.utils import reconfigure_autostart_policy
 
 
 def main():
@@ -93,7 +94,7 @@ def main():
         logger.info('kano-init finalise called')
         status = Status.get_instance()
         if status.stage == Status.UI_INIT_STAGE:
-            unset_ldm_autologin()
+            reconfigure_autostart_policy()
 
             status.stage = Status.DISABLED_STAGE
             status.username = None
@@ -102,6 +103,9 @@ def main():
             logger.warn('kano-init finalise called from the wrong stage ' +
                         status.stage)
             return 1
+    elif args['status']:
+        status = Status.get_instance()
+        print status.stage
 
     return 0
 
