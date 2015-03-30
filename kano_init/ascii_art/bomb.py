@@ -62,7 +62,8 @@ def user_input(cursorx, cursory):
         if c != curses.ERR and c > 0 and chr(c).lower() == key[keypos]:
             with l:
                 win.addstr(0, keypos, chr(c).lower())
-                #win.refresh()
+                win.refresh()
+                screen.refresh()
                 keypos += 1
             if keypos >= len(key):
                 return
