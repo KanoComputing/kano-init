@@ -211,6 +211,7 @@ def init_curses():
     curses.curs_set(0)
 
     if curses.has_colors():
+        curses.start_color()
         curses.use_default_colors()
 
 
