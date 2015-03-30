@@ -6,14 +6,6 @@
 #
 # Write to terminal in a Matrix-style
 #
-# Params:
-#   $1: Sring to be printed
-#   $2: Wait time at the end of the line (optional)
-#   $3: Number of line breaks at the end (optional)
-#   $4: Whether there is padding at the start of the line (0, 1 or X) (optional)
-#   $5: Whether there is padding at the start of the next line (1 or 0) (optional)
-#   $6: Number of line breaks at the start (optional)
-#
 
 import sys
 import time
