@@ -16,12 +16,13 @@ Usage:
   kano-init schedule delete-user [<name>]
   kano-init finalise
   kano-init status
-  kano-init reset
+  kano-init reset [-f]
   kano-init boot
 
 Options:
   -h, --help       Show this message.
   -v, --version    Print the version of the updater.
+  -f, --force      Force resetting of the kit.
 """
 
 import os
@@ -111,6 +112,13 @@ def main():
         status = Status.get_instance()
         print status.stage
     elif args['reset']:
+        if args['-f']:
+            # force into the disabled stage so we can schedule reset
+            status = Status.get_instance()
+            status.stage = Status.DISABLED_STAGE
+            status.username = None
+            status.save()
+
         try:
             schedule_reset()
         except StatusError as e:
