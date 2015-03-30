@@ -28,7 +28,7 @@ TOP_PADDING = 4
 LEFT_PADDING = 9
 
 def restore_original_state():
-    if original_state:
+    if sys.stdin.isatty() and original_state:
         fd = sys.stdin.fileno()
         termios.tcsetattr(fd, termios.TCSADRAIN, original_state)
 
@@ -36,7 +36,7 @@ def restore_original_state():
 def save_original_state():
     global original_state
 
-    if not original_state:
+    if sys.stdin.isatty() and not original_state:
         fd = sys.stdin.fileno()
         original_state = termios.tcgetattr(fd)
 
