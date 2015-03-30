@@ -47,6 +47,7 @@ from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_startx_stage
 from kano_init.utils import reconfigure_autostart_policy, load_init_conf
+from kano_init.terminal import set_control
 
 
 def main():
@@ -63,8 +64,9 @@ def main():
 
         flow_params = load_init_conf()
 
-        # TODO: Debugging only
-        #status.stage = Status.USERNAME_STAGE
+        # Disable terminal control characters
+        set_control(False)
+
         while True:
             if status.stage == Status.ADD_USER_STAGE:
                 do_add_user()

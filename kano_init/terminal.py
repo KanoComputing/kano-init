@@ -84,6 +84,9 @@ def write_flush(string):
 
 
 def set_echo(enabled=True):
+    if not sys.stdin.isatty():
+        return
+
     fd = sys.stdin.fileno()
     attrs = termios.tcgetattr(fd)
 
@@ -93,6 +96,36 @@ def set_echo(enabled=True):
         attrs[3] = attrs[3] & ~termios.ECHO
 
     termios.tcsetattr(fd, termios.TCSADRAIN, attrs)
+
+
+def set_control(enabled=True):
+    if not sys.stdin.isatty():
+        return
+
+    fd = sys.stdin.fileno()
+    attrs = termios.tcgetattr(fd)
+
+    if enabled:
+        attrs[0] = attrs[0] | termios.XON
+        attrs[0] = attrs[0] | termios.XOFF
+
+        attrs[6][termios.VSUSP] = '\x00'
+        attrs[6][termios.VQUIT] = '\x00'
+        attrs[6][termios.VKILL] = '\x00'
+        attrs[6][termios.VINTR] = '\x00'
+        attrs[6][termios.VEOF] = '\x00'
+    else:
+        attrs[0] = attrs[0] & ~termios.XON
+        attrs[0] = attrs[0] & ~termios.XOFF
+
+        attrs[6][termios.VSUSP] = '\x1a'
+        attrs[6][termios.VQUIT] = '\x1c'
+        attrs[6][termios.VKILL] = '\x15'
+        attrs[6][termios.VINTR] = '\x03'
+        attrs[6][termios.VEOF] = '\x04'
+
+    termios.tcsetattr(fd, termios.TCSADRAIN, attrs)
+
 
 def user_input(prompt):
     typewriter_echo(prompt, trailing_linebreaks=0)
