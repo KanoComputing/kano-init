@@ -111,7 +111,12 @@ def main():
         status = Status.get_instance()
         print status.stage
     elif args['reset']:
-        schedule_reset()
+        try:
+            schedule_reset()
+        except StatusError as e:
+            msg = "ERROR: {}".format(str(e))
+            logger.error(msg)
+            sys.exit(msg)
 
     return 0
 
