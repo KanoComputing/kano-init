@@ -112,7 +112,7 @@ def main():
         status = Status.get_instance()
         print status.stage
     elif args['reset']:
-        if args['-f']:
+        if args['--force']:
             # force into the disabled stage so we can schedule reset
             status = Status.get_instance()
             status.stage = Status.DISABLED_STAGE
