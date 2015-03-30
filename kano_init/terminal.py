@@ -98,23 +98,23 @@ def set_control(enabled=True):
     attrs = termios.tcgetattr(fd)
 
     if enabled:
-        attrs[0] = attrs[0] | termios.XON
-        attrs[0] = attrs[0] | termios.XOFF
-
-        attrs[6][termios.VSUSP] = '\x00'
-        attrs[6][termios.VQUIT] = '\x00'
-        attrs[6][termios.VKILL] = '\x00'
-        attrs[6][termios.VINTR] = '\x00'
-        attrs[6][termios.VEOF] = '\x00'
-    else:
-        attrs[0] = attrs[0] & ~termios.XON
-        attrs[0] = attrs[0] & ~termios.XOFF
+        attrs[0] = attrs[0] | termios.IXON
+        attrs[0] = attrs[0] | termios.IXOFF
 
         attrs[6][termios.VSUSP] = '\x1a'
         attrs[6][termios.VQUIT] = '\x1c'
         attrs[6][termios.VKILL] = '\x15'
         attrs[6][termios.VINTR] = '\x03'
         attrs[6][termios.VEOF] = '\x04'
+    else:
+        attrs[0] = attrs[0] & ~termios.IXON
+        attrs[0] = attrs[0] & ~termios.IXOFF
+
+        attrs[6][termios.VSUSP] = '\x00'
+        attrs[6][termios.VQUIT] = '\x00'
+        attrs[6][termios.VKILL] = '\x00'
+        attrs[6][termios.VINTR] = '\x00'
+        attrs[6][termios.VEOF] = '\x00'
 
     termios.tcsetattr(fd, termios.TCSADRAIN, attrs)
 
