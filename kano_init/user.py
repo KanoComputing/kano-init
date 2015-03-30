@@ -109,8 +109,11 @@ def create_user(username):
     # folder from other users
     umask_override = '0077'
 
-    cmd = "useradd -m -K UMASK={} -s /bin/bash {}".format(umask_override,
-                                                          username)
+    cmd = "useradd -u {} -m -K UMASK={} -s /bin/bash {}".format(
+        get_next_uid(),
+        umask_override,
+        username
+    )
     _, _, rv = run_cmd_log(cmd)
     if rv != 0:
         msg = "Unable to create new user, useradd failed."
@@ -135,6 +138,28 @@ def create_user(username):
     # Add the new user to all necessary groups
     cmd = "usermod -G '{}' {}".format(DEFAULT_USER_GROUPS, username)
     _, _, rv = run_cmd_log(cmd)
+
+
+
+def get_next_uid():
+    """
+        Returns the next free user id.
+
+        :return: Free uid.
+        :rtyp: int
+    """
+
+    users = pwd.getpwall()
+
+    uids = []
+    for u in users:
+        uids.append(u.pw_uid)
+
+    i = 1000
+    while i in uids:
+        i += 1
+
+    return i
 
 
 def make_username_unique(username_base):
