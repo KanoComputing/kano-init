@@ -16,6 +16,7 @@ Usage:
   kano-init schedule delete-user [<name>]
   kano-init finalise
   kano-init status
+  kano-init reset
   kano-init boot
 
 Options:
@@ -106,6 +107,8 @@ def main():
     elif args['status']:
         status = Status.get_instance()
         print status.stage
+    elif args['reset']:
+        schedule_reset()
 
     return 0
 
