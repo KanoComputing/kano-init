@@ -155,7 +155,7 @@ def get_next_uid():
     for u in users:
         uids.append(u.pw_uid)
 
-    i = 1000
+    i = 1001
     while i in uids:
         i += 1
 
