@@ -115,8 +115,6 @@ def do_startx_stage(flow_params):
     # init flow. At the end of it, kano-uixinit should call kano-init
     # to finalise the process and switch the kit to multiuser.
     set_ldm_autologin(init_status.username)
-    disable_ldm_autostart()
-    enable_ldm_autostart()
 
     init_status.stage = Status.UI_INIT_STAGE
     init_status.save()
