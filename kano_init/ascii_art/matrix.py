@@ -2,20 +2,21 @@
 
 # matrix.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
-# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# Copyright (C) 2014, 2015 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# Startx exercise
+# A basic matrix animation showed during the init flow
 #
 
-import re
-import os
+# TODO: Needs a LOT of refactoring ...
+
 import sys
 import time
 import curses
 from random import randint
 
 screen = None
+old_colors = {}
 
 
 def draw_fn(y, x, msg, color=None):
@@ -25,7 +26,7 @@ def draw_fn(y, x, msg, color=None):
         else:
             screen.addstr(y, x, msg, color)
     except:
-        exit_curses()
+        shutdown_curses()
         sys.exit(0)
 
 
@@ -73,7 +74,7 @@ class Drop(object):
     def _phase_one(self):
         if self._cycle % self._cycles_per_char == 0:
             draw_fn(self._posy + self._charpos, self._posx,
-                          chr(randint(97, 122)), self._colour1)
+                    chr(randint(97, 122)), self._colour1)
             self._charpos += 1
 
             if self._charpos < self._length-1:
@@ -85,7 +86,7 @@ class Drop(object):
     def _phase_two(self):
         if self._cycle % self._cycles_per_char == 0:
             draw_fn(self._posy + self._charpos, self._posx,
-                          chr(randint(65, 90)), self._colour2)
+                    chr(randint(65, 90)), self._colour2)
             self._charpos += 1
 
         self._cycle += 1
@@ -157,7 +158,6 @@ class Face(object):
         self._pending_lines = range(0, len(self._face))
         self._mask = []
 
-
     def draw_next(self):
         if len(self._pending_lines) > 0:
             n = randint(0, len(self._pending_lines)-1)
@@ -173,6 +173,7 @@ def debug(msg):
     with open(log, 'a') as f:
         f.write(str(msg) + '\n')
 
+
 def main(duration, show_face):
     h, w = screen.getmaxyx()
 
@@ -186,20 +187,20 @@ def main(duration, show_face):
     while True:
         elapsed += tick
         if elapsed < duration:
-            length = randint(5,h-1)
+            length = randint(5, h-1)
             xpos = randint(0, w-1)
             ypos = randint(0, h-length-1)
             drop = Drop(xpos, ypos, length, randint(1, 2),
-                        curses.color_pair(randint(1,3)),
-                        curses.color_pair(randint(1,3)))
+                        curses.color_pair(randint(1, 3)),
+                        curses.color_pair(randint(1, 3)))
             drops.append(drop)
 
-            length = randint(5,h-1)
+            length = randint(5, h-1)
             xpos = randint(0, w-1)
             ypos = randint(0, h-length-1)
             drop = Drop(xpos, ypos, length, randint(1, 2),
-                        curses.color_pair(randint(1,3)),
-                        curses.color_pair(randint(1,3)))
+                        curses.color_pair(randint(1, 3)),
+                        curses.color_pair(randint(1, 3)))
             drops.append(drop)
         else:
             for drop in drops:
@@ -229,49 +230,70 @@ def main(duration, show_face):
     return 0
 
 
+def set_color(color_id, r, g, b):
+    global old_colors
+
+    old_colors[color_id] = curses.color_content(color_id)
+    curses.init_color(color_id, r, g, b)
+
+
+def restore_original_colors():
+    for color_id, rgb in old_colors.iteritems():
+        curses.init_color(color_id, rgb[0], rgb[1], rgb[2])
+
+
 def init_curses():
     global screen
 
     screen = curses.initscr()
+    screen.clear()
+    screen.refresh()
     curses.curs_set(0)
     curses.noecho()
     curses.cbreak()
     screen.keypad(1)
 
+    curses.start_color()
     if curses.has_colors():
-        curses.start_color()
         if curses.can_change_color():
-            curses.init_color(curses.COLOR_GREEN, 1000, 517, 165)
-            curses.init_color(curses.COLOR_BLUE, 909, 533, 35)
-            curses.init_color(curses.COLOR_CYAN, 611, 529, 419)
-            curses.init_color(curses.COLOR_WHITE, 1000, 905, 541)
-            curses.init_color(curses.COLOR_RED, 1000, 1000, 1000)
+            set_color(curses.COLOR_GREEN, 1000, 517, 165)
+            set_color(curses.COLOR_BLUE, 909, 533, 35)
+            set_color(curses.COLOR_CYAN, 611, 529, 419)
+            set_color(curses.COLOR_WHITE, 1000, 905, 541)
+            set_color(curses.COLOR_RED, 1000, 1000, 1000)
 
-            curses.init_pair(1, curses.COLOR_GREEN, 0)
-            curses.init_pair(2, curses.COLOR_BLUE, 0)
-            curses.init_pair(3, curses.COLOR_CYAN, 0)
-            curses.init_pair(4, curses.COLOR_WHITE, 0)
-            curses.init_pair(5, curses.COLOR_RED, 0)
-        else:
-            curses.use_default_colors()
+        curses.init_pair(1, curses.COLOR_GREEN, 0)
+        curses.init_pair(2, curses.COLOR_BLUE, 0)
+        curses.init_pair(3, curses.COLOR_CYAN, 0)
+        curses.init_pair(4, curses.COLOR_WHITE, 0)
+        curses.init_pair(5, curses.COLOR_RED, 0)
 
-            curses.init_pair(1, curses.COLOR_GREEN, 0)
-            curses.init_pair(2, curses.COLOR_BLUE, 0)
-            curses.init_pair(3, curses.COLOR_CYAN, 0)
-            curses.init_pair(4, curses.COLOR_WHITE, 0)
-            curses.init_pair(5, curses.COLOR_RED, 0)
 
-def exit_curses():
+def shutdown_curses():
+    restore_original_colors
     curses.curs_set(2)
     screen.keypad(0)
+    screen.clear()
+    screen.refresh()
     curses.echo()
     curses.nocbreak()
     curses.endwin()
 
 
-if __name__ == "__main__":
-    init_curses()
+def matrix(duration=10, show_face=False):
+    status = 1
 
+    try:
+        init_curses()
+        status = main(duration, show_face)
+    finally:
+        shutdown_curses()
+
+    return status
+
+
+# For testing only
+if __name__ == "__main__":
     duration = 10
     show_face = False
 
@@ -280,9 +302,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 2:
         show_face = (sys.argv[2] == "yes")
 
-    try:
-        status = main(duration, show_face)
-    finally:
-        exit_curses()
-
-    sys.exit(status)
+    rv = matrix(duration, show_face)
+    sys.exit(rv)

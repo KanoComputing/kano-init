@@ -1,9 +1,3 @@
-./kano-init /usr/bin
-./autostart-kano-init.sh /etc/profile.d
-./ascii_art/*.txt /usr/share/kano-init/ascii_art/
-./bomb.py /usr/share/kano-init/
-./matrix.py /usr/share/kano-init/
-./judoka.py /usr/share/kano-init/
-./rabbit.py /usr/share/kano-init/
-./subshellrc /usr/share/kano-init/
-./kano-usertools /usr/bin
+bin/* usr/bin
+autostart-kano-init.sh etc/profile.d
+kano_init usr/lib/python2.7/dist-packages

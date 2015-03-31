@@ -1,11 +1,12 @@
-#!/usr/bin/env python
-
+#
 # rabbit.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
-# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# Copyright (C) 2014, 2015 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# Startx exercise
+# A simple running rabbit animation for the init flow.
+#
+# TODO: Needs a LOT of refactoring.
 #
 
 import os
@@ -14,6 +15,8 @@ import time
 import curses
 
 from random import randint
+
+from kano_init.paths import ASCII_RES_PATH
 
 screen = None
 
@@ -25,7 +28,7 @@ def draw_fn(y, x, msg, color=None):
         else:
             screen.addstr(y, x, msg, color)
     except:
-        exit_curses()
+        shutdown_curses()
         raise
 
 
@@ -129,18 +132,12 @@ def rabbit_rl():
     pass
 
 def main(max_cycles, start_direction):
-    res_dir = "."
-    if not os.path.isdir("ascii_art"):
-        res_dir = "/usr/share/kano-init"
-
-    ascii_art_dir = res_dir + "/ascii_art"
-
     # preload all parts of the animation
-    rabbit_lr = load_animation(ascii_art_dir + "/rabbit-animation.txt")
+    rabbit_lr = load_animation(ASCII_RES_PATH + "/rabbit-animation.txt")
     rabbit_w = animation_width(rabbit_lr)
     rabbit_h = animation_height(rabbit_lr)
 
-    rabbit_rl = load_animation(ascii_art_dir + "/rabbit-animation-reversed.txt")
+    rabbit_rl = load_animation(ASCII_RES_PATH + "/rabbit-animation-reversed.txt")
 
     h, w = screen.getmaxyx()
 
@@ -206,18 +203,38 @@ def init_curses():
     global screen
 
     screen = curses.initscr()
+    screen.clear()
+    screen.refresh()
     curses.noecho()
     curses.cbreak()
     screen.keypad(1)
     curses.curs_set(0)
 
+    curses.start_color()
+    if curses.has_colors():
+        curses.use_default_colors()
 
-def exit_curses():
+
+def shutdown_curses():
     curses.curs_set(2)
     screen.keypad(0)
+    screen.clear()
+    screen.refresh()
     curses.echo()
     curses.nocbreak()
     curses.endwin()
+
+
+def rabbit(cycles=1, start_direction='left-to-right'):
+    status = 1
+
+    try:
+        init_curses()
+        status = main(cycles, start_direction)
+    finally:
+        shutdown_curses()
+
+    return status
 
 
 if __name__ == "__main__":
@@ -230,9 +247,4 @@ if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[2] == "right-to-left":
         start_direction = "right-to-left"
 
-    try:
-        status = main(max_cycles, start_direction)
-    finally:
-        exit_curses()
-
-    sys.exit(status)
+    sys.exit(main(max_cycles, start_direction))

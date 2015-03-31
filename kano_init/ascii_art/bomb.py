@@ -1,24 +1,23 @@
-#!/usr/bin/env python
-
+#
 # bomb.py
 #
-# Copyright (C) 2014 Kano Computing Ltd.
-# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+# Copyright (C) 2014, 2015 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
-# Startx exercise
+# The 'startx' exercise with the bomb.
+#
+# TODO: Needs a LOT of refactoring.
 #
 
-import os
 import sys
 import time
 import curses
-from threading import Thread, Lock
+
+from kano_init.paths import ASCII_RES_PATH
 
 screen = None
 key = "startx"
 keypos = 0
-
-l = Lock()
 
 
 def draw_fn(y, x, msg, color=None):
@@ -28,38 +27,8 @@ def draw_fn(y, x, msg, color=None):
         else:
             screen.addstr(y, x, msg, color)
     except:
-        exit_curses()
+        shutdown_curses()
         sys.exit(0)
-
-
-def user_input(cursorx, cursory):
-    """
-        Runs as a background thread to capture user input.
-
-        Separate window is created just for the input.
-        A global thread lock (l) is used for all calls to
-        curses to avoid any mixups.
-    """
-
-    # Current position in the key phrase. Must be global so the
-    # main thread can position the cursor correctly.
-    global keypos
-
-    # Avoids problems with the thread moving the cursor too early
-    time.sleep(0.5)
-
-    with l:
-        win = curses.newwin(1, 8, cursory, cursorx)
-
-    while True:
-        c = win.getch(0, keypos)
-        if c != curses.ERR and chr(c).lower() == key[keypos]:
-            with l:
-                win.addstr(0, keypos, chr(c).lower())
-                win.refresh()
-                keypos += 1
-            if keypos >= len(key):
-                return
 
 
 def load_animation(path):
@@ -130,8 +99,7 @@ def draw_frame(frame, x, y):
 
     n = 0
     for line in frame:
-        with l:
-            draw_fn(y + n, x, line)
+        draw_fn(y + n, x, line)
         n += 1
 
 
@@ -144,142 +112,166 @@ def blink(duration, interval):
         individual flashes. Both values are in seconds.
     """
 
-    with l:
-        curses.curs_set(0)
-        h, w = screen.getmaxyx()
+    curses.curs_set(0)
+    h, w = screen.getmaxyx()
 
     repeats = int((duration * 1.0) / interval)
     colour = 1
     for n in range(0, repeats):
         for y in range(0, h):
-            with l:
-                draw_fn(y, 0, " " * (w - 1), curses.color_pair(colour))
+            draw_fn(y, 0, " " * (w - 1), curses.color_pair(colour))
 
-        with l:
-            screen.refresh()
+        screen.refresh()
 
         colour = 2 if colour == 1 else 1
         time.sleep(interval)
 
 
 def main(username):
-    res_dir = "."
-    if not os.path.isdir("ascii_art"):
-        res_dir = "/usr/share/kano-init"
+    global keypos
 
-    ascii_art_dir = res_dir + "/ascii_art"
+    keypos = 0
 
-    # preload all parts of the animation
-    spark = load_animation(ascii_art_dir + "/spark.txt")
+    # Preload all parts of the animation in the memory.
+    spark = load_animation(ASCII_RES_PATH + "/spark.txt")
 
-    numbers = load_animation(ascii_art_dir + "/numbers.txt")
+    numbers = load_animation(ASCII_RES_PATH + "/numbers.txt")
     num_w = animation_width(numbers)
 
-    bomb = load_animation(ascii_art_dir + "/bomb.txt")
+    bomb = load_animation(ASCII_RES_PATH + "/bomb.txt")
     bomb_w = animation_width(bomb)
     bomb_h = animation_height(bomb)
 
-    msg1 = "Quick, %s, type" % username
-    msg2 = " startx "
-    msg3 = "to escape!"
+    msg1 = "Quick, %s, type " % username
+    msg2 = "startx"
+    msg3 = " to escape!"
 
-    with l:
-        # initialize colours
-        curses.start_color()
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
-        curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    rv = 0
 
-        h, w = screen.getmaxyx()
+    h, w = screen.getmaxyx()
 
-    # position of the bomb
+    # Determine the position of the bomb.
     startx = (w - bomb_w - num_w - 10) / 2
     starty = (h - bomb_h - 8) / 2
 
-    # position of the message
+    # Position of the message.
     msgx = startx + (num_w + 10) / 2
     msgy = starty + bomb_h + 2
 
-    # initial position of the cursor
+    # Determine the initial position of the cursor.
     cursorx = msgx + len(msg1 + msg2 + msg3) / 2 - 3
     cursory = msgy + 2
 
-    # initialize the bomb
+    # Initialize the bomb.
     draw_frame(bomb[0], startx, starty)
-    with l:
-        x = msgx
-        draw_fn(msgy, x, msg1)
-        x += len(msg1)
-        draw_fn(msgy, x, msg2, curses.color_pair(3))
-        x += len(msg2)
-        draw_fn(msgy, x, msg3)
 
-    # Start the thread for the input functionality
-    t = Thread(target=user_input, args=(cursorx, cursory))
-    t.daemon = True
-    t.start()
+    x = msgx
+    draw_fn(msgy, x, msg1)
+    x += len(msg1)
+    draw_fn(msgy, x, msg2, curses.color_pair(3))
+    x += len(msg2)
+    draw_fn(msgy, x, msg3)
+
+    # Intitialise an auxiliary window for user input.
+    win = curses.newwin(1, 8, cursory, cursorx)
+    win.clear()
+    win.timeout(125)
 
     cycle = 0
     spark_frame = 0
     numbers_frame = 0
     while True:
-        # animate the countdown
+        # Animate the countdown
         if cycle % 8 == 0:
             draw_frame(numbers[numbers_frame],
                        startx + 10 + bomb_w, starty + (bomb_h / 2) + 4)
 
             numbers_frame += 1
             if numbers_frame >= len(numbers):
+                # Countdown is over, blink the screen and restart
+                # the animation from the beginning. 
                 blink(1.0, 0.08)
-                return 1
+                rv = 1
+                break
 
-        # animate the spark
+        # Animate the spark
         draw_frame(spark[spark_frame], startx, starty)
-
         spark_frame += 1
         if spark_frame >= len(spark):
             spark_frame = 0
 
-        with l:
-            screen.move(cursory, cursorx + keypos)
-            screen.refresh()
+        # Refresh the screen
+        screen.move(cursory, cursorx + keypos)
+        screen.refresh()
 
-        # stop when user enters the key
-        if not t.is_alive():
-            break
+        # Wait for user input, getch() will block for 125ms after which
+        # the next frame of the animation will be drawn.
+        before_sleep = time.time()
+        c = win.getch(0, keypos)
+        if c != curses.ERR and c > 0 and chr(c).lower() == key[keypos]:
+            win.addstr(0, keypos, chr(c).lower())
+            keypos += 1
+            if keypos >= len(key):
+                break
+        slept_for = time.time() - before_sleep
+        if slept_for < 0.125:
+            time.sleep(0.125 - slept_for)
+        curses.flushinp()
 
         cycle += 1
-        time.sleep(0.125)
 
-    return 0
+    return rv
 
 
 def init_curses():
     global screen
 
     screen = curses.initscr()
+    screen.clear()
+    screen.refresh()
     curses.noecho()
     curses.cbreak()
     screen.keypad(1)
 
+    curses.start_color()
+    if curses.has_colors():
+        curses.use_default_colors()
 
-def exit_curses():
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
+        curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+
+def shutdown_curses():
     curses.curs_set(2)
     screen.keypad(0)
+    screen.clear()
+    screen.refresh()
     curses.echo()
     curses.nocbreak()
     curses.endwin()
 
 
-if __name__ == "__main__":
+def bomb(user="buddy"):
+    rv = 1
+    try:
+        init_curses()
+        rv = main(user)
+    finally:
+        shutdown_curses()
 
-    init_curses()
+    return rv
+
+
+if __name__ == "__main__":
     user = "buddy"
     if len(sys.argv) > 1:
         user = sys.argv[1]
-    try:
-        status = main(user)
-    finally:
-        exit_curses()
 
-    sys.exit(status)
+    n = 0
+    rv = 1
+    while n < 20 and rv != 0:
+        rv = bomb(user)
+        n += 1
+
+    sys.exit(rv)
