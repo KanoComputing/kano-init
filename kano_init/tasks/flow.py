@@ -99,12 +99,13 @@ def do_startx_stage(flow_params):
     init_status = Status.get_instance()
 
     if not 'skip' in flow_params or not flow_params['skip']:
+        clear_screen(False)
         while True:
-            clear_screen(False)
-
             if bomb(init_status.username) == 0:
+                clear_screen(False)
                 break
 
+            clear_screen(True)
             time.sleep(1)
             typewriter_echo('Try again!', sleep=2)
 
