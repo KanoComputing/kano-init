@@ -6,6 +6,9 @@
 #
 # Write to terminal in a Matrix-style
 #
+# TODO: This could be useful as kano.terminal but it needs
+#       a bit more work before it can be moved there.
+
 
 import sys
 import time
