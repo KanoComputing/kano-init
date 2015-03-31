@@ -216,6 +216,7 @@ def main(username):
         slept_for = time.time() - before_sleep
         if slept_for < 0.125:
             time.sleep(0.125 - slept_for)
+        curses.flushinp()
 
         cycle += 1
 
@@ -232,8 +233,8 @@ def init_curses():
     curses.cbreak()
     screen.keypad(1)
 
+    curses.start_color()
     if curses.has_colors():
-        curses.start_color()
         curses.use_default_colors()
 
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLACK)

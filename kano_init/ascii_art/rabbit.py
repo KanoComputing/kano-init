@@ -210,8 +210,8 @@ def init_curses():
     screen.keypad(1)
     curses.curs_set(0)
 
+    curses.start_color()
     if curses.has_colors():
-        curses.start_color()
         curses.use_default_colors()
 
 
