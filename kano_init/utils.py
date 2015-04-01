@@ -11,11 +11,6 @@ import os
 import json
 
 from kano.utils import sed, run_cmd
-from kano_settings.system.keyboard_config import set_keyboard
-from kano_settings.config_file import file_replace
-from kano_settings.boot_config import set_config_value, set_config_comment
-from kano_settings.system.overclock import set_default_overclock_values
-from kano.utils import is_model_2_b
 
 from kano_init.paths import INIT_CONF_PATH
 from kano_init.user import get_group_members
@@ -68,6 +63,14 @@ def reconfigure_autostart_policy():
 
 
 def restore_factory_settings():
+    # FIXME: These imports are local because importing kano_settings.config_file
+    # has side effects that break peldins build
+    from kano_settings.system.keyboard_config import set_keyboard
+    from kano_settings.config_file import file_replace
+    from kano_settings.boot_config import set_config_value, set_config_comment
+    from kano_settings.system.overclock import set_default_overclock_values
+    from kano.utils import is_model_2_b
+    
     # removing wifi cache
     try:
         os.remove('/etc/kwifiprompt-cache.conf')
