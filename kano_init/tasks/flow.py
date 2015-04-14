@@ -90,6 +90,8 @@ def do_white_rabbit_stage(flow_params):
         delete_dir(rabbithole)
 
         matrix(2, False)
+        clear_screen()
+        rabbit(1, 'right-to-left')
 
     init_status.stage = Status.STARTX_STAGE
     init_status.save()
