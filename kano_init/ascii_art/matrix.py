@@ -270,7 +270,7 @@ def init_curses():
 
 
 def shutdown_curses():
-    restore_original_colors
+    restore_original_colors()
     curses.curs_set(2)
     screen.keypad(0)
     screen.clear()
