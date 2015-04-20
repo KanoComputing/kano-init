@@ -7,6 +7,7 @@
 # The task of reseting the kit to it's original state.
 #
 
+import os
 
 from kano_init.status import Status, StatusError
 from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
@@ -40,3 +41,7 @@ def do_reset():
     status = Status.get_instance()
     status.stage = Status.ADD_USER_STAGE
     status.save()
+    
+    # Reboot before initiating the next stage to make sure the
+    # settings are correct.
+    os.system('reboot')
