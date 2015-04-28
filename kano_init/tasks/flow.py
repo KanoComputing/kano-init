@@ -92,6 +92,11 @@ def do_white_rabbit_stage(flow_params):
         matrix(2, False)
         clear_screen()
         rabbit(1, 'right-to-left')
+        
+        clear_screen()
+        msg = "{}, it's a trap!".format(init_status.username)
+        typewriter_echo(msg)
+        time.sleep(2)
 
     init_status.stage = Status.STARTX_STAGE
     init_status.save()
