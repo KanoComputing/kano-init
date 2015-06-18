@@ -30,6 +30,7 @@ from kano_init.ascii_art.bomb import bomb
 from kano_init.user import user_exists, create_user, make_username_unique
 from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
     disable_ldm_autostart, enable_ldm_autostart
+from kano_settings import set_hostname
 
 
 def do_username_stage(flow_params):
@@ -56,6 +57,9 @@ def do_username_stage(flow_params):
         username = _get_username()
 
     create_user(username)
+    
+    # set the hostname to the same as the username
+    set_hostname(username)
 
     # Next up is the white rabit stage
     init_status = Status.get_instance()
