@@ -30,7 +30,7 @@ from kano_init.ascii_art.bomb import bomb
 from kano_init.user import user_exists, create_user, make_username_unique
 from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
     disable_ldm_autostart, enable_ldm_autostart
-from kano_settings.system.set_hostname import set_hostname
+from kano_settings.system.advanced import set_hostname
 
 
 def do_username_stage(flow_params):
