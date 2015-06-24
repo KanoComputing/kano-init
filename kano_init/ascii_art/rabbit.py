@@ -238,7 +238,6 @@ def rabbit(cycles=1, start_direction='left-to-right'):
 
 
 if __name__ == "__main__":
-    init_curses()
     max_cycles = 3
     if len(sys.argv) > 1:
         max_cycles = int(sys.argv[1])
@@ -247,4 +246,4 @@ if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[2] == "right-to-left":
         start_direction = "right-to-left"
 
-    sys.exit(main(max_cycles, start_direction))
+    sys.exit(rabbit(max_cycles, start_direction))
