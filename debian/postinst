@@ -14,6 +14,8 @@ case "$1" in
         # Create custom sudoers file
         echo "%sudo   ALL=(root) NOPASSWD: /usr/bin/kano-init" > $TMP_FILE
         chown root:root $TMP_FILE
+        # The file permissions must be set to 0440
+        chmod 0440 $TMP_FILE
         mv $TMP_FILE /etc/sudoers.d/
 
         ;;
