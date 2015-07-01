@@ -17,6 +17,8 @@ import shutil
 from kano.utils import run_cmd_log, run_cmd
 from kano.logging import logger
 
+from kano_settings import get_parental_level
+
 
 DEFAULT_USER_PASSWORD = "kano"
 DEFAULT_USER_GROUPS = "tty,adm,dialout,cdrom,audio,users,sudo,video,games," + \
@@ -139,6 +141,11 @@ def create_user(username):
     cmd = "usermod -G '{}' {}".format(DEFAULT_USER_GROUPS, username)
     _, _, rv = run_cmd_log(cmd)
 
+
+    # If the parental lock is enabled, restrict the new user Midori browser functionalities
+    if get_parental_level() >= 2:
+        set_everyone_youtube_cookies()
+    
 
 
 def get_next_uid():
