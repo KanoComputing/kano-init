@@ -17,7 +17,7 @@ import shutil
 from kano.utils import run_cmd_log, run_cmd
 from kano.logging import logger
 
-from kano_settings import get_parental_level
+from kano_settings.system.advanced import get_parental_level, set_everyone_youtube_cookies
 
 
 DEFAULT_USER_PASSWORD = "kano"
