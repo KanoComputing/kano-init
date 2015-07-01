@@ -17,6 +17,8 @@ import shutil
 from kano.utils import run_cmd_log, run_cmd
 from kano.logging import logger
 
+from kano_settings.system.advanced import set_user_youtube_cookies
+
 
 DEFAULT_USER_PASSWORD = "kano"
 DEFAULT_USER_GROUPS = "tty,adm,dialout,cdrom,audio,users,sudo,video,games," + \
@@ -139,6 +141,8 @@ def create_user(username):
     cmd = "usermod -G '{}' {}".format(DEFAULT_USER_GROUPS, username)
     _, _, rv = run_cmd_log(cmd)
 
+    # Apply parental control configuration
+    set_user_youtube_cookies(enabled=None, username=username)
 
 
 def get_next_uid():
