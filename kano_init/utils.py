@@ -10,7 +10,7 @@
 import os
 import json
 
-from kano.utils import sed, run_cmd
+from kano.utils import sed, run_cmd, is_systemd
 
 from kano_init.paths import INIT_CONF_PATH
 from kano_init.user import get_group_members
@@ -18,16 +18,60 @@ from kano_init.status import Status
 from kano_settings.system.audio import set_to_HDMI
 
 
-def enable_console_autologin(username):
-    sed('^(1:2345:respawn:/sbin/a?getty).+',
-        "\\1 -n -o\'-f {}\' 38400 tty1".format(username),
-        '/etc/inittab')
-    run_cmd('init q')
+def enable_console_autologin(username, restart=False):
+    '''
+    Sets the system to automatically login username on tty1
+    at boot time, or when you close the console session.
+    '''
+    if is_systemd():
+        #
+        # Change systemd symlink that says what needs to happen on tty1
+        # https://wiki.archlinux.org/index.php/Systemd_FAQ#How_do_I_change_the_default_number_of_gettys.3F
+        #
+        systemd_tty1_linkfile='/etc/systemd/system/getty.target.wants/getty@tty1.service'
+        kano_init_tty1_kanoautologin='/usr/share/kano-init/systemd_ttys/kanoautologin@.service'
+        kano_init_tty1_kanoinit='/usr/share/kano-init/systemd_ttys/kanoinit@.service'
+        
+        if os.path.isfile(systemd_tty1_linkfile):
+            os.unlink(systemd_tty1_linkfile)
 
+        if username=='root':
+            os.symlink(kano_init_tty1_kanoinit, systemd_tty1_linkfile)            
+        else:
+            # TODO: sed kanoautologin to populate username
+            os.symlink(kano_init_tty1_kanoautologin, systemd_tty1_linkfile)
 
-def disable_console_autologin():
-    sed('^(1:2345:respawn:/sbin/a?getty).+', '\\1 38400 tty1', '/etc/inittab')
-    run_cmd('init q')
+        if restart:
+            # replace the tty process inmediately, otherwise on next boot
+            run_cmd('systemctl restart getty@tty1.service')
+    else:
+        sed('^(1:2345:respawn:/sbin/a?getty).+',
+            "\\1 -n -o\'-f {}\' 38400 tty1".format(username),
+            '/etc/inittab')
+        run_cmd('init q')
+
+def disable_console_autologin(restart=False):
+    '''
+    Disable automatic login on tty1, default getty login prompt will be provided.
+    '''
+    if is_systemd():
+        #
+        # Change systemd symlink that says what needs to happen on tty1
+        # https://wiki.archlinux.org/index.php/Systemd_FAQ#How_do_I_change_the_default_number_of_gettys.3F
+        #
+        systemd_tty1_linkfile='/etc/systemd/system/getty.target.wants/getty@tty1.service'
+        systemd_tty1_getty='/lib/systemd/system/getty@.service'
+
+        if os.path.isfile(systemd_tty1_linkfile):
+            os.unlink(systemd_tty1_linkfile)
+
+        os.symlink(systemd_tty1_getty, systemd_tty1_linkfile)
+
+        if restart:
+            run_cmd('systemctl start getty@tty1.service')
+    else:
+        sed('^(1:2345:respawn:/sbin/a?getty).+', '\\1 38400 tty1', '/etc/inittab')
+        run_cmd('init q')
 
 
 def set_ldm_autologin(username):

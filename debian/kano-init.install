@@ -1,3 +1,4 @@
 bin/* usr/bin
 autostart-kano-init.sh etc/profile.d
 kano_init usr/lib/python2.7/dist-packages
+share/* /usr/share/kano-init

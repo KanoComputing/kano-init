@@ -1,0 +1,15 @@
+#
+#  Systemd startup definition for kano-init boot
+#
+#  The first time the kit is booting up, or after a kano-init reset, or add-user
+#
+
+[Unit]
+Description=Kano Init Boot
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kano-init boot
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty1
