@@ -9,7 +9,8 @@ Description=Kano Init Boot
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/kano-init boot
+ExecStart=/bin/bash -i -c "/usr/bin/kano-init boot"
 StandardInput=tty
 StandardOutput=tty
 TTYPath=/dev/tty1
+EnvironmentFile=/usr/share/kano-init/systemd_ttys/kanoinit-environment.conf
