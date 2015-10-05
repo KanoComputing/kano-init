@@ -75,15 +75,21 @@ def disable_console_autologin(restart=False):
 
 
 def set_ldm_autologin(username):
-    ldm_conf_util = '/usr/lib/arm-linux-gnueabihf/lightdm/lightdm-set-defaults'
-    run_cmd("{} --autologin {}".format(ldm_conf_util, username))
+    if is_systemd():
+        sed('^#?(autologin-user)=.*$', 'autologin-user={}'.format(username), '/etc/lightdm/lightdm.conf')
+    else:
+        ldm_conf_util = '/usr/lib/arm-linux-gnueabihf/lightdm/lightdm-set-defaults'
+        run_cmd("{} --autologin {}".format(ldm_conf_util, username))
 
     # Make sure the autologin timeout is set to 0
     sed('^#?(autologin-user-timeout)=.*$', '\\1=0', '/etc/lightdm/lightdm.conf')
 
 
 def unset_ldm_autologin():
-    sed('^autologin-user=.*$', '', '/etc/lightdm/lightdm.conf')
+    if is_systemd():
+        sed('^autologin-user=.*$', '#autologin-user=none', '/etc/lightdm/lightdm.conf')
+    else:        
+        sed('^autologin-user=.*$', '', '/etc/lightdm/lightdm.conf')
     
     # Comment out the autologin-user-timeout option
     sed('^#?(autologin-user-timeout=.*)$', '#\\1', '/etc/lightdm/lightdm.conf')
