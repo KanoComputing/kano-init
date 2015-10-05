@@ -38,7 +38,7 @@ def enable_console_autologin(username, restart=False):
         if username=='root':
             os.symlink(kano_init_tty1_kanoinit, systemd_tty1_linkfile)            
         else:
-            # TODO: sed kanoautologin to populate username
+            sed('^ExecStart.*', "ExecStart=/bin/su - {}".format(username), kano_init_tty1_kanoautologin)
             os.symlink(kano_init_tty1_kanoautologin, systemd_tty1_linkfile)
 
         if restart:
