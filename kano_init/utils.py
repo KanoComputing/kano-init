@@ -90,11 +90,17 @@ def unset_ldm_autologin():
 
 
 def enable_ldm_autostart():
-    run_cmd('update-rc.d lightdm enable 2')
+    if is_systemd():
+        run_cmd('systemctl set-default graphical.target')
+    else:
+        run_cmd('update-rc.d lightdm enable 2')
 
 
 def disable_ldm_autostart():
-    run_cmd('update-rc.d lightdm disable 2')
+    if is_systemd():
+        run_cmd('systemctl set-default multi-user.target')
+    else:
+        run_cmd('update-rc.d lightdm disable 2')
 
 
 def reconfigure_autostart_policy():
