@@ -68,7 +68,7 @@ def disable_console_autologin(restart=False):
         os.symlink(systemd_tty1_getty, systemd_tty1_linkfile)
 
         if restart:
-            run_cmd('systemctl start getty@tty1.service')
+            run_cmd('systemctl restart getty@tty1.service')
     else:
         sed('^(1:2345:respawn:/sbin/a?getty).+', '\\1 38400 tty1', '/etc/inittab')
         run_cmd('init q')
