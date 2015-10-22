@@ -87,10 +87,9 @@ def restore_factory_settings():
     set_keyboard('en_US', 'generic')
 
     # setting the audio to analogue
-    amixer_from = "amixer -c 0 cset numid=3 [0-9]"
-    amixer_to = "amixer -c 0 cset numid=3 1"
 
-    file_replace("/etc/rc.audio", amixer_from, amixer_to)
+    cmd = "amixer -c 0 cset numid=3 1"
+    
     set_config_value('hdmi_ignore_edid_audio', 1)
     set_config_value('hdmi_drive', None)
 
