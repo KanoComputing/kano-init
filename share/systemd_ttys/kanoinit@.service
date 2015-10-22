@@ -6,6 +6,7 @@
 
 [Unit]
 Description=Kano Init Boot
+After=kano-settings.service kano-safeboot.service
 
 [Service]
 Type=simple
