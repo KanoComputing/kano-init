@@ -90,6 +90,8 @@ class Status(object):
 
         with open(self._status_file, 'w') as status_file:
             json.dump(data, status_file)
+            status_file.flush()
+            os.fsync(status_file.fileno())
 
     # -- stage
     @property
