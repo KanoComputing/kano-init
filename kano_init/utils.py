@@ -15,6 +15,7 @@ from kano.utils import sed, run_cmd
 from kano_init.paths import INIT_CONF_PATH
 from kano_init.user import get_group_members
 from kano_init.status import Status
+from kano_settings.system.audio import set_to_HDMI
 
 
 def enable_console_autologin(username):
@@ -87,7 +88,7 @@ def restore_factory_settings():
     set_keyboard('en_US', 'generic')
 
     # setting the audio to analogue
-    cmd = "amixer -c 0 cset numid=3 1"
+    set_to_HDMI(False)
     
     set_config_value('hdmi_ignore_edid_audio', 1)
     set_config_value('hdmi_drive', None)
