@@ -41,8 +41,8 @@ def do_reset():
     status = Status.get_instance()
     status.stage = Status.ADD_USER_STAGE
     status.save()
-    
+
     # Reboot before initiating the next stage to make sure the
     # settings are correct.
     os.system('sync')
-    os.system('reboot')
+    os.system('systemctl reboot')
