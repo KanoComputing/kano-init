@@ -44,5 +44,4 @@ def do_reset():
 
     # Reboot before initiating the next stage to make sure the
     # settings are correct.
-    os.system('sync')
-    os.system('systemctl reboot')
+    os.system('kano-checked-reboot kano-init systemctl reboot')
