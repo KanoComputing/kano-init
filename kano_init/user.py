@@ -22,7 +22,7 @@ from kano_settings.system.advanced import set_user_cookies
 
 DEFAULT_USER_PASSWORD = "kano"
 DEFAULT_USER_GROUPS = "tty,adm,dialout,cdrom,audio,users,sudo,video,games," + \
-                      "plugdev,input,kanousers"
+                      "plugdev,input,kanousers,i2c"
 
 
 class UserError(Exception):
