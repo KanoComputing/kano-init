@@ -57,7 +57,7 @@ def do_username_stage(flow_params):
         username = _get_username()
 
     create_user(username)
-    
+
     # set the hostname to the same as the username
     set_hostname(username)
 
@@ -96,7 +96,7 @@ def do_white_rabbit_stage(flow_params):
         matrix(2, False)
         clear_screen()
         rabbit(1, 'right-to-left')
-        
+
         clear_screen()
         msg = "{}, it's a trap!".format(init_status.username)
         typewriter_echo(msg)
@@ -136,16 +136,17 @@ def do_startx_stage(flow_params):
 def _get_username():
     while True:
         username = user_input('Your name: ').strip()
+        username = re.sub('\s+', '', username)
         write_flush('\n')
 
         if len(username) == 0:
             typewriter_echo('Type a cool name.', trailing_linebreaks=2)
         elif not re.match("^[a-zA-Z0-9]+$", username):
             typewriter_echo('Just one word, letters or numbers! Try again.',
-                trailing_linebreaks=2)
+                            trailing_linebreaks=2)
         elif user_exists(username):
             typewriter_echo('This one is already taken! Try again.',
-                trailing_linebreaks=2)
+                            trailing_linebreaks=2)
         elif len(username) > 25:
             msg = "This one is too long by {} characters! Try again.".format(
                 len(username) - 25
