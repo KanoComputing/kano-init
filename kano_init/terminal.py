@@ -125,7 +125,10 @@ def set_control(enabled=True):
 def user_input(prompt):
     typewriter_echo(prompt, trailing_linebreaks=0)
     discard_input()
-    return raw_input()
+    try:
+        return raw_input()
+    except EOFError:
+        return ''
 
 
 def discard_input():
