@@ -1,7 +1,7 @@
 #
 # utils.py
 #
-# Copyright (C) 2015 Kano Computing Ltd.
+# Copyright (C) 2015-216 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # A collection of utilities for the initflow.
@@ -28,15 +28,15 @@ def enable_console_autologin(username, restart=False):
         # Change systemd symlink that says what needs to happen on tty1
         # https://wiki.archlinux.org/index.php/Systemd_FAQ#How_do_I_change_the_default_number_of_gettys.3F
         #
-        systemd_tty1_linkfile='/etc/systemd/system/getty.target.wants/getty@tty1.service'
-        kano_init_tty1_kanoautologin='/usr/share/kano-init/systemd_ttys/kanoautologin@.service'
-        kano_init_tty1_kanoinit='/usr/share/kano-init/systemd_ttys/kanoinit@.service'
-        
+        systemd_tty1_linkfile = '/etc/systemd/system/getty.target.wants/getty@tty1.service'
+        kano_init_tty1_kanoautologin = '/usr/share/kano-init/systemd_ttys/kanoautologin@.service'
+        kano_init_tty1_kanoinit = '/usr/share/kano-init/systemd_ttys/kanoinit@.service'
+
         if os.path.isfile(systemd_tty1_linkfile):
             os.unlink(systemd_tty1_linkfile)
 
-        if username=='root':
-            os.symlink(kano_init_tty1_kanoinit, systemd_tty1_linkfile)            
+        if username == 'root':
+            os.symlink(kano_init_tty1_kanoinit, systemd_tty1_linkfile)
         else:
             sed('^ExecStart.*', "ExecStart=/bin/su - {}".format(username), kano_init_tty1_kanoautologin)
             os.symlink(kano_init_tty1_kanoautologin, systemd_tty1_linkfile)
@@ -50,6 +50,7 @@ def enable_console_autologin(username, restart=False):
             '/etc/inittab')
         run_cmd('init q')
 
+
 def disable_console_autologin(restart=False):
     '''
     Disable automatic login on tty1, default getty login prompt will be provided.
@@ -59,8 +60,8 @@ def disable_console_autologin(restart=False):
         # Change systemd symlink that says what needs to happen on tty1
         # https://wiki.archlinux.org/index.php/Systemd_FAQ#How_do_I_change_the_default_number_of_gettys.3F
         #
-        systemd_tty1_linkfile='/etc/systemd/system/getty.target.wants/getty@tty1.service'
-        systemd_tty1_getty='/lib/systemd/system/getty@.service'
+        systemd_tty1_linkfile = '/etc/systemd/system/getty.target.wants/getty@tty1.service'
+        systemd_tty1_getty = '/lib/systemd/system/getty@.service'
 
         if os.path.isfile(systemd_tty1_linkfile):
             os.unlink(systemd_tty1_linkfile)
@@ -88,9 +89,9 @@ def set_ldm_autologin(username):
 def unset_ldm_autologin():
     if is_systemd():
         sed('^autologin-user=.*$', '#autologin-user=none', '/etc/lightdm/lightdm.conf')
-    else:        
+    else:
         sed('^autologin-user=.*$', '', '/etc/lightdm/lightdm.conf')
-    
+
     # Comment out the autologin-user-timeout option
     sed('^#?(autologin-user-timeout=.*)$', '#\\1', '/etc/lightdm/lightdm.conf')
 
@@ -129,11 +130,10 @@ def restore_factory_settings():
     # FIXME: These imports are local because importing kano_settings.config_file
     # has side effects that break peldins build
     from kano_settings.system.keyboard_config import set_keyboard
-    from kano_settings.config_file import file_replace
     from kano_settings.boot_config import set_config_value, set_config_comment
     from kano_settings.system.overclock import set_default_overclock_values
     from kano.utils import is_model_2_b
-    
+
     # removing wifi cache
     try:
         os.remove('/etc/kwifiprompt-cache.conf')
@@ -145,7 +145,7 @@ def restore_factory_settings():
 
     # setting the audio to analogue
     set_to_HDMI(False)
-    
+
     set_config_value('hdmi_ignore_edid_audio', 1)
     set_config_value('hdmi_drive', None)
 
@@ -158,6 +158,7 @@ def restore_factory_settings():
     set_config_value('hdmi_pixel_encoding', 2)
     set_config_value('hdmi_group', None)
     set_config_value('hdmi_mode', None)
+    set_config_value('display_rotate', 0)
     set_config_comment('kano_screen_used', 'xxx')
 
     # resetting overclocking settings
