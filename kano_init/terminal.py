@@ -1,13 +1,13 @@
 #
 # terminal.py
 #
-# Copyright (C) 2015 Kano Computing Ltd.
+# Copyright (C) 2015-2016 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # Write to terminal in a Matrix-style
 #
 # TODO: This could be useful as kano.terminal but it needs
-#       a bit more work before it can be moved there.
+#       a bit more work before it can be moved there.
 
 
 import sys
@@ -21,6 +21,7 @@ SPEED_FACTOR = 1
 
 TOP_PADDING = 4
 LEFT_PADDING = 9
+
 
 def restore_original_state():
     if sys.stdin.isatty() and original_state:
