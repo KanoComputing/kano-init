@@ -129,10 +129,7 @@ def reconfigure_autostart_policy():
 def restore_factory_settings():
     # FIXME: These imports are local because importing kano_settings.config_file
     # has side effects that break peldins build
-    from kano_settings.system.keyboard_config import set_keyboard
-    from kano_settings.boot_config import set_config_value, set_config_comment
-    from kano_settings.system.overclock import set_default_overclock_values
-    from kano.utils import is_model_2_b
+    from kano_settings.default import set_default_config
 
     # removing wifi cache
     try:
@@ -140,29 +137,7 @@ def restore_factory_settings():
     except Exception:
         pass
 
-    # set the keyboard to default
-    set_keyboard('en_US', 'generic')
-
-    # setting the audio to analogue
-    set_to_HDMI(False)
-
-    set_config_value('hdmi_ignore_edid_audio', 1)
-    set_config_value('hdmi_drive', None)
-
-    # resetting HDMI settings
-    set_config_value('disable_overscan', 1)
-    set_config_value('overscan_left', 0)
-    set_config_value('overscan_right', 0)
-    set_config_value('overscan_top', 0)
-    set_config_value('overscan_bottom', 0)
-    set_config_value('hdmi_pixel_encoding', 2)
-    set_config_value('hdmi_group', None)
-    set_config_value('hdmi_mode', None)
-    set_config_value('display_rotate', 0)
-    set_config_comment('kano_screen_used', 'xxx')
-
-    # resetting overclocking settings
-    set_default_overclock_values(is_model_2_b())
+    set_default_config()
 
 
 def is_any_task_scheduled():
