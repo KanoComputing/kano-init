@@ -32,6 +32,7 @@ from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
     disable_ldm_autostart, enable_ldm_autostart
 from kano_settings.system.advanced import set_hostname
 
+MAX_BOMB_RETRIES = 10
 
 def do_username_stage(flow_params):
     """
@@ -111,7 +112,11 @@ def do_startx_stage(flow_params):
 
     if 'skip' not in flow_params or not flow_params['skip']:
         clear_screen(False)
-        while True:
+
+        i = 0
+        while i < MAX_BOMB_RETRIES:
+            i += 1
+
             try:
                 rv = bomb(init_status.username)
             except EnvironmentError:
