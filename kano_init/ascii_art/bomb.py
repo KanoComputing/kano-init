@@ -189,7 +189,7 @@ def main(username):
             numbers_frame += 1
             if numbers_frame >= len(numbers):
                 # Countdown is over, blink the screen and restart
-                # the animation from the beginning. 
+                # the animation from the beginning.
                 blink(1.0, 0.08)
                 rv = 1
                 break
@@ -252,10 +252,19 @@ def shutdown_curses():
     curses.endwin()
 
 
+def is_screen_big_enough():
+    h, w = screen.getmaxyx()
+    return h >= 40 and w >= 70
+
+
 def bomb(user="buddy"):
     rv = 1
     try:
         init_curses()
+
+        if not is_screen_big_enough():
+            raise EnvironmentError('Screen too small')
+
         rv = main(user)
     finally:
         shutdown_curses()

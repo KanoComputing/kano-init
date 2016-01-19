@@ -109,10 +109,15 @@ def do_white_rabbit_stage(flow_params):
 def do_startx_stage(flow_params):
     init_status = Status.get_instance()
 
-    if not 'skip' in flow_params or not flow_params['skip']:
+    if 'skip' not in flow_params or not flow_params['skip']:
         clear_screen(False)
         while True:
-            if bomb(init_status.username) == 0:
+            try:
+                rv = bomb(init_status.username)
+            except EnvironmentError:
+                rv = 0
+
+            if rv == 0:
                 clear_screen(False)
                 break
 
