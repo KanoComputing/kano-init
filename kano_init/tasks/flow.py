@@ -38,7 +38,7 @@ def do_username_stage(flow_params):
     """
     """
 
-    if 'skip' in flow_params and flow_params['skip']:
+    if flow_params.get('skip', False):
         # Skip the interactive flow and create the user automatically
         if 'user' in flow_params:
             username = flow_params['user']
@@ -72,7 +72,7 @@ def do_username_stage(flow_params):
 def do_white_rabbit_stage(flow_params):
     init_status = Status.get_instance()
 
-    if not 'skip' in flow_params or not flow_params['skip']:
+    if not flow_params.get('skip', False):
         clear_screen()
         rabbit(1, 'left-to-right')
         clear_screen()
@@ -110,7 +110,7 @@ def do_white_rabbit_stage(flow_params):
 def do_startx_stage(flow_params):
     init_status = Status.get_instance()
 
-    if 'skip' not in flow_params or not flow_params['skip']:
+    if not flow_params.get('skip', False):
         clear_screen(False)
 
         i = 0
