@@ -32,12 +32,13 @@ from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
     disable_ldm_autostart, enable_ldm_autostart
 from kano_settings.system.advanced import set_hostname
 
+MAX_BOMB_RETRIES = 10
 
 def do_username_stage(flow_params):
     """
     """
 
-    if 'skip' in flow_params and flow_params['skip']:
+    if flow_params.get('skip'):
         # Skip the interactive flow and create the user automatically
         if 'user' in flow_params:
             username = flow_params['user']
@@ -71,7 +72,7 @@ def do_username_stage(flow_params):
 def do_white_rabbit_stage(flow_params):
     init_status = Status.get_instance()
 
-    if not 'skip' in flow_params or not flow_params['skip']:
+    if not flow_params.get('skip', False):
         clear_screen()
         rabbit(1, 'left-to-right')
         clear_screen()
@@ -109,10 +110,19 @@ def do_white_rabbit_stage(flow_params):
 def do_startx_stage(flow_params):
     init_status = Status.get_instance()
 
-    if not 'skip' in flow_params or not flow_params['skip']:
+    if not flow_params.get('skip', False):
         clear_screen(False)
-        while True:
-            if bomb(init_status.username) == 0:
+
+        i = 0
+        while i < MAX_BOMB_RETRIES:
+            i += 1
+
+            try:
+                rv = bomb(init_status.username)
+            except EnvironmentError:
+                rv = 0
+
+            if rv == 0:
                 clear_screen(False)
                 break
 
