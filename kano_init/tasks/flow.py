@@ -38,7 +38,7 @@ def do_username_stage(flow_params):
     """
     """
 
-    if flow_params.get('skip', False):
+    if flow_params.get('skip'):
         # Skip the interactive flow and create the user automatically
         if 'user' in flow_params:
             username = flow_params['user']
