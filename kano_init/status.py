@@ -25,17 +25,29 @@ class Status(object):
     ADD_USER_STAGE = 'add-user'
     USERNAME_STAGE = 'username-stage'
     WHITE_RABBIT_STAGE = 'white-rabbit-stage'
-    STARTX_STAGE = 'startx-stage'
+    LIGHTUP_STAGE = 'light-up-stage'
+    SWITCH_STAGE = 'switch-stage'
+    SPEAK_STAGE = 'speak-stage'
+    LETTERS_STAGE = 'letters-stage'
+    PICTURE_STAGE = 'picture-stage'
+    STOLE_STAGE = 'stole-stage'
+    FINAL_STAGE = 'final-stage'
     UI_INIT_STAGE = 'ui-init-stage'
 
     stages = [
         USERNAME_STAGE,
         WHITE_RABBIT_STAGE,
-        STARTX_STAGE,
+        LIGHTUP_STAGE,
+        SWITCH_STAGE,
+        SPEAK_STAGE,
+        LETTERS_STAGE,
+        PICTURE_STAGE,
+        STOLE_STAGE,
         DISABLED_STAGE,
         RESET_STAGE,
         DELETE_USER_STAGE,
         ADD_USER_STAGE,
+        FINAL_STAGE,
         UI_INIT_STAGE
     ]
 

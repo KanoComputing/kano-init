@@ -15,24 +15,24 @@
 
 import re
 import os
-import time
 
 from kano.colours import decorate_with_preset
 from kano.utils import run_cmd, ensure_dir, delete_dir
 
 from kano_init.paths import SUBSHELLRC_PATH
 from kano_init.terminal import typewriter_echo, clear_screen, user_input, \
-    write_flush
+    write_flush, LEFT_PADDING
 from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
+from kano_init.ascii_art.matrix_binary import matrix_binary
 from kano_init.ascii_art.rabbit import rabbit
-from kano_init.ascii_art.bomb import bomb
+from kano_init.ascii_art.binary import binary
+from kano_init.ascii_art.ascii_image import ascii_image
+from kano_init.ascii_art.loading import loading
 from kano_init.user import user_exists, create_user, make_username_unique
-from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
-    disable_ldm_autostart, enable_ldm_autostart
+from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
 from kano_settings.system.advanced import set_hostname
 
-MAX_BOMB_RETRIES = 10
 
 def do_username_stage(flow_params):
     """
@@ -98,37 +98,169 @@ def do_white_rabbit_stage(flow_params):
         clear_screen()
         rabbit(1, 'right-to-left')
 
-        clear_screen()
-        msg = "{}, it's a trap!".format(init_status.username)
-        typewriter_echo(msg)
-        time.sleep(2)
-
-    init_status.stage = Status.STARTX_STAGE
+    init_status.stage = Status.LIGHTUP_STAGE
     init_status.save()
 
 
-def do_startx_stage(flow_params):
+def do_lightup_stage(flow_params):
     init_status = Status.get_instance()
 
     if not flow_params.get('skip', False):
-        clear_screen(False)
+        clear_screen()
 
-        i = 0
-        while i < MAX_BOMB_RETRIES:
-            i += 1
+        msg = "{} has gone deeper into the computer.".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
 
-            try:
-                rv = bomb(init_status.username)
-            except EnvironmentError:
-                rv = 0
+        msg = "It\'s very dark here, can you turn the light on?"
+        typewriter_echo(msg, trailing_linebreaks=2)
 
-            if rv == 0:
-                clear_screen(False)
+        msg = "Press [ENTER] to light up the room."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        # Wait for user input
+        raw_input(LEFT_PADDING * ' ')
+
+    init_status.stage = Status.SWITCH_STAGE
+    init_status.save()
+
+
+def do_switch_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        try:
+            binary(init_status.username)
+        except EnvironmentError:
+            pass
+
+    init_status.stage = Status.SPEAK_STAGE
+    init_status.save()
+
+
+def do_speak_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        msg = "Computers use switches to speak in many 1s and 0s."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "This is called binary code."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "{} press [ENTER] to dive deeper!".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        # Wait for user input
+        raw_input(LEFT_PADDING * ' ')
+
+        matrix_binary(5, False)
+        clear_screen()
+
+    init_status.stage = Status.LETTERS_STAGE
+    init_status.save()
+
+
+def do_letters_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        msg = "Binary can also represent letters. Here is a secret password:"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "k = 01101011"
+        typewriter_echo(msg, trailing_linebreaks=1)
+        msg = "a = 01100001"
+        typewriter_echo(msg, trailing_linebreaks=1)
+        msg = "n = 01101110"
+        typewriter_echo(msg, trailing_linebreaks=1)
+        msg = "o = 01101111"
+        typewriter_echo(msg, trailing_linebreaks=1)
+
+        msg = "01101011 01100001 01101110 01101111"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "Can you type the password in human letters?"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        while True:
+            # Wait for user input
+            terminal = LEFT_PADDING * ' '
+            terminal = terminal + "{}@kano ~ $ ".format(init_status.username)
+            password = raw_input(terminal).lower()
+            if password == "kano":
                 break
+            else:
+                msg = "Not the correct password, keep trying!"
+                typewriter_echo(msg, trailing_linebreaks=2)
 
-            clear_screen(True)
-            time.sleep(1)
-            typewriter_echo('Try again!', sleep=2)
+    init_status.stage = Status.PICTURE_STAGE
+    init_status.save()
+
+
+def do_picture_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        msg = "Binary can even code pictures."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "{} press [ENTER] to see one!".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        # Wait for user input
+        raw_input(LEFT_PADDING * ' ')
+        clear_screen()
+
+        # Show Judoka face for 5 seconds
+        ascii_image("judoka_face.txt", 5)
+        clear_screen()
+        rabbit(1, 'left-to-right')
+
+    init_status.stage = Status.STOLE_STAGE
+    init_status.save()
+
+
+def do_stole_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        msg = "It\'s the white rabbit again!"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "It stole some of my code... {}, \
+can you help to find it?".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "Explore the computer world... Good luck!"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "Press [ENTER] to continue."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        # Wait for user input
+        raw_input(LEFT_PADDING * ' ')
+
+        loading()
+        clear_screen()
+
+    init_status.stage = Status.FINAL_STAGE
+    init_status.save()
+
+
+def do_final_stage(flow_params):
+    init_status = Status.get_instance()
+
+    clear_screen()
 
     reconfigure_autostart_policy()
 

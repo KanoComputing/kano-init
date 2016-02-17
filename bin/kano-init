@@ -30,13 +30,6 @@ import sys
 
 import docopt
 
-if __name__ == '__main__' and __package__ is None:
-    dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    if dir_path != '/usr':
-        sys.path.insert(0, dir_path)
-    else:
-        locale_path = None
-
 from kano.utils import enforce_root
 from kano.logging import logger
 
@@ -45,9 +38,17 @@ from kano_init.tasks.add_user import do_add_user, schedule_add_user
 from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
-    do_startx_stage
+    do_lightup_stage, do_switch_stage, do_speak_stage, do_letters_stage,  \
+    do_picture_stage, do_stole_stage, do_final_stage
 from kano_init.utils import reconfigure_autostart_policy, load_init_conf
 from kano_init.terminal import set_control
+
+if __name__ == '__main__' and __package__ is None:
+    dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    if dir_path != '/usr':
+        sys.path.insert(0, dir_path)
+    else:
+        locale_path = None
 
 
 def main():
@@ -78,8 +79,20 @@ def main():
                 do_username_stage(flow_params)
             elif status.stage == Status.WHITE_RABBIT_STAGE:
                 do_white_rabbit_stage(flow_params)
-            elif status.stage == Status.STARTX_STAGE:
-                do_startx_stage(flow_params)
+            elif status.stage == Status.LIGHTUP_STAGE:
+                do_lightup_stage(flow_params)
+            elif status.stage == Status.SWITCH_STAGE:
+                do_switch_stage(flow_params)
+            elif status.stage == Status.SPEAK_STAGE:
+                do_speak_stage(flow_params)
+            elif status.stage == Status.LETTERS_STAGE:
+                do_letters_stage(flow_params)
+            elif status.stage == Status.PICTURE_STAGE:
+                do_picture_stage(flow_params)
+            elif status.stage == Status.STOLE_STAGE:
+                do_stole_stage(flow_params)
+            elif status.stage == Status.FINAL_STAGE:
+                do_final_stage(flow_params)
             else:
                 break
     elif args['schedule']:
