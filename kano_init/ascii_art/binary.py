@@ -31,8 +31,8 @@ def main(username):
 
     keypos = 0
 
-    msg1 = "Look %s! There are millions of switches." % username
-    msg2 = "When the switch is on that means 1. When the switch is off that means a 0."
+    msg1 = "Computers use switches to speak in many 1s and 0s."
+    msg2 = "This is called binary code. Press [ENTER] to dive deeper!"
 
     rv = 0
 

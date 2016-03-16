@@ -51,9 +51,9 @@ def do_username_stage(flow_params):
         clear_screen()
 
         typewriter_echo('Hello!', trailing_linebreaks=2)
-        typewriter_echo('I\'m KANO. Thanks for bringing me to life.',
+        typewriter_echo('You brought your computer to life.',
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo('What should I call you?', trailing_linebreaks=2)
+        typewriter_echo('What is your name?', trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -64,43 +64,9 @@ def do_username_stage(flow_params):
 
     # Next up is the white rabit stage
     init_status = Status.get_instance()
-    init_status.stage = Status.WHITE_RABBIT_STAGE
+    init_status.stage = Status.LIGHTUP_STAGE
     init_status.username = username
     init_status.save()
-
-
-def do_white_rabbit_stage(flow_params):
-    init_status = Status.get_instance()
-
-    if not flow_params.get('skip', False):
-        clear_screen()
-        rabbit(1, 'left-to-right')
-        clear_screen()
-
-        msg = "{}, follow the white rabbit ...".format(init_status.username)
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        typewriter_echo('He\'s hiding in my memory. Can you find him?',
-                        trailing_linebreaks=2)
-
-        command = decorate_with_preset('cd rabbithole', 'code')
-        typewriter_echo("Type {}".format(command), trailing_linebreaks=2)
-
-        # TODO: open shell
-        rabbithole = "/home/{}/rabbithole".format(init_status.username)
-        ensure_dir(rabbithole)
-        cmd = "sudo -u {} -H bash --init-file {}".format(init_status.username,
-                                                         SUBSHELLRC_PATH)
-        os.system(cmd)
-        delete_dir(rabbithole)
-
-        matrix(2, False)
-        clear_screen()
-        rabbit(1, 'right-to-left')
-
-    init_status.stage = Status.LIGHTUP_STAGE
-    init_status.save()
-
 
 def do_lightup_stage(flow_params):
     init_status = Status.get_instance()
@@ -108,7 +74,7 @@ def do_lightup_stage(flow_params):
     if not flow_params.get('skip', False):
         clear_screen()
 
-        msg = "{} has gone deeper into the computer.".format(init_status.username)
+        msg = "Nice to meet you {}!".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "It\'s very dark here, can you turn the light on?"
@@ -123,7 +89,6 @@ def do_lightup_stage(flow_params):
     init_status.stage = Status.SWITCH_STAGE
     init_status.save()
 
-
 def do_switch_stage(flow_params):
     init_status = Status.get_instance()
 
@@ -135,34 +100,8 @@ def do_switch_stage(flow_params):
         except EnvironmentError:
             pass
 
-    init_status.stage = Status.SPEAK_STAGE
-    init_status.save()
-
-
-def do_speak_stage(flow_params):
-    init_status = Status.get_instance()
-
-    if not flow_params.get('skip', False):
-        clear_screen()
-
-        msg = "Computers use switches to speak in many 1s and 0s."
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        msg = "This is called binary code."
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        msg = "{} press [ENTER] to dive deeper!".format(init_status.username)
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        # Wait for user input
-        raw_input(LEFT_PADDING * ' ')
-
-        matrix_binary(5, False)
-        clear_screen()
-
     init_status.stage = Status.LETTERS_STAGE
     init_status.save()
-
 
 def do_letters_stage(flow_params):
     init_status = Status.get_instance()
@@ -170,19 +109,12 @@ def do_letters_stage(flow_params):
     if not flow_params.get('skip', False):
         clear_screen()
 
-        msg = "Binary can also represent letters. Here is a secret password:"
+        msg = "Binary code can also represent letters. Here is a secret password:"
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "k = 01101011"
-        typewriter_echo(msg, trailing_linebreaks=1)
-        msg = "a = 01100001"
-        typewriter_echo(msg, trailing_linebreaks=1)
-        msg = "n = 01101110"
-        typewriter_echo(msg, trailing_linebreaks=1)
-        msg = "o = 01101111"
-        typewriter_echo(msg, trailing_linebreaks=1)
-
         msg = "01101011 01100001 01101110 01101111"
+        typewriter_echo(msg, trailing_linebreaks=1)
+        msg = "   k        a        n        o    "
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "Can you type the password in human letters?"
@@ -199,63 +131,39 @@ def do_letters_stage(flow_params):
                 msg = "Not the correct password, keep trying!"
                 typewriter_echo(msg, trailing_linebreaks=2)
 
-    init_status.stage = Status.PICTURE_STAGE
+    init_status.stage = Status.WHITE_RABBIT_STAGE
     init_status.save()
 
-
-def do_picture_stage(flow_params):
+def do_white_rabbit_stage(flow_params):
     init_status = Status.get_instance()
 
     if not flow_params.get('skip', False):
-        clear_screen()
-
-        msg = "Binary can even code pictures."
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        msg = "{} press [ENTER] to see one!".format(init_status.username)
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        # Wait for user input
-        raw_input(LEFT_PADDING * ' ')
-        clear_screen()
-
-        # Show Judoka face for 5 seconds
-        ascii_image("judoka_face.txt", 5)
         clear_screen()
         rabbit(1, 'left-to-right')
-
-    init_status.stage = Status.STOLE_STAGE
-    init_status.save()
-
-
-def do_stole_stage(flow_params):
-    init_status = Status.get_instance()
-
-    if not flow_params.get('skip', False):
         clear_screen()
 
-        msg = "It\'s the white rabbit again!"
+        msg = "{}, follow the white rabbit ...".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "It stole some of my code... {}, \
-can you help to find it?".format(init_status.username)
-        typewriter_echo(msg, trailing_linebreaks=2)
+        typewriter_echo('It\'s hiding in the computer world. Can you help to find it?',
+                        trailing_linebreaks=2)
 
-        msg = "Explore the computer world... Good luck!"
-        typewriter_echo(msg, trailing_linebreaks=2)
+        command = decorate_with_preset('cd rabbithole', 'code')
+        typewriter_echo("Type {}".format(command), trailing_linebreaks=2)
 
-        msg = "Press [ENTER] to continue."
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        # Wait for user input
-        raw_input(LEFT_PADDING * ' ')
+        # TODO: open shell
+        rabbithole = "/home/{}/rabbithole".format(init_status.username)
+        ensure_dir(rabbithole)
+        cmd = "sudo -u {} -H bash --init-file {}".format(init_status.username,
+                                                         SUBSHELLRC_PATH)
+        os.system(cmd)
+        delete_dir(rabbithole)
 
         loading()
         clear_screen()
 
     init_status.stage = Status.FINAL_STAGE
     init_status.save()
-
 
 def do_final_stage(flow_params):
     init_status = Status.get_instance()
