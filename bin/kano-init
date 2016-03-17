@@ -39,7 +39,7 @@ from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_lightup_stage, do_switch_stage, do_letters_stage,  \
-    do_final_stage
+    do_love_stage, do_final_stage
 from kano_init.utils import reconfigure_autostart_policy, load_init_conf
 from kano_init.terminal import set_control
 
@@ -85,6 +85,8 @@ def main():
                 do_switch_stage(flow_params)
             elif status.stage == Status.LETTERS_STAGE:
                 do_letters_stage(flow_params)
+            elif status.stage == Status.LOVE_STAGE:
+                do_love_stage(flow_params)
             elif status.stage == Status.FINAL_STAGE:
                 do_final_stage(flow_params)
             else:

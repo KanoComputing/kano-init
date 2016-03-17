@@ -28,6 +28,7 @@ class Status(object):
     LIGHTUP_STAGE = 'light-up-stage'
     SWITCH_STAGE = 'switch-stage'
     LETTERS_STAGE = 'letters-stage'
+    LOVE_STAGE = 'love-stage'
     FINAL_STAGE = 'final-stage'
     UI_INIT_STAGE = 'ui-init-stage'
 
@@ -41,6 +42,7 @@ class Status(object):
         RESET_STAGE,
         DELETE_USER_STAGE,
         ADD_USER_STAGE,
+        LOVE_STAGE,
         FINAL_STAGE,
         UI_INIT_STAGE
     ]
