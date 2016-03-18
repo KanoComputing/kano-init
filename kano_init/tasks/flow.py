@@ -162,8 +162,21 @@ def do_white_rabbit_stage(flow_params):
         loading()
         clear_screen()
 
+    init_status.stage = Status.LOVE_STAGE
+    init_status.save()
+
+def do_love_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+        cmd = "/usr/bin/love /usr/bin/kanoOverworld.love --load=terminalForest"
+
+        os.system(cmd)
+
     init_status.stage = Status.FINAL_STAGE
     init_status.save()
+
 
 def do_final_stage(flow_params):
     init_status = Status.get_instance()
