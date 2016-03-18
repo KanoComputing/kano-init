@@ -15,24 +15,24 @@
 
 import re
 import os
-import time
 
 from kano.colours import decorate_with_preset
 from kano.utils import run_cmd, ensure_dir, delete_dir
 
 from kano_init.paths import SUBSHELLRC_PATH
 from kano_init.terminal import typewriter_echo, clear_screen, user_input, \
-    write_flush
+    write_flush, LEFT_PADDING
 from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
+from kano_init.ascii_art.matrix_binary import matrix_binary
 from kano_init.ascii_art.rabbit import rabbit
-from kano_init.ascii_art.bomb import bomb
+from kano_init.ascii_art.binary import binary
+from kano_init.ascii_art.ascii_image import ascii_image
+from kano_init.ascii_art.loading import loading
 from kano_init.user import user_exists, create_user, make_username_unique
-from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
-    disable_ldm_autostart, enable_ldm_autostart
+from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
 from kano_settings.system.advanced import set_hostname
 
-MAX_BOMB_RETRIES = 10
 
 def do_username_stage(flow_params):
     """
@@ -51,9 +51,9 @@ def do_username_stage(flow_params):
         clear_screen()
 
         typewriter_echo('Hello!', trailing_linebreaks=2)
-        typewriter_echo('I\'m KANO. Thanks for bringing me to life.',
+        typewriter_echo('You brought your computer to life.',
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo('What should I call you?', trailing_linebreaks=2)
+        typewriter_echo('What is your name?', trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -64,10 +64,75 @@ def do_username_stage(flow_params):
 
     # Next up is the white rabit stage
     init_status = Status.get_instance()
-    init_status.stage = Status.WHITE_RABBIT_STAGE
+    init_status.stage = Status.LIGHTUP_STAGE
     init_status.username = username
     init_status.save()
 
+def do_lightup_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        msg = "Nice to meet you {}!".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "It\'s very dark here, can you turn the light on?"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "Press [ENTER] to light up the room."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        # Wait for user input
+        raw_input(LEFT_PADDING * ' ')
+
+    init_status.stage = Status.SWITCH_STAGE
+    init_status.save()
+
+def do_switch_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        try:
+            binary(init_status.username)
+        except EnvironmentError:
+            pass
+
+    init_status.stage = Status.LETTERS_STAGE
+    init_status.save()
+
+def do_letters_stage(flow_params):
+    init_status = Status.get_instance()
+
+    if not flow_params.get('skip', False):
+        clear_screen()
+
+        msg = "Binary code can also represent letters. Here is a secret password:"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "01101011 01100001 01101110 01101111"
+        typewriter_echo(msg, trailing_linebreaks=1)
+        msg = "   k        a        n        o    "
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "Can you type the password in human letters?"
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        while True:
+            # Wait for user input
+            terminal = LEFT_PADDING * ' '
+            terminal = terminal + "{}@kano ~ $ ".format(init_status.username)
+            password = raw_input(terminal).lower()
+            if password == "kano":
+                break
+            else:
+                msg = "Not the correct password, keep trying!"
+                typewriter_echo(msg, trailing_linebreaks=2)
+
+    init_status.stage = Status.WHITE_RABBIT_STAGE
+    init_status.save()
 
 def do_white_rabbit_stage(flow_params):
     init_status = Status.get_instance()
@@ -80,7 +145,7 @@ def do_white_rabbit_stage(flow_params):
         msg = "{}, follow the white rabbit ...".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        typewriter_echo('He\'s hiding in my memory. Can you find him?',
+        typewriter_echo('It\'s hiding in the computer world. Can you help to find it?',
                         trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
@@ -94,41 +159,16 @@ def do_white_rabbit_stage(flow_params):
         os.system(cmd)
         delete_dir(rabbithole)
 
-        matrix(2, False)
+        loading()
         clear_screen()
-        rabbit(1, 'right-to-left')
 
-        clear_screen()
-        msg = "{}, it's a trap!".format(init_status.username)
-        typewriter_echo(msg)
-        time.sleep(2)
-
-    init_status.stage = Status.STARTX_STAGE
+    init_status.stage = Status.FINAL_STAGE
     init_status.save()
 
-
-def do_startx_stage(flow_params):
+def do_final_stage(flow_params):
     init_status = Status.get_instance()
 
-    if not flow_params.get('skip', False):
-        clear_screen(False)
-
-        i = 0
-        while i < MAX_BOMB_RETRIES:
-            i += 1
-
-            try:
-                rv = bomb(init_status.username)
-            except EnvironmentError:
-                rv = 0
-
-            if rv == 0:
-                clear_screen(False)
-                break
-
-            clear_screen(True)
-            time.sleep(1)
-            typewriter_echo('Try again!', sleep=2)
+    clear_screen()
 
     reconfigure_autostart_policy()
 
