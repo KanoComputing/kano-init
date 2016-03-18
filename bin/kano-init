@@ -83,14 +83,8 @@ def main():
                 do_lightup_stage(flow_params)
             elif status.stage == Status.SWITCH_STAGE:
                 do_switch_stage(flow_params)
-            elif status.stage == Status.SPEAK_STAGE:
-                do_speak_stage(flow_params)
             elif status.stage == Status.LETTERS_STAGE:
                 do_letters_stage(flow_params)
-            elif status.stage == Status.PICTURE_STAGE:
-                do_picture_stage(flow_params)
-            elif status.stage == Status.STOLE_STAGE:
-                do_stole_stage(flow_params)
             elif status.stage == Status.FINAL_STAGE:
                 do_final_stage(flow_params)
             else:
