@@ -170,7 +170,9 @@ def do_love_stage(flow_params):
 
     if not flow_params.get('skip', False):
         clear_screen()
-        cmd = "/usr/bin/love /usr/bin/kanoOverworld.love --load=terminalForest"
+        # kanoOverworld needs to run as the user
+        # to access the savefile correctly.
+        cmd = 'su {} -c "/usr/bin/love /usr/bin/kanoOverworld.love --load" >>/var/log/kanoOverworld.log 2>&1'.format(init_status.username)
 
         os.system(cmd)
 
