@@ -50,10 +50,10 @@ def do_username_stage(flow_params):
         matrix(2, True)
         clear_screen()
 
-        typewriter_echo('Hello!', trailing_linebreaks=2)
-        typewriter_echo('You brought your computer to life.',
+        typewriter_echo('Well done.', trailing_linebreaks=2)
+        typewriter_echo('You just brought your computer to life.',
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo('What is your name?', trailing_linebreaks=2)
+        typewriter_echo('Now, let\'s see what it can do. What is your name?', trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -74,13 +74,13 @@ def do_lightup_stage(flow_params):
     if not flow_params.get('skip', False):
         clear_screen()
 
-        msg = "Nice to meet you {}!".format(init_status.username)
+        msg = "Nice to meet you {}.".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "It\'s very dark here, can you turn the light on?"
+        msg = "Did you know your new computer\'s brain is made of electric switches?"
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Press [ENTER] to light up the room."
+        msg = "Press [ENTER] to keep exploring."
         typewriter_echo(msg, trailing_linebreaks=2)
 
         # Wait for user input
@@ -109,7 +109,10 @@ def do_letters_stage(flow_params):
     if not flow_params.get('skip', False):
         clear_screen()
 
-        msg = "Binary code can also represent letters. Here is a secret password:"
+        msg = "Words, music and pictures all get stored as binary code."
+        typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "Even your computer\'s secret password:"
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "01101011 01100001 01101110 01101111"
@@ -117,7 +120,7 @@ def do_letters_stage(flow_params):
         msg = "   k        a        n        o    "
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Can you type the password in human letters?"
+        msg = "Type the secret password in human letters:"
         typewriter_echo(msg, trailing_linebreaks=2)
 
         while True:
@@ -142,11 +145,11 @@ def do_white_rabbit_stage(flow_params):
         rabbit(1, 'left-to-right')
         clear_screen()
 
-        msg = "{}, follow the white rabbit ...".format(init_status.username)
-        typewriter_echo(msg, trailing_linebreaks=2)
+        msg = "Did you see that?"
+        typewriter_echo(msg,trailing_linebreaks=2)
 
-        typewriter_echo('It\'s hiding in the computer world. Can you help to find it?',
-                        trailing_linebreaks=2)
+        msg = "{}, follow the white rabbit ... it\'s hiding somewhere in the computer".format(init_status.username)
+        typewriter_echo(msg, trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
         typewriter_echo("Type {}".format(command), trailing_linebreaks=2)
