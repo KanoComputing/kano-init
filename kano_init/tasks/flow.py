@@ -50,10 +50,10 @@ def do_username_stage(flow_params):
         matrix(2, True)
         clear_screen()
 
-        typewriter_echo('Well done.', trailing_linebreaks=2)
-        typewriter_echo('You just brought your computer to life.',
+        typewriter_echo('Hello!', trailing_linebreaks=2)
+        typewriter_echo('Thanks for bringing me to life. Now, let\'s see what we can do.',
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo('Now, let\'s see what it can do. What is your name?', trailing_linebreaks=2)
+        typewriter_echo('What is your name?', trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -77,10 +77,10 @@ def do_lightup_stage(flow_params):
         msg = "Nice to meet you {}.".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Did you know your new computer\'s brain is made of electric switches?"
+        msg = "Did you know your new computer\'s brain is made of millions electric switches?"
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Press [ENTER] to keep exploring."
+        msg = "Press [ENTER] to see what the switches do."
         typewriter_echo(msg, trailing_linebreaks=2)
 
         # Wait for user input
@@ -112,7 +112,7 @@ def do_letters_stage(flow_params):
         msg = "Words, music and pictures all get stored as binary code."
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Even your computer\'s secret password:"
+        msg = "And so does your computer\'s secret password:"
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "01101011 01100001 01101110 01101111"
@@ -145,14 +145,14 @@ def do_white_rabbit_stage(flow_params):
         rabbit(1, 'left-to-right')
         clear_screen()
 
-        msg = "Did you see that?"
+        msg = "Woah."
         typewriter_echo(msg,trailing_linebreaks=2)
 
-        msg = "{}, follow the white rabbit ... it\'s hiding somewhere in the computer".format(init_status.username)
+        msg = "{}, did you see that?".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
-        typewriter_echo("Type {}".format(command), trailing_linebreaks=2)
+        typewriter_echo("Type {} to follow the white rabbit.".format(command), trailing_linebreaks=2)
 
         # TODO: open shell
         rabbithole = "/home/{}/rabbithole".format(init_status.username)
