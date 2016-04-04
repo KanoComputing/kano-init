@@ -31,8 +31,8 @@ def main(username):
 
     keypos = 0
 
-    msg1 = "Computers use switches to speak in many 1s and 0s."
-    msg2 = "This is called binary code. Press [ENTER] to dive deeper!"
+    msg1 = "These switches speak in 1s and 0s. This is called binary code."
+    msg2 = "Press [ENTER] to keep exploring."
 
     rv = 0
 
