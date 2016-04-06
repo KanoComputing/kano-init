@@ -147,7 +147,7 @@ def shutdown_curses():
 
 def is_screen_big_enough():
     h, w = screen.getmaxyx()
-    return h >= 40 and w >= 70
+    return h >= 38 and w >= 70
 
 
 def loading():
@@ -160,3 +160,5 @@ def loading():
         main()
     finally:
         shutdown_curses()
+        # ignore exception and allow init to proceed
+        return

@@ -18,6 +18,7 @@ Usage:
   kano-init status
   kano-init reset [-f]
   kano-init boot
+  kano-init test
 
 Options:
   -h, --help       Show this message.
@@ -89,8 +90,15 @@ def main():
                 do_love_stage(flow_params)
             elif status.stage == Status.FINAL_STAGE:
                 do_final_stage(flow_params)
-            else:
+            else:                
                 break
+    elif args['test']:
+        flow_params = load_init_conf()
+        do_username_stage(flow_params)
+        do_white_rabbit_stage(flow_params)
+        do_lightup_stage(flow_params)
+        do_letters_stage(flow_params)
+
     elif args['schedule']:
         try:
             if args['reset']:
