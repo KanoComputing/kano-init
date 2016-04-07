@@ -37,8 +37,8 @@ def main(username):
     rv = 0
 
     h, w = screen.getmaxyx()
-    max_row = 10
-    max_column = 10
+    max_row = min(10,int(h/4))
+    max_column = max_row
 
     # Determine the position of the grid.
     startx = (w - (max_column * 4)) / 2
@@ -148,7 +148,7 @@ def shutdown_curses():
 
 def is_screen_big_enough():
     h, w = screen.getmaxyx()
-    return h >= 40 and w >= 70
+    return h >= 17 and w >= 47
 
 
 def binary(user="buddy"):

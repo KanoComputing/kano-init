@@ -27,7 +27,7 @@ def draw_fn(y, x, msg, color=None):
             screen.addstr(y, x, msg, color)
     except:
         shutdown_curses()
-        sys.exit(0)
+        raise
 
 
 class Drop(object):

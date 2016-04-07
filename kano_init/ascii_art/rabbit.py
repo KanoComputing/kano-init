@@ -14,12 +14,18 @@ import sys
 import time
 import curses
 
-from random import randint
+import random
 
 from kano_init.paths import ASCII_RES_PATH
 
 screen = None
 
+
+def randint(a, b):
+    if a >= b:
+        return a
+    else:
+        return random.randint(a, b)
 
 def draw_fn(y, x, msg, color=None):
     try:
@@ -140,6 +146,10 @@ def main(max_cycles, start_direction):
     rabbit_rl = load_animation(ASCII_RES_PATH + "/rabbit-animation-reversed.txt")
 
     h, w = screen.getmaxyx()
+
+    if h < 18:
+        return
+
 
     # screen centre
     cx, cy = w/2, h/2
