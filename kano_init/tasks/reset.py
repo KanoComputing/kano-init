@@ -33,7 +33,7 @@ def schedule_reset():
     print 'kano-init RESET scheduled for the next system reboot'
 
 
-def do_reset():
+def do_reset(flow_param):
     restore_factory_settings()
     delete_all_users()
     reconfigure_autostart_policy()

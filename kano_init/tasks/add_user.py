@@ -31,7 +31,7 @@ def schedule_add_user():
     status.save()
 
 
-def do_add_user():
+def do_add_user(flow_param):
     status = Status.get_instance()
     status.stage = Status.USERNAME_STAGE
     status.save()
