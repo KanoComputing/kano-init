@@ -18,6 +18,7 @@ Usage:
   kano-init status
   kano-init reset [-f]
   kano-init boot
+  kano-init test [<stage>]
 
 Options:
   -h, --help       Show this message.
@@ -27,6 +28,7 @@ Options:
 
 import os
 import sys
+from collections import OrderedDict
 
 import docopt
 
@@ -60,6 +62,21 @@ def main():
     version = 2.0
     args = docopt.docopt(__doc__, version=str(version))
 
+    func_table = OrderedDict([
+        (Status.ADD_USER_STAGE,      do_add_user),
+        (Status.DELETE_USER_STAGE,   do_delete_user),
+        (Status.RESET_STAGE,         do_reset),
+        (Status.USERNAME_STAGE,      do_username_stage),
+        (Status.LIGHTUP_STAGE,       do_lightup_stage),
+        (Status.SWITCH_STAGE,        do_switch_stage),
+        (Status.LETTERS_STAGE,       do_letters_stage),
+        (Status.WHITE_RABBIT_STAGE,  do_white_rabbit_stage),
+        (Status.LOVE_STAGE,          do_love_stage),
+        (Status.FINAL_STAGE,         do_final_stage)
+        ])
+        
+        
+
     if args['boot']:
         status = Status.get_instance()
 
@@ -69,28 +86,23 @@ def main():
         set_control(False)
 
         while True:
-            if status.stage == Status.ADD_USER_STAGE:
-                do_add_user()
-            elif status.stage == Status.DELETE_USER_STAGE:
-                do_delete_user()
-            elif status.stage == Status.RESET_STAGE:
-                do_reset()
-            elif status.stage == Status.USERNAME_STAGE:
-                do_username_stage(flow_params)
-            elif status.stage == Status.WHITE_RABBIT_STAGE:
-                do_white_rabbit_stage(flow_params)
-            elif status.stage == Status.LIGHTUP_STAGE:
-                do_lightup_stage(flow_params)
-            elif status.stage == Status.SWITCH_STAGE:
-                do_switch_stage(flow_params)
-            elif status.stage == Status.LETTERS_STAGE:
-                do_letters_stage(flow_params)
-            elif status.stage == Status.LOVE_STAGE:
-                do_love_stage(flow_params)
-            elif status.stage == Status.FINAL_STAGE:
-                do_final_stage(flow_params)
+            if status.stage in func_table:
+                func_table[status.stage](flow_params)
             else:
                 break
+    elif args['test']:
+        flow_params = load_init_conf()
+        if args['<stage>']:
+            if args['<stage>'] in func_table: 
+                func_table[args['<stage>']](flow_params)
+            else:
+                print "Unknown stage"
+        else:
+            keylist = [k for k in func_table] 
+            for k in keylist[keylist.index(Status.USERNAME_STAGE):keylist.index(Status.LOVE_STAGE)]:
+                print(k)
+                func_table[k](flow_params)
+
     elif args['schedule']:
         try:
             if args['reset']:

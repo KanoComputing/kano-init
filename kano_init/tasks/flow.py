@@ -47,7 +47,10 @@ def do_username_stage(flow_params):
 
         username = make_username_unique(username)
     else:
-        matrix(2, True)
+        try:
+            matrix(2, True)
+        except:
+            pass
         clear_screen()
 
         typewriter_echo('Hello!', trailing_linebreaks=2)
@@ -142,7 +145,10 @@ def do_white_rabbit_stage(flow_params):
 
     if not flow_params.get('skip', False):
         clear_screen()
-        rabbit(1, 'left-to-right')
+        try:
+            rabbit(1, 'left-to-right')
+        except:
+            pass
         clear_screen()
 
         msg = "Woah."

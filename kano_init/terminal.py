@@ -14,19 +14,36 @@ import sys
 import time
 import termios
 import atexit
-
+import subprocess
 
 original_state = None
 SPEED_FACTOR = 1
 
-TOP_PADDING = 4
-LEFT_PADDING = 9
+TOP_PADDING = 0
+LEFT_PADDING = 0
+
+
+def set_overscan():
+    try:
+        otxt = subprocess.check_output('fbset')
+        h = None
+        v = None
+        for line in otxt.split('\n'):
+            if 'geometry' in line:
+                parts = line.split()
+                h = str(int(parts[1])/8)
+                v = str(int(parts[2])/8)
+        if h and v:
+            _ = subprocess.check_call(['overscan', h, h, v, v])
+    except:
+        pass
 
 
 def restore_original_state():
     if sys.stdin.isatty() and original_state:
         fd = sys.stdin.fileno()
         termios.tcsetattr(fd, termios.TCSADRAIN, original_state)
+        subprocess.check_call(['overscan', '0', '0', '0', '0'])
 
 
 def save_original_state():
@@ -35,7 +52,7 @@ def save_original_state():
     if sys.stdin.isatty() and not original_state:
         fd = sys.stdin.fileno()
         original_state = termios.tcgetattr(fd)
-
+        set_overscan()
         atexit.register(restore_original_state)
 
 

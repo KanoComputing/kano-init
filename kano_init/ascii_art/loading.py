@@ -91,7 +91,7 @@ def main():
     # Scrolling hex code
     code = hexcode.splitlines()
     code_x = (w - len(code[1])) / 2
-    code_y = len(code) + (loading_y + len(loading_title) + 2)
+    code_y = min(h-4,len(code) + (loading_y + len(loading_title) + 2))
 
     cycle = 0
     while cycle < len(code):
@@ -147,7 +147,7 @@ def shutdown_curses():
 
 def is_screen_big_enough():
     h, w = screen.getmaxyx()
-    return h >= 40 and w >= 70
+    return h >= 27 and w >= 48
 
 
 def loading():
@@ -160,3 +160,5 @@ def loading():
         main()
     finally:
         shutdown_curses()
+        # ignore exception and allow init to proceed
+        return

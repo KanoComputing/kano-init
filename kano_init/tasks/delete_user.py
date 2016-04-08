@@ -39,7 +39,7 @@ def schedule_delete_user(name=None):
     print "The '{}' user will be deleted on the next reboot.".format(name)
 
 
-def do_delete_user():
+def do_delete_user(flow_param):
     status = Status.get_instance()
 
     user = status.username
