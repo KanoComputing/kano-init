@@ -1,8 +1,6 @@
 cd
 . .bashrc
 
-export PS1="          $PS1"
-
 function disabled
 {
     echo "          There's no rabbit here, try again!"

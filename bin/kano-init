@@ -93,7 +93,9 @@ def main():
     elif args['test']:
         flow_params = load_init_conf()
         if args['<stage>']:
-            if args['<stage>'] in func_table: 
+            if args['<stage>'] in func_table:
+                status = Status.get_instance()
+                status.username = os.environ['SUDO_USER']
                 func_table[args['<stage>']](flow_params)
             else:
                 print "Unknown stage"
