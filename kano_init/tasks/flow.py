@@ -1,7 +1,7 @@
 #
 # flow.py
 #
-# Copyright (C) 2015 Kano Computing Ltd.
+# Copyright (C) 2015, 2016 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 
@@ -24,10 +24,8 @@ from kano_init.terminal import typewriter_echo, clear_screen, user_input, \
     write_flush, LEFT_PADDING
 from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
-from kano_init.ascii_art.matrix_binary import matrix_binary
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.binary import binary
-from kano_init.ascii_art.ascii_image import ascii_image
 from kano_init.ascii_art.loading import loading
 from kano_init.user import user_exists, create_user, make_username_unique
 from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
@@ -71,6 +69,7 @@ def do_username_stage(flow_params):
     init_status.username = username
     init_status.save()
 
+
 def do_lightup_stage(flow_params):
     init_status = Status.get_instance()
 
@@ -92,6 +91,7 @@ def do_lightup_stage(flow_params):
     init_status.stage = Status.SWITCH_STAGE
     init_status.save()
 
+
 def do_switch_stage(flow_params):
     init_status = Status.get_instance()
 
@@ -105,6 +105,7 @@ def do_switch_stage(flow_params):
 
     init_status.stage = Status.LETTERS_STAGE
     init_status.save()
+
 
 def do_letters_stage(flow_params):
     init_status = Status.get_instance()
@@ -126,19 +127,30 @@ def do_letters_stage(flow_params):
         msg = "Type the secret password in human letters:"
         typewriter_echo(msg, trailing_linebreaks=2)
 
+        attempts = 0
         while True:
             # Wait for user input
             terminal = LEFT_PADDING * ' '
             terminal = terminal + "{}@kano ~ $ ".format(init_status.username)
             password = raw_input(terminal).lower()
-            if password == "kano":
+            attempts += 1
+            if password == "kano" or \
+               password == "01101011 01100001 01101110 01101111" or \
+               password == "01101011011000010110111001101111":
                 break
             else:
-                msg = "Not the correct password, keep trying!"
-                typewriter_echo(msg, trailing_linebreaks=2)
+                if attempts < 3:
+                    msg = "Not the correct password, keep trying!"
+                    typewriter_echo(msg, trailing_linebreaks=2)
+                else:
+                    msg = "Remember, the password is kano"
+                    typewriter_echo(msg, trailing_linebreaks=2)
+                    raw_input("Press [ENTER] to continue")
+                    break
 
     init_status.stage = Status.WHITE_RABBIT_STAGE
     init_status.save()
+
 
 def do_white_rabbit_stage(flow_params):
     init_status = Status.get_instance()
@@ -152,13 +164,14 @@ def do_white_rabbit_stage(flow_params):
         clear_screen()
 
         msg = "Woah."
-        typewriter_echo(msg,trailing_linebreaks=2)
+        typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "{}, did you see that?".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
-        typewriter_echo("Type {} to follow the white rabbit.".format(command), trailing_linebreaks=2)
+        typewriter_echo("Type {} to follow the white rabbit.".format(command),
+                        trailing_linebreaks=2)
 
         # TODO: open shell
         rabbithole = "/home/{}/rabbithole".format(init_status.username)
@@ -173,6 +186,7 @@ def do_white_rabbit_stage(flow_params):
 
     init_status.stage = Status.LOVE_STAGE
     init_status.save()
+
 
 def do_love_stage(flow_params):
     init_status = Status.get_instance()
