@@ -24,6 +24,7 @@ from kano_init.terminal import typewriter_echo, clear_screen, user_input, \
     write_flush, LEFT_PADDING
 from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
+from kano_init.ascii_art.matrix_binary import matrix_binary
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.binary import binary
 from kano_init.user import user_exists, create_user, make_username_unique
@@ -180,7 +181,7 @@ def do_white_rabbit_stage(flow_params):
         os.system(cmd)
         delete_dir(rabbithole)
 
-        # TODO: Matrix binary animation
+        matrix_binary(1, False)
 
         clear_screen()
 
