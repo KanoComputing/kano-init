@@ -26,7 +26,6 @@ from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.binary import binary
-from kano_init.ascii_art.loading import loading
 from kano_init.user import user_exists, create_user, make_username_unique
 from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
 from kano_settings.system.advanced import set_hostname
@@ -181,7 +180,8 @@ def do_white_rabbit_stage(flow_params):
         os.system(cmd)
         delete_dir(rabbithole)
 
-        loading()
+        # TODO: Matrix binary animation
+
         clear_screen()
 
     init_status.stage = Status.LOVE_STAGE
