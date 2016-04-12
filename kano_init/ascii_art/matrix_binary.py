@@ -255,14 +255,6 @@ def init_curses():
 
     curses.start_color()
     if curses.has_colors():
-        '''
-        if curses.can_change_color():
-            set_color(curses.COLOR_GREEN, 1000, 517, 165)
-            set_color(curses.COLOR_BLUE, 909, 533, 35)
-            set_color(curses.COLOR_CYAN, 611, 529, 419)
-            set_color(curses.COLOR_WHITE, 1000, 905, 541)
-            set_color(curses.COLOR_RED, 1000, 1000, 1000)
-        '''
         curses.init_pair(1, curses.COLOR_GREEN, 0)
         curses.init_pair(2, curses.COLOR_BLUE, 0)
         curses.init_pair(3, curses.COLOR_CYAN, 0)
