@@ -143,9 +143,9 @@ def do_letters_stage(flow_params):
                     msg = "Not the correct password, keep trying!"
                     typewriter_echo(msg, trailing_linebreaks=2)
                 else:
-                    msg = "Remember, the password is kano"
+                    msg = "The secret password is kano"
                     typewriter_echo(msg, trailing_linebreaks=2)
-                    raw_input("Press [ENTER] to continue")
+                    raw_input("Press [ENTER] to keep exploring.")
                     break
 
     init_status.stage = Status.WHITE_RABBIT_STAGE
