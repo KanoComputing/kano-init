@@ -79,7 +79,10 @@ def do_lightup_stage(flow_params):
         msg = "Nice to meet you {}.".format(init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Did you know your new computer\'s brain is made of millions electric switches?"
+        msg = "Did you know your new computer\'s brain is made of millions"
+        typewriter_echo(msg, trailing_linebreaks=1)
+
+        msg = "of electric switches?"
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "Press [ENTER] to see what the switches do."
