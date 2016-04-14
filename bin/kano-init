@@ -12,7 +12,7 @@
 kano-init can create new users and initialise the OS for them.
 
 Usage:
-  kano-init schedule (reset|add-user)
+  kano-init schedule (reset|add-user|cd-rabbithole)
   kano-init schedule delete-user [<name>]
   kano-init finalise
   kano-init status
@@ -42,7 +42,8 @@ from kano_init.tasks.reset import do_reset, schedule_reset
 from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_lightup_stage, do_switch_stage, do_letters_stage,  \
     do_love_stage, do_final_stage
-from kano_init.utils import reconfigure_autostart_policy, load_init_conf
+from kano_init.utils import reconfigure_autostart_policy, load_init_conf, \
+    enable_console_autologin, disable_ldm_autostart
 from kano_init.terminal import set_control
 
 if __name__ == '__main__' and __package__ is None:
@@ -113,6 +114,18 @@ def main():
                 schedule_add_user()
             elif args['delete-user']:
                 schedule_delete_user(args['<name>'])
+            elif args['cd-rabbithole']:
+                # Go back to cd rabbithole to allow pre-3.0 users to
+                # get new experience from the start
+                status = Status.get_instance()
+                status.stage = Status.WHITE_RABBIT_STAGE
+                # passing 'root' as the user causes kano-init to be started
+                # at boot
+                enable_console_autologin('root',False)
+                disable_ldm_autostart()
+                status.username = os.environ['SUDO_USER']
+                status.save()
+
         except StatusError as e:
             msg = "ERROR: {}".format(str(e))
             logger.error(msg)
