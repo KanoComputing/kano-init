@@ -15,7 +15,6 @@ from kano.utils import sed, run_cmd, is_systemd
 from kano_init.paths import INIT_CONF_PATH
 from kano_init.user import get_group_members
 from kano_init.status import Status
-from kano_settings.system.audio import set_to_HDMI
 
 
 def enable_console_autologin(username, restart=False):
