@@ -174,7 +174,11 @@ def debug(msg):
         f.write(str(msg) + '\n')
 
 
-def main(duration, show_face):
+def main(duration, show_face, callback):
+    # 'callback' is called if show_face==True
+    # just before it is displayed. This is to allow us to change
+    # overscan settings at this point.
+
     h, w = screen.getmaxyx()
 
     drops = []
@@ -184,6 +188,7 @@ def main(duration, show_face):
 
     tick = 0.025
     elapsed = 0
+    callback_called = False
     while True:
         elapsed += tick
         if elapsed < duration:
@@ -218,6 +223,10 @@ def main(duration, show_face):
             i += 1
 
         if show_face and elapsed > duration:
+            if callback and not callback_called:
+                callback()
+                callback_called = True
+
             face.draw_next()
 
         screen.refresh()
@@ -280,12 +289,12 @@ def shutdown_curses():
     curses.endwin()
 
 
-def matrix(duration=10, show_face=False):
+def matrix(duration=10, show_face=False, callback=None):
     status = 1
 
     try:
         init_curses()
-        status = main(duration, show_face)
+        status = main(duration, show_face, callback)
     finally:
         shutdown_curses()
 
