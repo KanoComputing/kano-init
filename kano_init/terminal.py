@@ -39,11 +39,18 @@ def set_overscan():
         pass
 
 
+def reset_overscan():
+    try:
+        subprocess.check_call(['overscan', '0', '0', '0', '0'])
+    except:
+        pass
+
+
 def restore_original_state():
     if sys.stdin.isatty() and original_state:
         fd = sys.stdin.fileno()
         termios.tcsetattr(fd, termios.TCSADRAIN, original_state)
-        subprocess.check_call(['overscan', '0', '0', '0', '0'])
+        reset_overscan()
 
 
 def save_original_state():

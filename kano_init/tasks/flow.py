@@ -21,7 +21,7 @@ from kano.utils import run_cmd, ensure_dir, delete_dir
 
 from kano_init.paths import SUBSHELLRC_PATH
 from kano_init.terminal import typewriter_echo, clear_screen, user_input, \
-    write_flush, LEFT_PADDING
+    write_flush, LEFT_PADDING, set_overscan, reset_overscan
 from kano_init.status import Status
 from kano_init.ascii_art.matrix import matrix
 from kano_init.ascii_art.matrix_binary import matrix_binary
@@ -46,7 +46,8 @@ def do_username_stage(flow_params):
         username = make_username_unique(username)
     else:
         try:
-            matrix(2, True)
+            reset_overscan()
+            matrix(2, True, set_overscan)
         except:
             pass
         clear_screen()
@@ -184,7 +185,9 @@ def do_white_rabbit_stage(flow_params):
         os.system(cmd)
         delete_dir(rabbithole)
 
+        reset_overscan()
         matrix_binary(1, False)
+        set_overscan()
 
         clear_screen()
 
@@ -201,7 +204,9 @@ def do_love_stage(flow_params):
         # to access the savefile correctly.
         cmd = 'su {} -c "/usr/bin/love /usr/bin/kanoOverworld.love --load" >>/var/log/kanoOverworld.log 2>&1'.format(init_status.username)
 
+        reset_overscan()
         os.system(cmd)
+        set_overscan()
 
     init_status.stage = Status.FINAL_STAGE
     init_status.save()
