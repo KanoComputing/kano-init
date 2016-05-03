@@ -10,6 +10,9 @@
 import os
 import json
 
+import pwd
+import grp
+
 from kano.utils import sed, run_cmd, is_systemd
 
 from kano_init.paths import INIT_CONF_PATH
@@ -107,6 +110,28 @@ def disable_ldm_autostart():
         run_cmd('systemctl set-default multi-user.target')
     else:
         run_cmd('update-rc.d lightdm disable 2')
+
+
+def set_dashboard_onboarding(username, run_it=True):
+    '''
+    Tells the Dashboard supervisor whether the Onboarding needs to take place
+    '''
+    onboarding_file=os.path.join('/home/{}'.format(username),
+                                 '.dashboard-onboarding-done')
+
+    if run_it:
+        # Remove the mark file so the supervisor will go through Onboarding
+        if os.path.isfile(onboarding_file):
+            os.unlink(onboarding_file)
+    else:
+        # Create the mark file so Dashboard Supervisor will skip Onboarding
+        with open(onboarding_file, 'w'):
+            os.utime(onboarding_file, None)
+
+        # Make sure file has correct ownership
+        uid = pwd.getpwnam(username).pw_uid
+        gid = grp.getgrnam(username).gr_gid
+        os.chown(onboarding_file, uid, gid)
 
 
 def reconfigure_autostart_policy():
