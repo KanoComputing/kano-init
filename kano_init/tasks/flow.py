@@ -160,7 +160,7 @@ def do_letters_stage(flow_params):
                 init_status.stage = Status.FINAL_STAGE
 
                 msg = "Ok! Taking you to the Dashboard..."
-                typewriter_echo(msg, sleep=3, trailing_linebreaks=1)
+                typewriter_echo(msg, sleep=0.5, trailing_linebreaks=1)
 
                 break
 
