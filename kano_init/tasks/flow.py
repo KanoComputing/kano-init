@@ -28,7 +28,9 @@ from kano_init.ascii_art.matrix_binary import matrix_binary
 from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.binary import binary
 from kano_init.user import user_exists, create_user, make_username_unique
-from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin
+from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
+    set_dashboard_onboarding
+
 from kano_settings.system.advanced import set_hostname
 
 
@@ -115,6 +117,10 @@ def do_letters_stage(flow_params):
     init_status = Status.get_instance()
 
     if not flow_params.get('skip', False):
+
+        # Initially we will jump to this step on completion
+        init_status.stage = Status.WHITE_RABBIT_STAGE
+
         clear_screen()
 
         msg = "Words, music and pictures all get stored as binary code."
@@ -142,6 +148,22 @@ def do_letters_stage(flow_params):
                password == "01101011 01100001 01101110 01101111" or \
                password == "01101011011000010110111001101111":
                 break
+
+            elif password == "class":
+
+                # Class mode: Take the teacher directly to the Dashboard
+
+                # Disable the onboarding
+                set_dashboard_onboarding(init_status.username, run_it=False)
+
+                # Take kano-init to the final step
+                init_status.stage = Status.FINAL_STAGE
+
+                msg = "Ok! Taking you to the Dashboard..."
+                typewriter_echo(msg, sleep=0.5, trailing_linebreaks=1)
+
+                break
+
             else:
                 if attempts < 3:
                     msg = "Not the correct password, keep trying!"
@@ -152,7 +174,6 @@ def do_letters_stage(flow_params):
                     raw_input("Press [ENTER] to keep exploring.")
                     break
 
-    init_status.stage = Status.WHITE_RABBIT_STAGE
     init_status.save()
 
 
