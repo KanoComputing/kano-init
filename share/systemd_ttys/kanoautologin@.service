@@ -1,7 +1,8 @@
 #
 #  Systemd startup definition for kano-init boot
 #
-#  The first time the kit is booting up, or after a kano-init reset, or add-user
+#  This is the systemd unit to automatically provide a user bash shell on tty1.
+#  It will be restarted if closed or terminated abruptly.
 #
 
 [Unit]
@@ -9,6 +10,8 @@ Description=Kano tty1 Autologin
 
 [Service]
 Type=simple
+Restart=always
+RestartSec=3
 ExecStart=/bin/su - username
 StandardInput=tty
 StandardOutput=tty
