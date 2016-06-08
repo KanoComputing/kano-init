@@ -156,6 +156,13 @@ def do_letters_stage(flow_params):
                 # Disable the onboarding
                 set_dashboard_onboarding(init_status.username, run_it=False)
 
+                # Skip Story Mode onboarding
+                run_cmd(
+                    'su {} -c "/usr/bin/luajit '
+                    '/usr/share/kano-overworld/bin/skip-onboarding.lua"'
+                    .format(init_status.username)
+                )
+
                 # Take kano-init to the final step
                 init_status.stage = Status.FINAL_STAGE
 
@@ -223,7 +230,7 @@ def do_love_stage(flow_params):
         clear_screen()
         # kanoOverworld needs to run as the user
         # to access the savefile correctly.
-        cmd = 'su {} -c "/usr/bin/love /usr/bin/kanoOverworld.love --load" >>/var/log/kanoOverworld.log 2>&1'.format(init_status.username)
+        cmd = 'su {} -c "/usr/bin/love /usr/bin/kanoOverworld.love" >>/var/log/kanoOverworld.log 2>&1'.format(init_status.username)
 
         reset_overscan()
         os.system(cmd)
