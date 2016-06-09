@@ -43,7 +43,7 @@ from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_lightup_stage, do_switch_stage, do_letters_stage,  \
     do_love_stage, do_final_stage
 from kano_init.utils import reconfigure_autostart_policy, load_init_conf
-from kano_init.terminal import set_control
+from kano_init.terminal import set_control, save_original_state
 
 if __name__ == '__main__' and __package__ is None:
     dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -74,8 +74,8 @@ def main():
         (Status.LOVE_STAGE,          do_love_stage),
         (Status.FINAL_STAGE,         do_final_stage)
         ])
-        
-        
+
+
 
     if args['boot']:
         status = Status.get_instance()
@@ -100,7 +100,7 @@ def main():
             else:
                 print "Unknown stage"
         else:
-            keylist = [k for k in func_table] 
+            keylist = [k for k in func_table]
             for k in keylist[keylist.index(Status.USERNAME_STAGE):keylist.index(Status.LOVE_STAGE)]:
                 print(k)
                 func_table[k](flow_params)
@@ -154,4 +154,6 @@ def main():
     return 0
 
 if __name__ == '__main__':
+    # Store the original state of the terminal and make sure we restore it
+    save_original_state()
     sys.exit(main())
