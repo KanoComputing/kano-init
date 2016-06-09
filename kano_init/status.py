@@ -9,6 +9,7 @@ import os
 import json
 
 from kano.utils import ensure_dir
+from kano.utils.file_operations import open_locked
 from kano.logging import logger
 
 from kano_init.paths import STATUS_FILE_PATH
@@ -79,7 +80,7 @@ class Status(object):
             self.load()
 
     def load(self):
-        with open(self._status_file, 'r') as status_file:
+        with open_locked(self._status_file, 'r', timeout=1.0) as status_file:
             try:
                 data = json.load(status_file)
                 self._stage = data['stage']
@@ -96,7 +97,7 @@ class Status(object):
             'username': self._username
         }
 
-        with open(self._status_file, 'w') as status_file:
+        with open_locked(self._status_file, 'w', timeout=1.0) as status_file:
             json.dump(data, status_file)
             status_file.flush()
             os.fsync(status_file.fileno())
