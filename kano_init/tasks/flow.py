@@ -255,7 +255,12 @@ def do_final_stage(flow_params):
     init_status.stage = Status.UI_INIT_STAGE
     init_status.save()
 
-    run_cmd('service lightdm start')
+    # Start Lightdm with a splash screen if available,
+    # Or do it the classy way otherwise (soft dependency).
+    if os.path.isfile('/usr/bin/kano-dashboard-lightdm'):
+        run_cmd('/usr/bin/kano-dashboard-lightdm')
+    else:
+        run_cmd('service lightdm start')
 
 
 def _get_username():
