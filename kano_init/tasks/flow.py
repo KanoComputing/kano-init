@@ -180,6 +180,9 @@ def do_letters_stage(flow_params):
                     typewriter_echo(msg, trailing_linebreaks=2)
                     raw_input("Press [ENTER] to keep exploring.")
                     break
+    else:
+        # skip init flow, proceed to next stage
+        init_status.stage = Status.WHITE_RABBIT_STAGE
 
     init_status.save()
 
