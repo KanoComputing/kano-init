@@ -54,10 +54,10 @@ def do_username_stage(flow_params):
             pass
         clear_screen()
 
-        typewriter_echo('Hello!', trailing_linebreaks=2)
-        typewriter_echo('Thanks for bringing me to life. Now, let\'s see what we can do.',
+        typewriter_echo(_('Hello!'), trailing_linebreaks=2)
+        typewriter_echo(_('Thanks for bringing me to life. Now, let\'s see what we can do.'),
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo('What is your name?', trailing_linebreaks=2)
+        typewriter_echo(_('What is your name?'), trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -79,16 +79,16 @@ def do_lightup_stage(flow_params):
     if not flow_params.get('skip', False):
         clear_screen()
 
-        msg = "Nice to meet you {}.".format(init_status.username)
+        msg = _("Nice to meet you {string_username}.").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Did you know your new computer\'s brain is made of millions"
+        msg = _("Did you know your new computer\'s brain is made of millions")
         typewriter_echo(msg, trailing_linebreaks=1)
-
-        msg = "of electric switches?"
+        # TODO: string split here, could we join it and insert \n ?
+        msg = _("of electric switches?")
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Press [ENTER] to see what the switches do."
+        msg = _("Press [ENTER] to see what the switches do.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         # Wait for user input
@@ -123,10 +123,10 @@ def do_letters_stage(flow_params):
 
         clear_screen()
 
-        msg = "Words, music and pictures all get stored as binary code."
+        msg = _("Words, music and pictures all get stored as binary code.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "And so does your computer\'s secret password:"
+        msg = _("And so does your computer\'s secret password:")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "01101011 01100001 01101110 01101111"
@@ -134,7 +134,7 @@ def do_letters_stage(flow_params):
         msg = "   k        a        n        o    "
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "Type the secret password in human letters:"
+        msg = _("Type the secret password in human letters:")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         attempts = 0
@@ -166,19 +166,19 @@ def do_letters_stage(flow_params):
                 # Take kano-init to the final step
                 init_status.stage = Status.FINAL_STAGE
 
-                msg = "Ok! Taking you to the Dashboard..."
+                msg = _("Ok! Taking you to the Dashboard...")
                 typewriter_echo(msg, sleep=0.5, trailing_linebreaks=1)
 
                 break
 
             else:
                 if attempts < 3:
-                    msg = "Not the correct password, keep trying!"
+                    msg = _("Not the correct password, keep trying!")
                     typewriter_echo(msg, trailing_linebreaks=2)
                 else:
-                    msg = "The secret password is kano"
+                    msg = _("The secret password is kano")
                     typewriter_echo(msg, trailing_linebreaks=2)
-                    raw_input("Press [ENTER] to keep exploring.")
+                    raw_input(_("Press [ENTER] to keep exploring."))
                     break
     else:
         # skip init flow, proceed to next stage
@@ -198,15 +198,15 @@ def do_white_rabbit_stage(flow_params):
             pass
         clear_screen()
 
-        msg = "Woah."
+        msg = _("Woah.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = "{}, did you see that?".format(init_status.username)
+        msg = _("{string_username}, did you see that?").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
-        typewriter_echo("Type {} to follow the white rabbit.".format(command),
-                        trailing_linebreaks=2)
+        typewriter_echo(_("Type {string_code_to_type} to follow the white rabbit.").format(
+                        string_code_to_type=command), trailing_linebreaks=2)
 
         # TODO: open shell
         rabbithole = "/home/{}/rabbithole".format(init_status.username)
@@ -268,21 +268,21 @@ def do_final_stage(flow_params):
 
 def _get_username():
     while True:
-        username = user_input('Your name: ').strip()
+        username = user_input(_('Your name: ')).strip()
         username = re.sub('\s+', '', username)
         write_flush('\n')
 
         if len(username) == 0:
-            typewriter_echo('Type a cool name.', trailing_linebreaks=2)
+            typewriter_echo(_('Type a cool name.'), trailing_linebreaks=2)
         elif not re.match("^[a-zA-Z0-9]+$", username):
-            typewriter_echo('Just one word, letters or numbers! Try again.',
+            typewriter_echo(_('Just one word, letters or numbers! Try again.'),
                             trailing_linebreaks=2)
         elif user_exists(username):
-            typewriter_echo('This one is already taken! Try again.',
+            typewriter_echo(_('This one is already taken! Try again.'),
                             trailing_linebreaks=2)
         elif len(username) > 25:
-            msg = "This one is too long by {} characters! Try again.".format(
-                len(username) - 25
+            msg = _("This one is too long by {number} characters! Try again.").format(
+                number=len(username) - 25
             )
             typewriter_echo(msg, trailing_linebreaks=2)
         else:

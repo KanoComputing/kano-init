@@ -115,24 +115,24 @@ def create_user(username):
     )
     _, _, rv = run_cmd_log(cmd)
     if rv != 0:
-        msg = "Unable to create new user, useradd failed."
+        msg = N_("Unable to create new user, useradd failed.")
         logger.error(msg)
-        raise UserError(msg)
+        raise UserError(_(msg))
 
     cmd = "echo '{}:{}' | chpasswd".format(username, DEFAULT_USER_PASSWORD)
     _, _, rv = run_cmd_log(cmd)
     if rv != 0:
         delete_user(username)
-        msg = "Unable to change the new user\'s password, chpasswd failed."
+        msg = N_("Unable to change the new user\'s password, chpasswd failed.")
         logger.error(msg)
-        raise UserError(msg)
+        raise UserError(_(msg))
 
     # Make sure the kanousers group exists
     if not group_exists('kanousers'):
         _, _, rv = run_cmd_log('groupadd kanousers -f')
         if rv != 0:
-            msg = 'Unable to create the kanousers group, groupadd failed.'
-            raise UserError(msg)
+            msg = N_('Unable to create the kanousers group, groupadd failed.')
+            raise UserError(_(msg))
 
     # Add the new user to all necessary groups
     cmd = "usermod -G '{}' {}".format(DEFAULT_USER_GROUPS, username)
@@ -200,7 +200,8 @@ def delete_user(username):
 
     _, _, rv = run_cmd_log("userdel -r {}".format(username))
     if rv != 0:
-        raise UserError("Deleting the '{}' failed.".format(username))
+        raise UserError(_("Deleting the '{string_username}' failed."
+                          .format(string_username=username)))
 
 
 def delete_all_users():
