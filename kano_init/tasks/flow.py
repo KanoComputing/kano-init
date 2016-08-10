@@ -140,9 +140,9 @@ def do_letters_stage(flow_params):
         attempts = 0
         while True:
             # Wait for user input
-            terminal = LEFT_PADDING * ' '
-            terminal = terminal + "{}@kano ~ $ ".format(init_status.username)
-            password = raw_input(terminal).lower()
+            terminal = LEFT_PADDING * u' '
+            terminal = terminal + u"{}@kano ~ $ ".format(init_status.username)
+            password = raw_input(terminal.encode('utf8')).lower()
             attempts += 1
             if password == "kano" or \
                password == "01101011 01100001 01101110 01101111" or \
@@ -178,7 +178,7 @@ def do_letters_stage(flow_params):
                 else:
                     msg = _("The secret password is kano")
                     typewriter_echo(msg, trailing_linebreaks=2)
-                    raw_input(_("Press [ENTER] to keep exploring."))
+                    raw_input(_("Press [ENTER] to keep exploring.").encode('utf8'))
                     break
     else:
         # skip init flow, proceed to next stage
