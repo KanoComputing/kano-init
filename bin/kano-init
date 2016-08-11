@@ -116,7 +116,7 @@ def main():
             elif args['delete-user']:
                 schedule_delete_user(args['<name>'])
         except StatusError as e:
-            msg = N_("ERROR: {string_error}").format(string_error=e)
+            msg = N_(u"ERROR: {string_error}").format(string_error=e)
             logger.error(msg)
             sys.exit(_(msg).encode('utf8'))
     elif args['finalise']:
@@ -149,7 +149,7 @@ def main():
         try:
             schedule_reset()
         except StatusError as e:
-            msg = N_("ERROR: {string_error}").format(string_error=e)
+            msg = N_(u"ERROR: {string_error}").format(string_error=e)
             logger.error(msg)
             sys.exit(_(msg))
 
