@@ -58,9 +58,9 @@ kano_i18n.init.install('kano-init', LOCALE_PATH)
 
 
 def main():
-    msg = _('ERROR: Administrator priviledges are required to '
-            'perform this operation.')
-    enforce_root(msg)
+    msg = _('ERROR: Administrator priviledges are required to'
+            ' perform this operation.')
+    enforce_root(msg.encode('utf8'))
 
     # TODO: put the version somewhere nicer
     version = 2.0
@@ -149,7 +149,7 @@ def main():
         try:
             schedule_reset()
         except StatusError as e:
-            msg = N_("ERROR: {}").format(unicode(e).encode('utf8'))
+            msg = N_("ERROR: {string_error}").format(string_error=e)
             logger.error(msg)
             sys.exit(_(msg))
 

@@ -93,7 +93,7 @@ def create_user(username):
     """
 
     if user_exists(username):
-        raise UserError(_("The user '{}' already exists").format(username))
+        raise UserError(_("The user '{string_username}' already exists").format(username))
 
     home = "/home/{}".format(username)
     home_old = '/home/' + username + '-old'

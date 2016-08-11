@@ -79,6 +79,7 @@ def do_lightup_stage(flow_params):
     if not flow_params.get('skip', False):
         clear_screen()
 
+        # TODO: username is raw str, encode?
         msg = _("Nice to meet you {string_username}.").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
