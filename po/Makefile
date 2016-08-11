@@ -24,6 +24,8 @@ endef
 define run-xgettext
 xgettext -f PYPOTFILES -L Python -kN_ --force-po -o messages.pot \
     --package-name=$(APPNAME) --copyright-holder=$(ORG)
+xgettext -o messages.pot -j -L Shell --keyword=eval_gettext ../kano_init/data/subshellrc \
+    --package-name=$(APPNAME) --copyright-holder=$(ORG)
 endef
 
 messages:

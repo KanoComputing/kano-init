@@ -3,7 +3,7 @@ cd
 
 function disabled
 {
-    echo "          There's no rabbit here, try again!"
+    echo "`gettext "There's no rabbit here, try again!"`"
 }
 
 function in_rabbit_hole
