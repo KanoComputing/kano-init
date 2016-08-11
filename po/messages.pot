@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Kano Computing Ltd.
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the kano-init package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kano-init\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-11 14:05+0000\n"
+"POT-Creation-Date: 2016-08-11 16:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,47 +22,22 @@ msgid ""
 "ERROR: Administrator priviledges are required to perform this operation."
 msgstr ""
 
-#: ../bin/kano-init:119
+#: ../bin/kano-init:119 ../bin/kano-init:152
 #, python-brace-format
 msgid "ERROR: {string_error}"
 msgstr ""
 
-#: ../bin/kano-init:152
-msgid "ERROR: {}"
+#: ../kano_init/ascii_art/binary.py:36
+msgid "These switches speak in 1s and 0s. This is called binary code."
+msgstr ""
+
+#: ../kano_init/ascii_art/binary.py:37 ../kano_init/tasks/flow.py:180
+msgid "Press [ENTER] to keep exploring."
 msgstr ""
 
 #: ../kano_init/status.py:113
 #, python-brace-format
 msgid "'{string_app_stage_name}' is not a valid stage"
-msgstr ""
-
-#: ../kano_init/terminal.py:164 ../kano_init/tasks/flow.py:57
-msgid "Hello!"
-msgstr ""
-
-#: ../kano_init/terminal.py:165
-msgid "I'm KANO. Thanks for bringing me to life."
-msgstr ""
-
-#: ../kano_init/user.py:96
-msgid "The user '{}' already exists"
-msgstr ""
-
-#: ../kano_init/user.py:118
-msgid "Unable to create new user, useradd failed."
-msgstr ""
-
-#: ../kano_init/user.py:126
-msgid "Unable to change the new user's password, chpasswd failed."
-msgstr ""
-
-#: ../kano_init/user.py:134
-msgid "Unable to create the kanousers group, groupadd failed."
-msgstr ""
-
-#: ../kano_init/user.py:203
-#, python-brace-format
-msgid "Deleting the '{string_username}' failed."
 msgstr ""
 
 #: ../kano_init/tasks/add_user.py:20 ../kano_init/tasks/delete_user.py:24
@@ -81,8 +56,8 @@ msgstr ""
 msgid "The '{string_username}' user will be deleted on the next reboot."
 msgstr ""
 
-#: ../kano_init/tasks/reset.py:33
-msgid "kano-init RESET scheduled for the next system reboot"
+#: ../kano_init/tasks/flow.py:57 ../kano_init/terminal.py:164
+msgid "Hello!"
 msgstr ""
 
 #: ../kano_init/tasks/flow.py:58
@@ -93,86 +68,108 @@ msgstr ""
 msgid "What is your name?"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:82
+#: ../kano_init/tasks/flow.py:83
 #, python-brace-format
 msgid "Nice to meet you {string_username}."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:85
+#: ../kano_init/tasks/flow.py:86
 msgid ""
 "Did you know your new computer's brain is made of millions \n"
 "of electric switches?"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:89
+#: ../kano_init/tasks/flow.py:90
 msgid "Press [ENTER] to see what the switches do."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:124
+#: ../kano_init/tasks/flow.py:125
 msgid "Words, music and pictures all get stored as binary code."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:127
+#: ../kano_init/tasks/flow.py:128
 msgid "And so does your computer's secret password:"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:135
+#: ../kano_init/tasks/flow.py:136
 msgid "Type the secret password in human letters:"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:167
+#: ../kano_init/tasks/flow.py:168
 msgid "Ok! Taking you to the Dashboard..."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:174
+#: ../kano_init/tasks/flow.py:175
 msgid "Not the correct password, keep trying!"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:177
+#: ../kano_init/tasks/flow.py:178
 msgid "The secret password is kano"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:179 ../kano_init/ascii_art/binary.py:37
-msgid "Press [ENTER] to keep exploring."
-msgstr ""
-
-#: ../kano_init/tasks/flow.py:199
+#: ../kano_init/tasks/flow.py:200
 msgid "Woah."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:202
+#: ../kano_init/tasks/flow.py:203
 #, python-brace-format
 msgid "{string_username}, did you see that?"
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:206
+#: ../kano_init/tasks/flow.py:207
 #, python-brace-format
 msgid "Type {string_code_to_type} to follow the white rabbit."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:269
+#: ../kano_init/tasks/flow.py:270
 msgid "Your name: "
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:274
+#: ../kano_init/tasks/flow.py:275
 msgid "Type a cool name."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:276
+#: ../kano_init/tasks/flow.py:277
 msgid "Just one word, letters or numbers! Try again."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:279
+#: ../kano_init/tasks/flow.py:280
 msgid "This one is already taken! Try again."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:282
+#: ../kano_init/tasks/flow.py:283
 #, python-brace-format
 msgid "This one is too long by {number} characters! Try again."
 msgstr ""
 
-#: ../kano_init/ascii_art/binary.py:36
-msgid "These switches speak in 1s and 0s. This is called binary code."
+#: ../kano_init/tasks/reset.py:33
+msgid "kano-init RESET scheduled for the next system reboot"
+msgstr ""
+
+#: ../kano_init/terminal.py:165
+msgid "I'm KANO. Thanks for bringing me to life."
+msgstr ""
+
+#: ../kano_init/user.py:96
+#, python-brace-format
+msgid "The user '{string_username}' already exists"
+msgstr ""
+
+#: ../kano_init/user.py:118
+msgid "Unable to create new user, useradd failed."
+msgstr ""
+
+#: ../kano_init/user.py:126
+msgid "Unable to change the new user's password, chpasswd failed."
+msgstr ""
+
+#: ../kano_init/user.py:134
+msgid "Unable to create the kanousers group, groupadd failed."
+msgstr ""
+
+#: ../kano_init/user.py:203
+#, python-brace-format
+msgid "Deleting the '{string_username}' failed."
 msgstr ""
 
 #: ../kano_init/data/subshellrc:6
