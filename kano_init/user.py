@@ -93,7 +93,7 @@ def create_user(username):
     """
 
     if user_exists(username):
-        raise UserError("The user '{}' already exists".format(username))
+        raise UserError(_("The user '{}' already exists").format(username))
 
     home = "/home/{}".format(username)
     home_old = '/home/' + username + '-old'
@@ -123,7 +123,7 @@ def create_user(username):
     _, _, rv = run_cmd_log(cmd)
     if rv != 0:
         delete_user(username)
-        msg = N_("Unable to change the new user\'s password, chpasswd failed.")
+        msg = N_("Unable to change the new user's password, chpasswd failed.")
         logger.error(msg)
         raise UserError(_(msg))
 
@@ -131,7 +131,7 @@ def create_user(username):
     if not group_exists('kanousers'):
         _, _, rv = run_cmd_log('groupadd kanousers -f')
         if rv != 0:
-            msg = N_('Unable to create the kanousers group, groupadd failed.')
+            msg = N_("Unable to create the kanousers group, groupadd failed.")
             raise UserError(_(msg))
 
     # Add the new user to all necessary groups

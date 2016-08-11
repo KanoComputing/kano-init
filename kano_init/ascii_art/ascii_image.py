@@ -125,7 +125,7 @@ def ascii_image(image_file, length):
         init_curses()
 
         if not is_screen_big_enough():
-            raise EnvironmentError('Screen too small')
+            raise EnvironmentError("Screen too small")
 
         main(image_file, length)
     finally:

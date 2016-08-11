@@ -54,10 +54,10 @@ def do_username_stage(flow_params):
             pass
         clear_screen()
 
-        typewriter_echo(_('Hello!'), trailing_linebreaks=2)
-        typewriter_echo(_('Thanks for bringing me to life. Now, let\'s see what we can do.'),
+        typewriter_echo(_("Hello!"), trailing_linebreaks=2)
+        typewriter_echo(_("Thanks for bringing me to life. Now, let's see what we can do."),
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo(_('What is your name?'), trailing_linebreaks=2)
+        typewriter_echo(_("What is your name?"), trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -82,7 +82,7 @@ def do_lightup_stage(flow_params):
         msg = _("Nice to meet you {string_username}.").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("Did you know your new computer\'s brain is made of millions \n"
+        msg = _("Did you know your new computer's brain is made of millions \n"
                 "of electric switches?")
         typewriter_echo(msg, trailing_linebreaks=2)
 
@@ -124,7 +124,7 @@ def do_letters_stage(flow_params):
         msg = _("Words, music and pictures all get stored as binary code.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("And so does your computer\'s secret password:")
+        msg = _("And so does your computer's secret password:")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = "01101011 01100001 01101110 01101111"
@@ -266,17 +266,17 @@ def do_final_stage(flow_params):
 
 def _get_username():
     while True:
-        username = user_input(_('Your name: ')).strip()
+        username = user_input(_("Your name: ")).strip()
         username = re.sub('\s+', '', username)
         write_flush('\n')
 
         if len(username) == 0:
-            typewriter_echo(_('Type a cool name.'), trailing_linebreaks=2)
+            typewriter_echo(_("Type a cool name."), trailing_linebreaks=2)
         elif not re.match("^[a-zA-Z0-9]+$", username):
-            typewriter_echo(_('Just one word, letters or numbers! Try again.'),
+            typewriter_echo(_("Just one word, letters or numbers! Try again."),
                             trailing_linebreaks=2)
         elif user_exists(username):
-            typewriter_echo(_('This one is already taken! Try again.'),
+            typewriter_echo(_("This one is already taken! Try again."),
                             trailing_linebreaks=2)
         elif len(username) > 25:
             msg = _("This one is too long by {number} characters! Try again.").format(

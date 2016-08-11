@@ -163,7 +163,7 @@ def binary(user="buddy"):
         init_curses()
 
         if not is_screen_big_enough():
-            raise EnvironmentError('Screen too small')
+            raise EnvironmentError("Screen too small")
 
         rv = main(user)
     finally:
