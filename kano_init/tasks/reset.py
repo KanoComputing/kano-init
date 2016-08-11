@@ -19,8 +19,8 @@ def schedule_reset():
     init_status = Status.get_instance()
 
     if init_status.stage != Status.DISABLED_STAGE:
-        msg = _("A different task has been scheduled already. Reboot to " + \
-                "finish the task before scheduling another one.")
+        msg = N_("A different task has been scheduled already. Reboot to"
+                 " finish the task before scheduling another one.")
         raise StatusError(msg)
 
     disable_ldm_autostart()
@@ -30,7 +30,7 @@ def schedule_reset():
     init_status.stage = Status.RESET_STAGE
     init_status.save()
 
-    print _('kano-init RESET scheduled for the next system reboot')  # TODO: set encoding to UTF-8
+    print _('kano-init RESET scheduled for the next system reboot').encode('utf8')
 
 
 def do_reset(flow_param):

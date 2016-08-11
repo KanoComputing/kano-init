@@ -58,8 +58,8 @@ kano_i18n.init.install('kano-init', LOCALE_PATH)
 
 
 def main():
-    msg = 'ERROR: Administrator priviledges are required to ' + \
-          'perform this operation'
+    msg = _('ERROR: Administrator priviledges are required to '
+            'perform this operation.')
     enforce_root(msg)
 
     # TODO: put the version somewhere nicer
@@ -100,7 +100,7 @@ def main():
                 status.username = os.environ['SUDO_USER']
                 func_table[args['<stage>']](flow_params)
             else:
-                print "Unknown stage"
+                print "Unknown stage."
         else:
             keylist = [k for k in func_table]
             for k in keylist[keylist.index(Status.USERNAME_STAGE):keylist.index(Status.LOVE_STAGE)]:
@@ -116,9 +116,9 @@ def main():
             elif args['delete-user']:
                 schedule_delete_user(args['<name>'])
         except StatusError as e:
-            msg = "ERROR: {}".format(str(e))
+            msg = N_("ERROR: {string_error}").format(string_error=e)
             logger.error(msg)
-            sys.exit(msg)
+            sys.exit(_(msg).encode('utf8'))
     elif args['finalise']:
         # This is called from kano-uixinit in kano-desktop to notify
         # that the initflow has been completed and the kit can be
@@ -149,9 +149,9 @@ def main():
         try:
             schedule_reset()
         except StatusError as e:
-            msg = "ERROR: {}".format(str(e))
+            msg = N_("ERROR: {}").format(unicode(e).encode('utf8'))
             logger.error(msg)
-            sys.exit(msg)
+            sys.exit(_(msg))
 
     return 0
 

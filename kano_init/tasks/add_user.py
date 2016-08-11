@@ -17,15 +17,15 @@ def schedule_add_user():
     status = Status.get_instance()
 
     if status.stage != Status.DISABLED_STAGE:
-        msg = "A different task has been scheduled already. Reboot to " + \
-              "finish the task before scheduling another one."
+        msg = N_("A different task has been scheduled already. Reboot to"
+                 " finish the task before scheduling another one.")
         raise StatusError(msg)
 
     disable_ldm_autostart()
     unset_ldm_autologin()
     enable_console_autologin('root')
 
-    print "New user creation scheduled for the next system reboot"
+    print _("New user creation scheduled for the next system reboot.").encode('utf8')
 
     status.stage = Status.ADD_USER_STAGE
     status.save()

@@ -110,7 +110,8 @@ class Status(object):
     @stage.setter
     def stage(self, value):
         if value not in self.stages:
-            msg = _("'{string_app_stage_name}' is not a valid stage").format(string_app_stage_name=value)
+            msg = N_("'{string_app_stage_name}' is not a valid"
+                     " stage").format(string_app_stage_name=value)
             raise StatusError(msg)
 
         self._stage = value

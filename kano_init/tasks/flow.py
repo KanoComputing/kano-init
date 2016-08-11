@@ -82,10 +82,8 @@ def do_lightup_stage(flow_params):
         msg = _("Nice to meet you {string_username}.").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("Did you know your new computer\'s brain is made of millions")
-        typewriter_echo(msg, trailing_linebreaks=1)
-        # TODO: string split here, could we join it and insert \n ?
-        msg = _("of electric switches?")
+        msg = _("Did you know your new computer\'s brain is made of millions \n"
+                "of electric switches?")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         msg = _("Press [ENTER] to see what the switches do.")
