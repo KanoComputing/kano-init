@@ -1,6 +1,10 @@
 cd
 . .bashrc
 
+. gettext.sh
+export TEXTDOMAIN="kano-init"
+
+
 function disabled
 {
     echo "`gettext "There's no rabbit here, try again!"`"
