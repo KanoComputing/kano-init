@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Kano Computing Ltd.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: kano-init\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-11 14:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../bin/kano-init:61
+msgid ""
+"ERROR: Administrator priviledges are required to perform this operation."
+msgstr "ERROR: Se requieren permisos de administrador para realizar esta operación."
+
+#: ../bin/kano-init:119
+#, python-brace-format
+msgid "ERROR: {string_error}"
+msgstr "ERROR: {string_error}"
+
+#: ../bin/kano-init:152
+msgid "ERROR: {}"
+msgstr "ERROR: {}"
+
+#: ../kano_init/status.py:113
+#, python-brace-format
+msgid "'{string_app_stage_name}' no se reconoce"
+msgstr ""
+
+#: ../kano_init/terminal.py:164 ../kano_init/tasks/flow.py:57
+msgid "Hello!"
+msgstr "¡Hola!"
+
+#: ../kano_init/terminal.py:165
+msgid "I'm KANO. Thanks for bringing me to life."
+msgstr "Soy KANO. Gracias por darme vida."
+
+#: ../kano_init/user.py:96
+msgid "The user '{}' already exists"
+msgstr "El usuario ‘{}’ ya existe"
+
+#: ../kano_init/user.py:118
+msgid "Unable to create new user, useradd failed."
+msgstr "No se pudo crear un nuevo usuario, useradd fracasó."
+
+#: ../kano_init/user.py:126
+msgid "Unable to change the new user's password, chpasswd failed."
+msgstr "No se pudo cambiar la contraseña del nuevo usuario, chpasswd fracasó."
+
+#: ../kano_init/user.py:134
+msgid "Unable to create the kanousers group, groupadd failed."
+msgstr "No se pudo crear el grupo kanousers, groupadd failed."
+
+#: ../kano_init/user.py:203
+#, python-brace-format
+msgid "Deleting the '{string_username}' failed."
+msgstr "La eliminación de ’{string_username}' fracasó."  No se pudo borrar el nombre de usuario
+
+#: ../kano_init/tasks/add_user.py:20 ../kano_init/tasks/delete_user.py:24
+#: ../kano_init/tasks/reset.py:22
+msgid ""
+"A different task has been scheduled already. Reboot to finish the task "
+"before scheduling another one."
+msgstr "Ya se programó otra tarea. Reinicia para completar la tarea "
+"antes de empezar una nueva."
+
+#: ../kano_init/tasks/add_user.py:28
+msgid "New user creation scheduled for the next system reboot."
+msgstr "Creación de nuevo usuario programada para el próximo reinicio del sistema."
+
+#: ../kano_init/tasks/delete_user.py:40
+#, python-brace-format
+msgid "The '{string_username}' user will be deleted on the next reboot."
+msgstr "El usuario ’{string_username}' se eliminará en el próximo inicio del sistema."  
+
+#: ../kano_init/tasks/reset.py:33
+msgid "kano-init RESET scheduled for the next system reboot"
+msgstr "kano-init RESTAURAR se ha programado para el próximo reinicio del sistema"
+
+#: ../kano_init/tasks/flow.py:58
+msgid "Thanks for bringing me to life. Now, let's see what we can do."
+msgstr "Gracias por darme vida. Vamos a ver lo que podemos hacer."
+
+#: ../kano_init/tasks/flow.py:60
+msgid "What is your name?"
+msgstr "¿Cómo te llamas?"
+
+#: ../kano_init/tasks/flow.py:82
+#, python-brace-format
+msgid "Nice to meet you {string_username}."
+msgstr "Mucho gusto {string_username}."
+
+#: ../kano_init/tasks/flow.py:85
+msgid ""
+"Did you know your new computer's brain is made of millions \n"
+"of electric switches?"
+msgstr "¿Sabías que el cerebro de tu nueva computadora está compuesto de millones de \n"
+"interruptores eléctricos?"
+#: ../kano_init/tasks/flow.py:89
+msgid "Press [ENTER] to see what the switches do."
+msgstr "Presiona [INTRODUCIR] para descubrir lo qué hacen los interruptores."
+
+#: ../kano_init/tasks/flow.py:124
+msgid "Words, music and pictures all get stored as binary code."
+msgstr "Palabras, música e imágenes están todas almacenadas en formato binario."
+
+#: ../kano_init/tasks/flow.py:127
+msgid "And so does your computer's secret password:"
+msgstr "Y lo mismo ocurre con la contraseña secreta de tu computadora:"
+
+#: ../kano_init/tasks/flow.py:135
+msgid "Type the secret password in human letters:"
+msgstr "Escribe la contraseña en caracteres normales:"
+
+#: ../kano_init/tasks/flow.py:167
+msgid "Ok! Taking you to the Dashboard..."
+msgstr "¡Bueno! Llevándote al Tablero" <—————— 
+
+#: ../kano_init/tasks/flow.py:174
+msgid "Not the correct password, keep trying!"
+msgstr "No es la contraseña correcta, ¡sigue intentando!"
+
+#: ../kano_init/tasks/flow.py:177
+msgid "The secret password is kano"
+msgstr "La contraseña secreta es: kano"
+
+#: ../kano_init/tasks/flow.py:179 ../kano_init/ascii_art/binary.py:37
+msgid "Press [ENTER] to keep exploring."
+msgstr "Presiona [INTRODUCIR] para seguir explorando"
+
+#: ../kano_init/tasks/flow.py:199
+msgid "Woah."
+msgstr "Woah."
+
+#: ../kano_init/tasks/flow.py:202
+#, python-brace-format
+msgid "{string_username}, did you see that?"
+msgstr "¿{string_username}, viste eso?"
+
+#: ../kano_init/tasks/flow.py:206
+#, python-brace-format
+msgid "Type {string_code_to_type} to follow the white rabbit."
+msgstr "Escribe {string_code_to_type} para seguir al conejo blanco."
+
+#: ../kano_init/tasks/flow.py:269
+msgid "Your name: "
+msgstr "Tu nombre: "
+
+#: ../kano_init/tasks/flow.py:274
+msgid "Type a cool name."
+msgstr "Escribe un nombre que suena bien."
+
+#: ../kano_init/tasks/flow.py:276
+msgid "Just one word, letters or numbers! Try again."
+msgstr "¡Solo una palabra, puedes usar letras o números!"
+
+#: ../kano_init/tasks/flow.py:279
+msgid "This one is already taken! Try again."
+msgstr "¡Este nombre de usuario no está disponible! Intenta de nuevo."
+
+#: ../kano_init/tasks/flow.py:282
+#, python-brace-format
+msgid "This one is too long by {number} characters! Try again."
+msgstr "¡Éste tiene {number} caracteres de más! Intenta de nuevo. "
+
+#: ../kano_init/ascii_art/binary.py:36
+msgid "These switches speak in 1s and 0s. This is called binary code."
+msgstr "Estos interruptores hablan en ceros y unos. Esto se llama código binario"
+
+#: ../kano_init/data/subshellrc:6
+msgid "There's no rabbit here, try again!"
+msgstr "No hay ningún conejo aquí, ¡intenta de nuevo!"
