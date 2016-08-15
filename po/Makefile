@@ -28,13 +28,19 @@ xgettext -o messages.pot -j -L Shell --keyword=eval_gettext ../kano_init/data/su
     --package-name=$(APPNAME) --copyright-holder=$(ORG)
 endef
 
+define clean-up
+rm PYPOTFILES
+endef
+
 messages:
 	$(generate-pypotfiles)
 	$(run-xgettext)
+	$(clean-up)
 
 messages.pot:
 	$(generate-pypotfiles)
 	$(run-xgettext)
+	$(clean-up)
 
 %.po: messages.pot
 	msgmerge -N -U $*.po messages.pot
