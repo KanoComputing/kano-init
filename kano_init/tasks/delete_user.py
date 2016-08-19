@@ -21,8 +21,8 @@ def schedule_delete_user(name=None):
     status = Status.get_instance()
 
     if status.stage != Status.DISABLED_STAGE:
-        msg = _("A different task has been scheduled already. Reboot to"
-                " finish the task before scheduling another one.")
+        msg = N_("A different task has been scheduled already. Reboot to"
+                 " finish the task before scheduling another one.")
         raise StatusError(msg)
 
     if not name:
