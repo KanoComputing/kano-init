@@ -14,7 +14,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../bin/kano-init:61
@@ -174,7 +174,7 @@ msgstr "¡A éste le sobran {number} caracteres! Intenta de nuevo. "
 
 #: ../kano_init/ascii_art/binary.py:36
 msgid "These switches speak in 1s and 0s. This is called binary code."
-msgstr "Estos interruptores hablan en ceros y unos, o en lo que se denomina "código binario""
+msgstr "Estos interruptores hablan en ceros y unos, o en lo que se denomina \"código binario\""
 
 #: ../kano_init/data/subshellrc:6
 msgid "There's no rabbit here, try again!"
