@@ -19,8 +19,8 @@ def schedule_reset():
     init_status = Status.get_instance()
 
     if init_status.stage != Status.DISABLED_STAGE:
-        msg = N_("A different task has been scheduled already. Reboot to"
-                 " finish the task before scheduling another one.")
+        msg = _("A different task has been scheduled already. Reboot to"
+                " finish the task before scheduling another one.")
         raise StatusError(msg)
 
     disable_ldm_autostart()
