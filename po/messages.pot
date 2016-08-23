@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kano-init\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-11 16:54+0100\n"
+"POT-Creation-Date: 2016-08-22 15:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,17 +27,39 @@ msgstr ""
 msgid "ERROR: {string_error}"
 msgstr ""
 
-#: ../kano_init/ascii_art/binary.py:36
-msgid "These switches speak in 1s and 0s. This is called binary code."
-msgstr ""
-
-#: ../kano_init/ascii_art/binary.py:37 ../kano_init/tasks/flow.py:180
-msgid "Press [ENTER] to keep exploring."
-msgstr ""
-
 #: ../kano_init/status.py:113
 #, python-brace-format
 msgid "'{string_app_stage_name}' is not a valid stage"
+msgstr ""
+
+#: ../kano_init/terminal.py:164 ../kano_init/tasks/flow.py:57
+msgid "Hello!"
+msgstr ""
+
+#: ../kano_init/terminal.py:165
+msgid "I'm KANO. Thanks for bringing me to life."
+msgstr ""
+
+#: ../kano_init/user.py:96
+#, python-brace-format
+msgid "The user '{string_username}' already exists"
+msgstr ""
+
+#: ../kano_init/user.py:118
+msgid "Unable to create new user, useradd failed."
+msgstr ""
+
+#: ../kano_init/user.py:126
+msgid "Unable to change the new user's password, chpasswd failed."
+msgstr ""
+
+#: ../kano_init/user.py:134
+msgid "Unable to create the kanousers group, groupadd failed."
+msgstr ""
+
+#: ../kano_init/user.py:203
+#, python-brace-format
+msgid "Deleting the '{string_username}' failed."
 msgstr ""
 
 #: ../kano_init/tasks/add_user.py:20 ../kano_init/tasks/delete_user.py:24
@@ -56,8 +78,8 @@ msgstr ""
 msgid "The '{string_username}' user will be deleted on the next reboot."
 msgstr ""
 
-#: ../kano_init/tasks/flow.py:57 ../kano_init/terminal.py:164
-msgid "Hello!"
+#: ../kano_init/tasks/reset.py:33
+msgid "kano-init RESET scheduled for the next system reboot"
 msgstr ""
 
 #: ../kano_init/tasks/flow.py:58
@@ -107,6 +129,10 @@ msgstr ""
 msgid "The secret password is kano"
 msgstr ""
 
+#: ../kano_init/tasks/flow.py:180 ../kano_init/ascii_art/binary.py:37
+msgid "Press [ENTER] to keep exploring."
+msgstr ""
+
 #: ../kano_init/tasks/flow.py:200
 msgid "Woah."
 msgstr ""
@@ -142,36 +168,10 @@ msgstr ""
 msgid "This one is too long by {number} characters! Try again."
 msgstr ""
 
-#: ../kano_init/tasks/reset.py:33
-msgid "kano-init RESET scheduled for the next system reboot"
+#: ../kano_init/ascii_art/binary.py:36
+msgid "These switches speak in 1s and 0s. This is called binary code."
 msgstr ""
 
-#: ../kano_init/terminal.py:165
-msgid "I'm KANO. Thanks for bringing me to life."
-msgstr ""
-
-#: ../kano_init/user.py:96
-#, python-brace-format
-msgid "The user '{string_username}' already exists"
-msgstr ""
-
-#: ../kano_init/user.py:118
-msgid "Unable to create new user, useradd failed."
-msgstr ""
-
-#: ../kano_init/user.py:126
-msgid "Unable to change the new user's password, chpasswd failed."
-msgstr ""
-
-#: ../kano_init/user.py:134
-msgid "Unable to create the kanousers group, groupadd failed."
-msgstr ""
-
-#: ../kano_init/user.py:203
-#, python-brace-format
-msgid "Deleting the '{string_username}' failed."
-msgstr ""
-
-#: ../kano_init/data/subshellrc:6
+#: ../kano_init/data/subshellrc:10
 msgid "There's no rabbit here, try again!"
 msgstr ""

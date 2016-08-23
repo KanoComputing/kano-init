@@ -1,7 +1,7 @@
 APPNAME=kano-init
 ORG="Kano Computing Ltd."
 
-MSGLANGS=$(notdir $(wildcard *po))
+MSGLANGS=$(notdir $(wildcard *.po))
 MSGOBJS=$(addprefix ../locale/,$(MSGLANGS:.po=/LC_MESSAGES/$(APPNAME).mo))
 
 .PHONY: clean_locales messages
