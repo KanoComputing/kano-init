@@ -34,7 +34,7 @@ def set_overscan():
                 h = str(int(parts[1])/8)
                 v = str(int(parts[2])/8)
         if h and v:
-            _ = subprocess.check_call(['overscan', h, h, v, v])
+            subprocess.check_call(['overscan', h, h, v, v])
     except:
         pass
 
@@ -99,7 +99,7 @@ def typewriter_echo(string, sleep=0, trailing_linebreaks=1):
 
 
 def write_flush(string):
-    sys.stdout.write(string)
+    sys.stdout.write(string)  # TODO: set encoding to UTF-8
     sys.stdout.flush()
 
 
@@ -161,5 +161,5 @@ def discard_input():
 
 
 if __name__ == '__main__':
-    typewriter_echo("Hello!")
-    typewriter_echo("I'm KANO. Thanks for bringing me to life.")
+    typewriter_echo(_("Hello!"))
+    typewriter_echo(_("I'm KANO. Thanks for bringing me to life."))

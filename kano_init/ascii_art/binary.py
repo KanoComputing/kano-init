@@ -16,6 +16,8 @@ keypos = 0
 
 
 def draw_fn(y, x, msg, color=None):
+    if isinstance(msg, unicode):
+        msg = msg.encode('utf8')
     try:
         if color is None:
             screen.addstr(y, x, msg)
@@ -31,8 +33,8 @@ def main(username):
 
     keypos = 0
 
-    msg1 = "These switches speak in 1s and 0s. This is called binary code."
-    msg2 = "Press [ENTER] to keep exploring."
+    msg1 = _("These switches speak in 1s and 0s. This is called binary code.")
+    msg2 = _("Press [ENTER] to keep exploring.")
 
     rv = 0
 
@@ -154,10 +156,14 @@ def is_screen_big_enough():
 def binary(user="buddy"):
     rv = 1
     try:
+        # Set LC_ALL otherwise curses won't display utf8 strings properly.
+        import locale
+        locale.setlocale(locale.LC_ALL, '')
+
         init_curses()
 
         if not is_screen_big_enough():
-            raise EnvironmentError('Screen too small')
+            raise EnvironmentError("Screen too small")
 
         rv = main(user)
     finally:

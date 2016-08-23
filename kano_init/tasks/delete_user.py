@@ -21,8 +21,8 @@ def schedule_delete_user(name=None):
     status = Status.get_instance()
 
     if status.stage != Status.DISABLED_STAGE:
-        msg = "A different task has been scheduled already. Reboot to " + \
-              "finish the task before scheduling another one."
+        msg = _("A different task has been scheduled already. Reboot to"
+                " finish the task before scheduling another one.")
         raise StatusError(msg)
 
     if not name:
@@ -36,7 +36,9 @@ def schedule_delete_user(name=None):
     status.username = name
     status.save()
 
-    print "The '{}' user will be deleted on the next reboot.".format(name)
+    # Converting name to unicode for safety and then back to bytes for print.
+    print _("The '{string_username}' user will be deleted on the next"
+            " reboot.").format(unicode(name)).encode('utf8')
 
 
 def do_delete_user(flow_param):
