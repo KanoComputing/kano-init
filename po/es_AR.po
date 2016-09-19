@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kano-init\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-22 15:53+0000\n"
+"POT-Creation-Date: 2016-09-19 14:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,42 +89,40 @@ msgstr ""
 "kano-init RESTAURAR se ha programado para el próximo reinicio del sistema"
 
 #: ../kano_init/tasks/flow.py:58
-msgid "Thanks for bringing me to life. Now, let's see what we can do."
+msgid "I'm Kano, thanks for bringing me to life."
 msgstr "Gracias por darme vida. Ahora veamos lo que podemos hacer."
 
 #: ../kano_init/tasks/flow.py:60
-msgid "What is your name?"
+msgid "What should I call you?"
 msgstr "¿Cómo te llamas?"
 
 #: ../kano_init/tasks/flow.py:83
 #, python-brace-format
-msgid "Nice to meet you {string_username}."
-msgstr "Mucho gusto {string_username}."
+msgid "Welcome to the inside of your computer, {string_username}."
+msgstr "Saludos desde el interior de tu computadora, {string_username}."
 
 #: ../kano_init/tasks/flow.py:86
-msgid ""
-"Did you know your new computer's brain is made of millions \n"
-"of electric switches?"
+msgid "Did you know my brain is made of millions of electric switches?"
 msgstr ""
 "¿Sabías que el cerebro de tu nueva computadora está compuesto de millones "
 "de \n"
 "interruptores eléctricos?"
 
-#: ../kano_init/tasks/flow.py:90
-msgid "Press [ENTER] to see what the switches do."
+#: ../kano_init/tasks/flow.py:89
+msgid "Press [ENTER] to see them spark."
 msgstr "Presiona [ENTER] para descubrir lo que hacen los interruptores."
 
-#: ../kano_init/tasks/flow.py:125
-msgid "Words, music and pictures all get stored as binary code."
+#: ../kano_init/tasks/flow.py:124
+msgid "Words, sounds, and pictures all get stored as binary code."
 msgstr ""
 "Palabras, música e imágenes están todas almacenadas en formato binario."
 
-#: ../kano_init/tasks/flow.py:128
-msgid "And so does your computer's secret password:"
+#: ../kano_init/tasks/flow.py:127
+msgid "So does your computer's secret password"
 msgstr "Y lo mismo ocurre con la contraseña secreta de tu computadora:"
 
 #: ../kano_init/tasks/flow.py:136
-msgid "Type the secret password in human letters:"
+msgid "Type the password in human letters."
 msgstr "Escribe la contraseña en caracteres normales:"
 
 #: ../kano_init/tasks/flow.py:168
@@ -139,50 +137,51 @@ msgstr "No es la contraseña correcta, ¡sigue intentando!"
 msgid "The secret password is kano"
 msgstr "La contraseña secreta es: kano"
 
-#: ../kano_init/tasks/flow.py:180 ../kano_init/ascii_art/binary.py:37
+#: ../kano_init/tasks/flow.py:180
 msgid "Press [ENTER] to keep exploring."
 msgstr "Presiona [ENTER] para seguir explorando"
 
 #: ../kano_init/tasks/flow.py:200
-msgid "Woah."
-msgstr "Wow."
-
-#: ../kano_init/tasks/flow.py:203
 #, python-brace-format
-msgid "{string_username}, did you see that?"
-msgstr "¿{string_username}, viste eso?"
+msgid "{string_username}, follow the white rabbit"
+msgstr "{string_username}, sigue al conejo blanco"
 
-#: ../kano_init/tasks/flow.py:207
+#: ../kano_init/tasks/flow.py:204
 #, python-brace-format
-msgid "Type {string_code_to_type} to follow the white rabbit."
-msgstr "Escribe {string_code_to_type} para seguir al conejo blanco."
+msgid "Type {string_code_to_type}, then [ENTER]"
+msgstr "Escribe {string_code_to_type}, y presiona [ENTER]"
 
-#: ../kano_init/tasks/flow.py:270
+#: ../kano_init/tasks/flow.py:267
 msgid "Your name: "
 msgstr "Tu nombre: "
 
-#: ../kano_init/tasks/flow.py:275
+#: ../kano_init/tasks/flow.py:272
 msgid "Type a cool name."
 msgstr "Escribe un buen nombre."
 
-#: ../kano_init/tasks/flow.py:277
+#: ../kano_init/tasks/flow.py:274
 msgid "Just one word, letters or numbers! Try again."
 msgstr "¡Sólo una palabra! Puedes usar letras o números. Intenta de nuevo"
 
-#: ../kano_init/tasks/flow.py:280
+#: ../kano_init/tasks/flow.py:277
 msgid "This one is already taken! Try again."
 msgstr "¡Este nombre de usuario no está disponible! Intenta de nuevo."
 
-#: ../kano_init/tasks/flow.py:283
+#: ../kano_init/tasks/flow.py:280
 #, python-brace-format
 msgid "This one is too long by {number} characters! Try again."
 msgstr "¡A éste le sobran {number} caracteres! Intenta de nuevo. "
 
 #: ../kano_init/ascii_art/binary.py:36
-msgid "These switches speak in 1s and 0s. This is called binary code."
+msgid ""
+"Switches speak in code, 1s and 0s. 1 means yes. 0 means no. This is binary."
 msgstr ""
 "Estos interruptores hablan en ceros y unos, o en lo que se denomina \"código "
 "binario\""
+
+#: ../kano_init/ascii_art/binary.py:37
+msgid "Press [ENTER] to go deeper."
+msgstr "Presiona [ENTER] para seguir explorando"
 
 #: ../kano_init/data/subshellrc:10
 msgid "There's no rabbit here, try again!"
@@ -193,3 +192,6 @@ msgstr "Aquí no hay ningún conejo, ¡intenta de nuevo!"
 
 #~ msgid "The user '{}' already exists"
 #~ msgstr "El usuario ‘{}’ ya existe"
+
+#~ msgid "Woah."
+#~ msgstr "Wow."
