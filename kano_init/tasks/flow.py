@@ -201,7 +201,7 @@ def do_white_rabbit_stage(flow_params):
         typewriter_echo(msg, trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
-        typewriter_echo(_("Type {string_code_to_type} then [ENTER]").format(
+        typewriter_echo(_("Type {string_code_to_type}, then [ENTER]").format(
                         string_code_to_type=command), trailing_linebreaks=2)
 
         # TODO: open shell
