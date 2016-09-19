@@ -99,7 +99,7 @@ msgstr "¿Cómo te llamas?"
 #: ../kano_init/tasks/flow.py:83
 #, python-brace-format
 msgid "Welcome to the inside of your computer, {string_username}."
-msgstr "Mucho gusto {string_username}."
+msgstr "Saludos desde el interior de tu computadora, {string_username}."
 
 #: ../kano_init/tasks/flow.py:86
 msgid "Did you know my brain is made of millions of electric switches?"
@@ -144,12 +144,12 @@ msgstr "Presiona [ENTER] para seguir explorando"
 #: ../kano_init/tasks/flow.py:200
 #, python-brace-format
 msgid "{string_username}, follow the white rabbit"
-msgstr "¿{string_username}, viste eso?"
+msgstr "{string_username}, sigue al conejo blanco"
 
 #: ../kano_init/tasks/flow.py:204
 #, python-brace-format
 msgid "Type {string_code_to_type}, then [ENTER]"
-msgstr "Escribe {string_code_to_type} para seguir al conejo blanco."
+msgstr "Escribe {string_code_to_type}, y presiona [ENTER]"
 
 #: ../kano_init/tasks/flow.py:267
 msgid "Your name: "
