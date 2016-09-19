@@ -55,9 +55,9 @@ def do_username_stage(flow_params):
         clear_screen()
 
         typewriter_echo(_("Hello!"), trailing_linebreaks=2)
-        typewriter_echo(_("Thanks for bringing me to life. Now, let's see what we can do."),
+        typewriter_echo(_("I'm Kano, thanks for bringing me to life."),
                         sleep=0.5, trailing_linebreaks=2)
-        typewriter_echo(_("What is your name?"), trailing_linebreaks=2)
+        typewriter_echo(_("What should I call you?"), trailing_linebreaks=2)
 
         username = _get_username()
 
@@ -80,14 +80,13 @@ def do_lightup_stage(flow_params):
         clear_screen()
 
         # TODO: username is raw str, encode?
-        msg = _("Nice to meet you {string_username}.").format(string_username=init_status.username)
+        msg = _("Welcome to the inside of your computer, {string_username}.").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("Did you know your new computer's brain is made of millions \n"
-                "of electric switches?")
+        msg = _("Did you know my brain is made of millions of electric switches?")
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("Press [ENTER] to see what the switches do.")
+        msg = _("Press [ENTER] to see them spark.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         # Wait for user input
@@ -122,18 +121,19 @@ def do_letters_stage(flow_params):
 
         clear_screen()
 
-        msg = _("Words, music and pictures all get stored as binary code.")
+        msg = _("Words, sounds, and pictures all get stored as binary code.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("And so does your computer's secret password:")
+        msg = _("So does your computer's secret password")
         typewriter_echo(msg, trailing_linebreaks=2)
+
+        msg = "   k        a        n        o    "
+        typewriter_echo(msg, trailing_linebreaks=1)
 
         msg = "01101011 01100001 01101110 01101111"
-        typewriter_echo(msg, trailing_linebreaks=1)
-        msg = "   k        a        n        o    "
         typewriter_echo(msg, trailing_linebreaks=2)
 
-        msg = _("Type the secret password in human letters:")
+        msg = _("Type the password in human letters.")
         typewriter_echo(msg, trailing_linebreaks=2)
 
         attempts = 0
@@ -197,14 +197,11 @@ def do_white_rabbit_stage(flow_params):
             pass
         clear_screen()
 
-        msg = _("Woah.")
-        typewriter_echo(msg, trailing_linebreaks=2)
-
-        msg = _("{string_username}, did you see that?").format(string_username=init_status.username)
+        msg = _("{string_username}, follow the white rabbit").format(string_username=init_status.username)
         typewriter_echo(msg, trailing_linebreaks=2)
 
         command = decorate_with_preset('cd rabbithole', 'code')
-        typewriter_echo(_("Type {string_code_to_type} to follow the white rabbit.").format(
+        typewriter_echo(_("Type {string_code_to_type} then [ENTER]").format(
                         string_code_to_type=command), trailing_linebreaks=2)
 
         # TODO: open shell
