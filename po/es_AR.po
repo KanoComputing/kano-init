@@ -110,7 +110,7 @@ msgstr ""
 
 #: ../kano_init/tasks/flow.py:89
 msgid "Press [ENTER] to see them spark."
-msgstr "Presiona [ENTER] para descubrir lo que hacen los interruptores."
+msgstr "Presiona [ ←-┘ ] (ENTER) para descubrir lo que hacen los interruptores."
 
 #: ../kano_init/tasks/flow.py:124
 msgid "Words, sounds, and pictures all get stored as binary code."
@@ -139,7 +139,7 @@ msgstr "La contraseña secreta es: kano"
 
 #: ../kano_init/tasks/flow.py:180
 msgid "Press [ENTER] to keep exploring."
-msgstr "Presiona [ENTER] para seguir explorando"
+msgstr "Presiona [ ←-┘ ] (ENTER) para seguir explorando"
 
 #: ../kano_init/tasks/flow.py:200
 #, python-brace-format
@@ -149,7 +149,7 @@ msgstr "{string_username}, sigue al conejo blanco"
 #: ../kano_init/tasks/flow.py:204
 #, python-brace-format
 msgid "Type {string_code_to_type}, then [ENTER]"
-msgstr "Escribe {string_code_to_type}, y presiona [ENTER]"
+msgstr "Escribe {string_code_to_type}, y presiona [ ←-┘ ] (ENTER)"
 
 #: ../kano_init/tasks/flow.py:267
 msgid "Your name: "
@@ -181,7 +181,7 @@ msgstr ""
 
 #: ../kano_init/ascii_art/binary.py:37
 msgid "Press [ENTER] to go deeper."
-msgstr "Presiona [ENTER] para seguir explorando"
+msgstr "Presiona [ ←-┘ ] (ENTER) para seguir explorando"
 
 #: ../kano_init/data/subshellrc:10
 msgid "There's no rabbit here, try again!"
