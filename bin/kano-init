@@ -55,9 +55,15 @@ from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
     do_love_stage, do_final_stage
 from kano_init.utils import reconfigure_autostart_policy, load_init_conf
 from kano_init.terminal import set_control
+import locale
+
 
 
 def main():
+    # Set LC_ALL otherwise curses won't display utf8 strings properly.
+    # Must be done before any curses init.
+    locale.setlocale(locale.LC_ALL, '')
+
     msg = _('ERROR: Administrator priviledges are required to'
             ' perform this operation.')
     enforce_root(msg.encode('utf8'))
