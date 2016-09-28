@@ -156,10 +156,6 @@ def is_screen_big_enough():
 def binary(user="buddy"):
     rv = 1
     try:
-        # Set LC_ALL otherwise curses won't display utf8 strings properly.
-        import locale
-        locale.setlocale(locale.LC_ALL, '')
-
         init_curses()
 
         if not is_screen_big_enough():
