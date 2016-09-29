@@ -161,7 +161,7 @@ msgstr "Escribe un buen nombre."
 
 #: ../kano_init/tasks/flow.py:274
 msgid "Just one word, letters or numbers! Try again."
-msgstr "¡Sólo una palabra! Puedes usar letras o números. Intenta de nuevo"
+msgstr "¡Una palabra solamente! Puedes usar letras con números, sin acentos. Intenta de nuevo"
 
 #: ../kano_init/tasks/flow.py:277
 msgid "This one is already taken! Try again."
