@@ -176,7 +176,7 @@ msgstr "¡A éste le sobran {number} caracteres! Intenta de nuevo. "
 msgid ""
 "Switches speak in code, 1s and 0s. 1 means yes. 0 means no. This is binary."
 msgstr ""
-"Estos interruptores hablan en ceros y unos, o en lo que se denomina \"código "
+"Estos interruptores hablan en ceros y unos, esto se denomina \"código "
 "binario\""
 
 #: ../kano_init/ascii_art/binary.py:37
