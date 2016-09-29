@@ -261,25 +261,38 @@ def do_final_stage(flow_params):
     else:
         run_cmd('service lightdm start')
 
+def _validate_username(username):
+    '''
+    Validates a username for special characters and uniqueness.
+    Spaces in username are stripped.
+    Returns a tuple with username, and errormsg if it cannot be accepted.
+    '''
+
+    errormsg=None
+    username = re.sub('\s+', '', username)
+
+    if len(username) == 0:
+        errormsg=_("Type a cool name.")
+    elif not re.match("^[a-zA-Z0-9]+$", username):
+        errormsg=_("Just one word, letters or numbers! Try again.")
+    elif user_exists(username):
+        errormsg=_("This one is already taken! Try again.")
+    elif len(username) > 25:
+        errormsg=_("This one is too long by {number} characters! Try again.").format(
+            number=len(username) - 25
+        )
+    
+    return username, errormsg
 
 def _get_username():
+    '''
+    Prompts and returns a new username, with validation control.
+    '''
     while True:
-        username = user_input(_("Your name: ")).strip()
-        username = re.sub('\s+', '', username)
-        write_flush('\n')
-
-        if len(username) == 0:
-            typewriter_echo(_("Type a cool name."), trailing_linebreaks=2)
-        elif not re.match("^[a-zA-Z0-9]+$", username):
-            typewriter_echo(_("Just one word, letters or numbers! Try again."),
-                            trailing_linebreaks=2)
-        elif user_exists(username):
-            typewriter_echo(_("This one is already taken! Try again."),
-                            trailing_linebreaks=2)
-        elif len(username) > 25:
-            msg = _("This one is too long by {number} characters! Try again.").format(
-                number=len(username) - 25
-            )
-            typewriter_echo(msg, trailing_linebreaks=2)
+        input_username = user_input(_("Your name: ")).strip()
+        username, errormsg = _validate_username(input_username)
+        if errormsg:
+            write_flush('\n')
+            typewriter_echo(errormsg, trailing_linebreaks=2)
         else:
             return username
