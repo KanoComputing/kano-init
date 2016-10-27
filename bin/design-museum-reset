@@ -6,15 +6,62 @@
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # This is the inactivity-based reset of the OS for the Design Museum Expo.
+# The script is executed with sudo.
 
 
+import os
+import shutil
 import sys
 
 
 def main():
+    user_dir_path = os.path.expanduser('~')
+
+    delete_user_save_files(user_dir_path)
+    reset_profile_app_vars(user_dir_path)
+    delete_system_logs(user_dir_path)
 
     # Exit cleanly
     return 0
+
+
+def delete_user_save_files(user_dir_path):
+    app_dirs = [
+        os.path.join(user_dir_path, "Minecraft-content"),
+        os.path.join(user_dir_path, "Draw-content"),
+        os.path.join(user_dir_path, "Pong-content"),
+        os.path.join(user_dir_path, "Snake-content"),
+        os.path.join(user_dir_path, "Light-content"),
+        os.path.join(user_dir_path, "Music-content"),
+        os.path.join(user_dir_path, "Terminal-Quest-content"),
+        os.path.join(user_dir_path, ".linux-story"),
+        os.path.join(user_dir_path, "Scratch"),
+    ]
+    delete_dir_paths(app_dirs)
+
+
+def reset_profile_app_vars(user_dir_path):
+    profile_dirs = [
+        os.path.join(user_dir_path, ".kanoprofile/apps"),
+        # os.path.join(user_dir_path, ".kanoprofile/tracker"),  # TODO: keep or remove?
+    ]
+    delete_dir_paths(profile_dirs)
+
+
+def delete_system_logs(user_dir_path):
+    log_dirs_paths = [
+        "/var/log",
+        "/root/.kano-logs",
+        os.path.join(user_dir_path, ".kano-logs"),
+        os.path.join(user_dir_path, ".cache/lxsession/LXDE/run.log"),
+    ]
+    delete_dir_paths(log_dirs_paths)
+
+
+def delete_dir_paths(dir_paths):
+    for dir_path in dir_paths:
+        # print "I should delete {}".format(dir_path)
+        shutil.rmtree(dir_path)
 
 
 if __name__ == '__main__':
