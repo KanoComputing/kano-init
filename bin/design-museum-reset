@@ -2,7 +2,7 @@
 
 # design-museum-reset
 #
-# Copyright (C) 2015 Kano Computing Ltd.
+# Copyright (C) 2016 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # This is the inactivity-based reset of the OS for the Design Museum Expo.
@@ -13,16 +13,18 @@ import os
 import shutil
 import sys
 
+from kano.utils import get_user_unsudoed
+
 
 def main():
-    user_dir_path = os.path.expanduser('~')
+    user_dir_path = os.path.join('/home', get_user_unsudoed())
 
     try:
         delete_user_save_files(user_dir_path)
         reset_profile_app_vars(user_dir_path)
         delete_system_logs(user_dir_path)
-
-        os.system('reboot')
+        reset_overworld_savefile(user_dir_path)
+        reset_overworld_thumbnail(user_dir_path)
     except:
         return 1
 
@@ -32,6 +34,7 @@ def main():
 
 def delete_user_save_files(user_dir_path):
     app_dirs = [
+        os.path.join(user_dir_path, 'Make-Apps-content'),
         os.path.join(user_dir_path, 'Minecraft-content'),
         os.path.join(user_dir_path, 'Draw-content'),
         os.path.join(user_dir_path, 'Pong-content'),
@@ -41,6 +44,7 @@ def delete_user_save_files(user_dir_path):
         os.path.join(user_dir_path, 'Terminal-Quest-content'),
         os.path.join(user_dir_path, '.linux-story'),
         os.path.join(user_dir_path, 'Scratch'),
+        os.path.join(user_dir_path, 'Screenshots'),
     ]
     delete_dir_paths(app_dirs)
 
@@ -65,9 +69,32 @@ def delete_system_logs(user_dir_path):
 
 def delete_dir_paths(dir_paths):
     for dir_path in dir_paths:
-        # print "I should delete {}".format(dir_path)
+        print "I should delete {}".format(dir_path)
         if os.path.isdir(dir_path):
+            # print "I should delete {}".format(dir_path)
             shutil.rmtree(dir_path)
+
+
+def reset_overworld_savefile(user_dir_path):
+    new_savefile_path = os.path.join(user_dir_path, '.kano-overworld/savefile-data.lua')
+    save_dir_path = os.path.join(
+        user_dir_path, '.local', 'share', 'love', 'kanoOverworld', 'sync'
+    )
+
+    # print "I should reset overworld with {} and put it at {}".format(
+    #     new_savefile_path, save_dir_path
+    # )
+    shutil.copy(new_savefile_path, save_dir_path)
+
+
+def reset_overworld_thumbnail(user_dir_path):
+    new_savefile_path = os.path.join(user_dir_path, '.kano-overworld/lastPosition.png')
+    save_dir_path = os.path.join(user_dir_path, '.local', 'share', 'love', 'kanoOverworld')
+
+    # print "I should reset overworld with {} and put it at {}".format(
+    #     new_savefile_path, save_dir_path
+    # )
+    shutil.copy(new_savefile_path, save_dir_path)
 
 
 if __name__ == '__main__':

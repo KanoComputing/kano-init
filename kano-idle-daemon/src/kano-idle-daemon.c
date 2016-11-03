@@ -22,8 +22,8 @@
 
 
 // Constant parameters.
-const int IDLE_TIME_SEC = 4 * 60 * 60;
-const int SLEEP_TIME_SEC = 1 * 60 * 60 + 1;
+const int IDLE_TIME_SEC = 4 * 60 * 60;  // 4h
+const int SLEEP_TIME_SEC = 1 * 60 * 60 + 1;  // 1h + 1s
 const char const *SCRIPT = "/usr/share/kano-idle-daemon/scripts/idle-action.sh";
 
 // Global vars.
@@ -31,7 +31,7 @@ int g_isScriptExecuted = 0;
 
 
 int getIdleTime() {
-    time_t idleTime;
+    int idleTimeSec;
 
     static XScreenSaverInfo *saverInfo;
     Display *display;
@@ -47,26 +47,25 @@ int getIdleTime() {
     // Query the X screen saver lib and get the idle time in seconds.
     saverInfo = XScreenSaverAllocInfo();
     XScreenSaverQueryInfo(display, RootWindow(display, screen), saverInfo);
-    idleTime = (saverInfo->idle) / 1000;
+    idleTimeSec = (saverInfo->idle) / 1000;
 
     // Clean up.
     XFree(saverInfo);
     XCloseDisplay(display);
 
-    return idleTime;
+    return idleTimeSec;
 }
 
 int main(int argc, char *argv[]) {
-    int idleTime;
+    int idleTimeSec;
 
     // Enter the daemon loop.
     while (1) {
-        idleTime = getIdleTime();
-        printf("%d\n", idleTime);
+        idleTimeSec = getIdleTime();
 
         // Execute the idle script if the idle time has passed and the script was
         // not previously executed, or failed by any chance.
-        if (idleTime >= IDLE_TIME_SEC && !g_isScriptExecuted) {
+        if (idleTimeSec >= IDLE_TIME_SEC && !g_isScriptExecuted) {
             int rc = system(SCRIPT);
             if (!rc)
                 g_isScriptExecuted = 1;

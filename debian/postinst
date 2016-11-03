@@ -7,6 +7,7 @@
 
 TMP_FILE=/tmp/kano-init_conf
 TMP_FILE2=/tmp/kano-idle-daemon_conf
+TMP_FILE3=/tmp/design-museum-reset
 
 case "$1" in
     configure)
@@ -25,6 +26,13 @@ case "$1" in
         # The file permissions must be set to 0440
         chmod 0440 $TMP_FILE2
         mv $TMP_FILE2 /etc/sudoers.d/
+
+        # Create custom sudoers file
+        echo "%sudo   ALL=(root) NOPASSWD: /usr/bin/design-museum-reset" > $TMP_FILE3
+        chown root:root $TMP_FILE3
+        # The file permissions must be set to 0440
+        chmod 0440 $TMP_FILE3
+        mv $TMP_FILE3 /etc/sudoers.d/
 
         ;;
 esac
