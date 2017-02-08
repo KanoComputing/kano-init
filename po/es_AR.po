@@ -3,35 +3,32 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: kano-init\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 14:17+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2017-01-23 17:27+0000\n"
+"PO-Revision-Date: 2017-02-03 17:23+0000\n"
+"Last-Translator: Seán <sdowens@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: es_AR\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.7\n"
+"X-POOTLE-MTIME: 1486142580.651172\n"
 
-#: ../bin/kano-init:61
+#: ../bin/kano-init:67
 msgid ""
 "ERROR: Administrator priviledges are required to perform this operation."
 msgstr ""
 "ERROR: Se requieren permisos de administrador para realizar esta operación."
 
-#: ../bin/kano-init:119 ../bin/kano-init:152
+#: ../bin/kano-init:125 ../bin/kano-init:158
 #, python-brace-format
 msgid "ERROR: {string_error}"
 msgstr "ERROR: {string_error}"
-
-#: ../kano_init/status.py:113
-#, python-brace-format
-msgid "'{string_app_stage_name}' is not a valid stage"
-msgstr "'{string_app_stage_name}' no se reconoce"
 
 #: ../kano_init/terminal.py:164 ../kano_init/tasks/flow.py:57
 msgid "Hello!"
@@ -39,32 +36,10 @@ msgstr "¡Hola!"
 
 #: ../kano_init/terminal.py:165
 msgid "I'm KANO. Thanks for bringing me to life."
-msgstr "Soy KANO. Gracias traerme a la vida."
+msgstr "Soy KANO. Gracias por traerme a la vida."
 
-#: ../kano_init/user.py:96
-#, python-brace-format
-msgid "The user '{string_username}' already exists"
-msgstr ""
-
-#: ../kano_init/user.py:118
-msgid "Unable to create new user, useradd failed."
-msgstr "No se pudo crear un nuevo usuario, useradd fracasó."
-
-#: ../kano_init/user.py:126
-msgid "Unable to change the new user's password, chpasswd failed."
-msgstr "No se pudo cambiar la contraseña del nuevo usuario, chpasswd fracasó."
-
-#: ../kano_init/user.py:134
-msgid "Unable to create the kanousers group, groupadd failed."
-msgstr "No se pudo crear el grupo kanousers, groupadd failed."
-
-#: ../kano_init/user.py:203
-#, python-brace-format
-msgid "Deleting the '{string_username}' failed."
-msgstr "No se pudo borrar el nombre de usuario: ’{string_username}'."
-
-#: ../kano_init/tasks/add_user.py:20 ../kano_init/tasks/delete_user.py:24
-#: ../kano_init/tasks/reset.py:22
+#: ../kano_init/tasks/delete_user.py:24 ../kano_init/tasks/reset.py:22
+#: ../kano_init/tasks/add_user.py:20
 msgid ""
 "A different task has been scheduled already. Reboot to finish the task "
 "before scheduling another one."
@@ -72,21 +47,11 @@ msgstr ""
 "Ya se programó otra tarea. Se debe reiniciar el sistema para completar la "
 "tarea antes de empezar una nueva."
 
-#: ../kano_init/tasks/add_user.py:28
-msgid "New user creation scheduled for the next system reboot."
-msgstr ""
-"Creación de nuevo usuario programada para el próximo reinicio del sistema."
-
 #: ../kano_init/tasks/delete_user.py:40
 #, python-brace-format
 msgid "The '{string_username}' user will be deleted on the next reboot."
 msgstr ""
 "El usuario ’{string_username}' se eliminará en el próximo inicio del sistema."
-
-#: ../kano_init/tasks/reset.py:33
-msgid "kano-init RESET scheduled for the next system reboot"
-msgstr ""
-"kano-init RESTAURAR se ha programado para el próximo reinicio del sistema"
 
 #: ../kano_init/tasks/flow.py:58
 msgid "I'm Kano, thanks for bringing me to life."
@@ -104,8 +69,8 @@ msgstr "Saludos desde el interior de tu computadora, {string_username}."
 #: ../kano_init/tasks/flow.py:86
 msgid "Did you know my brain is made of millions of electric switches?"
 msgstr ""
-"¿Sabías que el cerebro de tu nueva computadora está compuesto de millones "
-"de \n"
+"¿Sabías que el cerebro de tu nueva computadora está compuesto de millones de "
+"\n"
 "interruptores eléctricos?"
 
 #: ../kano_init/tasks/flow.py:89
@@ -114,8 +79,7 @@ msgstr "Presiona [ ←-┘ ] (ENTER) para descubrir lo que hacen los interruptor
 
 #: ../kano_init/tasks/flow.py:124
 msgid "Words, sounds, and pictures all get stored as binary code."
-msgstr ""
-"Palabras, música e imágenes están todas almacenadas en formato binario."
+msgstr "Palabras, música e imágenes están todas almacenadas en formato binario."
 
 #: ../kano_init/tasks/flow.py:127
 msgid "So does your computer's secret password"
@@ -151,26 +115,38 @@ msgstr "{string_username}, sigue al conejo blanco"
 msgid "Type {string_code_to_type}, then [ENTER]"
 msgstr "Escribe {string_code_to_type}, y presiona [ ←-┘ ] (ENTER)"
 
-#: ../kano_init/tasks/flow.py:267
-msgid "Your name: "
-msgstr "Tu nombre: "
-
-#: ../kano_init/tasks/flow.py:272
+#: ../kano_init/tasks/flow.py:275
 msgid "Type a cool name."
 msgstr "Escribe un buen nombre."
 
-#: ../kano_init/tasks/flow.py:274
-msgid "Just one word, letters or numbers! Try again."
-msgstr "¡Una palabra solamente! Puedes usar letras con números, sin acentos. Intenta de nuevo"
-
 #: ../kano_init/tasks/flow.py:277
+msgid "Just one word, letters or numbers! Try again."
+msgstr ""
+"¡Una palabra solamente! Puedes usar letras con números, sin acentos. Intenta "
+"de nuevo"
+
+#: ../kano_init/tasks/flow.py:279
 msgid "This one is already taken! Try again."
 msgstr "¡Este nombre de usuario no está disponible! Intenta de nuevo."
 
-#: ../kano_init/tasks/flow.py:280
+#: ../kano_init/tasks/flow.py:281
 #, python-brace-format
 msgid "This one is too long by {number} characters! Try again."
 msgstr "¡A éste le sobran {number} caracteres! Intenta de nuevo. "
+
+#: ../kano_init/tasks/flow.py:292
+msgid "Your name: "
+msgstr "Tu nombre:"
+
+#: ../kano_init/tasks/reset.py:33
+msgid "kano-init RESET scheduled for the next system reboot"
+msgstr ""
+"kano-init RESTAURAR se ha programado para el próximo reinicio del sistema"
+
+#: ../kano_init/tasks/add_user.py:28
+msgid "New user creation scheduled for the next system reboot."
+msgstr ""
+"Creación de nuevo usuario programada para el próximo reinicio del sistema."
 
 #: ../kano_init/ascii_art/binary.py:36
 msgid ""
@@ -183,15 +159,33 @@ msgstr ""
 msgid "Press [ENTER] to go deeper."
 msgstr "Presiona [ ←-┘ ] (ENTER) para seguir explorando"
 
+#: ../kano_init/status.py:113
+#, python-brace-format
+msgid "'{string_app_stage_name}' is not a valid stage"
+msgstr "'{string_app_stage_name}' no se reconoce"
+
+#: ../kano_init/user.py:96
+#, python-brace-format
+msgid "The user '{string_username}' already exists"
+msgstr "EL nombre de usuario '{string_username}' ya existe"
+
+#: ../kano_init/user.py:118
+msgid "Unable to create new user, useradd failed."
+msgstr "No se pudo crear un nuevo usuario, useradd fracasó."
+
+#: ../kano_init/user.py:126
+msgid "Unable to change the new user's password, chpasswd failed."
+msgstr "No se pudo cambiar la contraseña del nuevo usuario, chpasswd fracasó."
+
+#: ../kano_init/user.py:134
+msgid "Unable to create the kanousers group, groupadd failed."
+msgstr "No se pudo crear el grupo kanousers, groupadd fracasó."
+
+#: ../kano_init/user.py:203
+#, python-brace-format
+msgid "Deleting the '{string_username}' failed."
+msgstr "No se pudo borrar el nombre de usuario: ’{string_username}'."
+
 #: ../kano_init/data/subshellrc:10
 msgid "There's no rabbit here, try again!"
 msgstr "Aquí no hay ningún conejo, ¡intenta de nuevo!"
-
-#~ msgid "ERROR: {}"
-#~ msgstr "ERROR: {}"
-
-#~ msgid "The user '{}' already exists"
-#~ msgstr "El usuario ‘{}’ ya existe"
-
-#~ msgid "Woah."
-#~ msgstr "Wow."
