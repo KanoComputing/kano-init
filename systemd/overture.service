@@ -11,10 +11,10 @@
 
 [Unit]
 Description=Kano Overture
-Conflicts=lightdm
+Conflicts=graphical.target
 
 [Service]
 ExecStart=/usr/bin/overture
 
 [Install]
-WantedBy=getty@tty1.service
+WantedBy=getty@tty1.service multi-user.target
