@@ -3,3 +3,4 @@ autostart-kano-init.sh /usr/bin
 kano_init usr/lib/python2.7/dist-packages
 share/* /usr/share/kano-init
 locale/* /usr/share/locale
+system/overture.service /usr/lib/systemd/system

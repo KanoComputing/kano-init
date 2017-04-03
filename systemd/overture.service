@@ -1,0 +1,15 @@
+#
+# overture.service
+#
+# The Overture service is the modern Onboarding app
+# It takes control right after the tty1 console is allocated
+#
+
+[Unit]
+Description=Kano Overture
+
+[Service]
+ExecStart=/usr/bin/overture
+
+[Install]
+WantedBy=getty@tty1.service
