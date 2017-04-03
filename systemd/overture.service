@@ -1,12 +1,17 @@
 #
 # overture.service
 #
-# The Overture service is the modern Onboarding app
-# It takes control right after the tty1 console is allocated
+# The Overture service is the modern Onboarding app,
+# It takes new users through an engaging flow.
+#
+# It is started at boot time right after the tty1 console is allocated.
+# We make sure it is started only when lightdm is disabled,
+# this is needed because we do not have the new user account just yet.
 #
 
 [Unit]
 Description=Kano Overture
+Conflicts=lightdm
 
 [Service]
 ExecStart=/usr/bin/overture
