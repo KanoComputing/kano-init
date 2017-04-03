@@ -8,6 +8,8 @@
 # We make sure it is started only when lightdm is disabled,
 # this is needed because we do not have the new user account just yet.
 #
+# see the README for grainer details.
+#
 
 [Unit]
 Description=Kano Overture
