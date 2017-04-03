@@ -12,6 +12,9 @@ case "$1" in
         # Remove sudoers config file
         rm /etc/sudoers.d/kano-init_conf
 
+        # As a precaution, so a safe cleanup takes place
+        systemctl disable overture
+        systemctl stop overture
         ;;
 esac
 
