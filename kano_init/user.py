@@ -172,6 +172,38 @@ def create_temporary_user():
     return username
 
 
+def rename_user(current, new):
+    '''
+    Renames current username to new, by changing its login name and home folder.
+    '''
+
+    # Sanity checks
+    if not user_exists(current) or user_exists(new):
+        logger.error(N_('cannot rename user {} to {} due to conflicting names'.format(current, new)))
+        return False
+
+    # Rename the username and move his home directory.
+    cmd='usermod --login {} --home /home/{} --move-home {}'.format(new, new, current)
+    _, _, rv = run_cmd_log(cmd)
+    if rv != 0:
+        msg = N_("Unable to rename user, rename_user failed.")
+        logger.error(msg)
+        raise UserError(_(msg))
+
+    # Do the same with his initial user group
+    cmd='groupmod --new-name {} {}'.format(new, current)
+    _, _, rv = run_cmd_log(cmd)
+    if rv != 0:
+        msg = N_("Unable to rename user group, rename_user failed.")
+        logger.error(msg)
+
+        # Try to rollback the first step
+        cmd='usermod --login {} --home /home/{} --move-home {}'.format(current, current, new)
+        _, _, rv = run_cmd_log(cmd)
+
+        raise UserError(_(msg))
+
+
 def get_next_uid():
     """
         Returns the next free user id.

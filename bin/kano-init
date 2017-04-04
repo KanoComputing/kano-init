@@ -18,6 +18,7 @@ Usage:
   kano-init status
   kano-init reset [-f]
   kano-init create-temp-user [-x]
+  kano-init rename-user <current> <new>
   kano-init xserver-start <username>
   kano-init boot
   kano-init test [<stage>]
@@ -38,7 +39,7 @@ import docopt
 
 from kano.utils import enforce_root
 from kano_init.utils import set_ldm_autologin, start_lightdm
-from kano_init.user import create_temporary_user
+from kano_init.user import create_temporary_user, rename_user
 from kano.logging import logger
 
 if __name__ == '__main__' and __package__ is None:
@@ -175,6 +176,14 @@ def main():
             if args['--xserver']:
                 set_ldm_autologin(username)
                 start_lightdm()
+
+    elif args['rename-user']:
+        # Rename "current" username to "new".
+        try:
+            rename_user(args['<current>'], args['<new>'])
+        except:
+            raise
+            sys.exit(1)
 
     elif args['xserver-start']:
         # Starts the X server in the background and logs in as username
