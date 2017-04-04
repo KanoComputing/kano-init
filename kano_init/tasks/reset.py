@@ -10,7 +10,7 @@
 import os
 
 from kano_init.status import Status, StatusError
-from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
+from kano_init.utils import disable_ldm_autostart, \
     unset_ldm_autologin, restore_factory_settings, reconfigure_autostart_policy
 from kano_init.user import delete_all_users
 
@@ -25,7 +25,6 @@ def schedule_reset():
 
     disable_ldm_autostart()
     unset_ldm_autologin()
-    enable_console_autologin('root')
 
     init_status.stage = Status.RESET_STAGE
     init_status.save()

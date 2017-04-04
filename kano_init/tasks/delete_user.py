@@ -12,7 +12,7 @@ from kano.logging import logger
 from kano.utils import get_user_unsudoed, run_cmd
 
 from kano_init.status import Status, StatusError
-from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
+from kano_init.utils import disable_ldm_autostart, \
     unset_ldm_autologin, reconfigure_autostart_policy, start_lightdm
 from kano_init.user import delete_user, user_exists, get_group_members
 
@@ -30,7 +30,6 @@ def schedule_delete_user(name=None):
 
     disable_ldm_autostart()
     unset_ldm_autologin()
-    enable_console_autologin('root')
 
     status.stage = Status.DELETE_USER_STAGE
     status.username = name

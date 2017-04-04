@@ -9,8 +9,7 @@
 
 
 from kano_init.status import Status, StatusError
-from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
-    unset_ldm_autologin
+from kano_init.utils import disable_ldm_autostart, unset_ldm_autologin
 
 
 def schedule_add_user():
@@ -23,7 +22,6 @@ def schedule_add_user():
 
     disable_ldm_autostart()
     unset_ldm_autologin()
-    enable_console_autologin('root')
 
     print _("New user creation scheduled for the next system reboot.").encode('utf8')
 
