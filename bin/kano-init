@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! /usr/bin/python
 #
 # kano-init
 #
@@ -17,6 +17,7 @@ Usage:
   kano-init finalise [-f]
   kano-init status
   kano-init reset [-f]
+  kano-init xserver-start <username>
   kano-init boot
   kano-init test [<stage>]
 
@@ -33,6 +34,7 @@ from collections import OrderedDict
 import docopt
 
 from kano.utils import enforce_root
+from kano_init.utils import set_ldm_autologin, start_lightdm
 from kano.logging import logger
 
 if __name__ == '__main__' and __package__ is None:
@@ -158,6 +160,12 @@ def main():
             msg = N_(u"ERROR: {string_error}").format(string_error=e)
             logger.error(msg)
             sys.exit(_(msg))
+
+    elif args['xserver-start']:
+        # Starts the X server in the background and logs in as username
+        set_ldm_autologin(args['<username>'])
+        start_lightdm()
+
 
     return 0
 
