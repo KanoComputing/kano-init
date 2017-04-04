@@ -103,6 +103,13 @@ def disable_ldm_autostart():
     run_cmd('systemctl set-default multi-user.target')
 
 
+def start_lightdm():
+    '''
+    Starts the X server immediately, it is safe to call while overture is running
+    '''
+    run_cmd('systemctl start lightdm')
+
+
 def set_dashboard_onboarding(username, run_it=True):
     '''
     FIXME: This onboarding stage is to be superseded by Overture

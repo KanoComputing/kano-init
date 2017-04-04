@@ -29,13 +29,14 @@ from kano_init.ascii_art.rabbit import rabbit
 from kano_init.ascii_art.binary import binary
 from kano_init.user import user_exists, create_user, make_username_unique
 from kano_init.utils import reconfigure_autostart_policy, set_ldm_autologin, \
-    set_dashboard_onboarding
+    set_dashboard_onboarding, start_lightdm
 
 from kano_settings.system.advanced import set_hostname
 
 
 def do_username_stage(flow_params):
     """
+    Prompt for a username and create it as a new Kano system user
     """
 
     if flow_params.get('skip'):
@@ -259,7 +260,8 @@ def do_final_stage(flow_params):
     if os.path.isfile('/usr/bin/kano-dashboard-lightdm'):
         run_cmd('/usr/bin/kano-dashboard-lightdm')
     else:
-        run_cmd('service lightdm start')
+        start_lightdm()
+
 
 def _validate_username(username):
     '''

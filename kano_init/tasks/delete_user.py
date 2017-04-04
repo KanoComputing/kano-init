@@ -13,7 +13,7 @@ from kano.utils import get_user_unsudoed, run_cmd
 
 from kano_init.status import Status, StatusError
 from kano_init.utils import enable_console_autologin, disable_ldm_autostart, \
-    unset_ldm_autologin, reconfigure_autostart_policy
+    unset_ldm_autologin, reconfigure_autostart_policy, start_lightdm
 from kano_init.user import delete_user, user_exists, get_group_members
 
 
@@ -52,12 +52,14 @@ def do_delete_user(flow_param):
 
     reconfigure_autostart_policy()
 
+    # If this was the last user on the system,
+    # we need to schedule a new one.
     kanousers = get_group_members('kanousers')
     if len(kanousers) == 0:
         status.stage = Status.ADD_USER_STAGE
     else:
         status.stage = Status.DISABLED_STAGE
-        run_cmd('service lightdm start')
+        start_lightdm()
 
     status.username = None
     status.save()
