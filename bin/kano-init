@@ -17,6 +17,7 @@ Usage:
   kano-init finalise [-f]
   kano-init status
   kano-init reset [-f]
+  kano-init create-temp-user [-x]
   kano-init xserver-start <username>
   kano-init boot
   kano-init test [<stage>]
@@ -25,16 +26,19 @@ Options:
   -h, --help       Show this message.
   -v, --version    Print the version of the updater.
   -f, --force      Force resetting of the kit.
+  -x, --xserver    Start the xserver as the new user
 """
 
 import os
 import sys
+import random
 from collections import OrderedDict
 
 import docopt
 
 from kano.utils import enforce_root
 from kano_init.utils import set_ldm_autologin, start_lightdm
+from kano_init.user import create_user
 from kano.logging import logger
 
 if __name__ == '__main__' and __package__ is None:
@@ -160,6 +164,26 @@ def main():
             msg = N_(u"ERROR: {string_error}").format(string_error=e)
             logger.error(msg)
             sys.exit(_(msg))
+
+    elif args['create-temp-user']:
+        # Create a temporary kano user, optionally start Xserver and log him in
+        def random_kano_user():
+            suffix=random.randrange(10**10)
+            random_username='kano%08x' % suffix
+            return random_username
+
+        try:
+            username=random_kano_user()
+            create_user(username)
+        except:
+            sys.exit(1)
+
+        print username
+        if args['--xserver']:
+            set_ldm_autologin(username)
+            start_lightdm()
+
+        sys.exit(0)
 
     elif args['xserver-start']:
         # Starts the X server in the background and logs in as username
