@@ -13,6 +13,7 @@ import os
 import grp
 import pwd
 import shutil
+import random
 
 from kano.utils import run_cmd_log, run_cmd
 from kano.logging import logger
@@ -137,6 +138,38 @@ def create_user(username):
     # Add the new user to all necessary groups
     cmd = "usermod -G '{}' {}".format(DEFAULT_USER_GROUPS, username)
     _, _, rv = run_cmd_log(cmd)
+
+
+def create_temporary_user():
+    '''
+    Creates a temporary Kano user on the system.
+    Returns the newly created username, None on error.
+    '''
+    username=None
+    created=False
+
+    def random_kano_user():
+        suffix=random.randrange(10**10)
+        random_username='kano%08x' % suffix
+        return random_username
+
+    # Try to create a new temporary username in the form "kano3faf5dcd".
+    try:
+        username=random_kano_user()
+        create_user(username)
+        created=True
+    except:
+        pass
+
+    # Do a cleanup if something went wrong
+    if not created and username:
+        try:
+            delete_user(username)
+        except:
+            pass
+        username=None
+
+    return username
 
 
 def get_next_uid():

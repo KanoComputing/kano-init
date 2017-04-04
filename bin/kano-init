@@ -38,7 +38,7 @@ import docopt
 
 from kano.utils import enforce_root
 from kano_init.utils import set_ldm_autologin, start_lightdm
-from kano_init.user import create_user
+from kano_init.user import create_temporary_user
 from kano.logging import logger
 
 if __name__ == '__main__' and __package__ is None:
@@ -167,23 +167,14 @@ def main():
 
     elif args['create-temp-user']:
         # Create a temporary kano user, optionally start Xserver and log him in
-        def random_kano_user():
-            suffix=random.randrange(10**10)
-            random_username='kano%08x' % suffix
-            return random_username
-
-        try:
-            username=random_kano_user()
-            create_user(username)
-        except:
+        username=create_temporary_user()
+        if not username:
             sys.exit(1)
-
-        print username
-        if args['--xserver']:
-            set_ldm_autologin(username)
-            start_lightdm()
-
-        sys.exit(0)
+        else:
+            print username
+            if args['--xserver']:
+                set_ldm_autologin(username)
+                start_lightdm()
 
     elif args['xserver-start']:
         # Starts the X server in the background and logs in as username
