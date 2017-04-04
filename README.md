@@ -28,6 +28,14 @@ Whilst the new onboarding is running, it is possible to start lightdm in the bac
 $ systemctl start lightdm
 ```
 
+## New Onboarding commands
+
+The following new commands are available. They are ready to be invoked from the Overture app
+in order to follow through the steps.
+
+ * `kano-init finalise -f` : mark the onboarding as complete, so the next reboot will take user to desktop
+
+
 ## Automation
 
 Kano Init is capable of going through the initial setup process unattended, create the user account
