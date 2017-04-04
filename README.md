@@ -9,32 +9,20 @@ tool from Alex Bradbury.
 ## Onboarding UI
 
 As of kano-init 3.3, there is a new version which uses a QML based graphical UI called Overture.
-It is bound to the system via systemd - the command below will skip kano-init and take the kit
-directly to the Dashboard or Greeter:
+It is bound to the system via systemd - the commands below summarize the available workflow options.
 
-```
-$ systemctl set-default graphical.target
-```
+ * `kano-init schedule add-user` will disable the Dashbhoard and start the Overture app with no Xserver on next reboot.
+ * `kano-init finalise -f` will mark the onboarding as complete, the next reboot will go to either Dashboard or Greeter.
+ * `kano-init create-temp-user [-x]` creates a temporary kano user which is returned through `stdout`, `[-x]` starts an empty XServer.
+ * `kano-init rename-user <current> <new>` renames the user account, group name, home folder, and its inner permissions.
+ * `kano-init xserver-start <username>` starts the Xserver in the background, logs in as username.
 
-The command below will disable the Dashboard UI and start the new onboarding on next boot:
+At the systemd level, `systemctl set-default multi-user.target` will enable the Overture app through systemd,
+leaving the Xserver and Dashboard disabled. You can still `systemctl start ligthdm` without disrupting the Overture app.
 
-```
-$ systemctl set-default multi-user.target
-```
+Conversely, `systemctl set-default graphical.target` will switch back to taking the user to the Dashboard or Greeter on next reboot.
 
-Whilst the new onboarding is running, it is possible to start lightdm in the background without disrupting the UI:
-
-```
-$ systemctl start lightdm
-```
-
-## New Onboarding commands
-
-The following new commands are available. They are ready to be invoked from the Overture app
-in order to follow through the steps.
-
- * `kano-init finalise -f` : mark the onboarding as complete, so the next reboot will take user to desktop
-
+Note that the Overture app will run as root. Use `create-temp-user` along with `su` to impersonate regular and X11 apps.
 
 ## Automation
 
