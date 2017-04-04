@@ -14,7 +14,7 @@ kano-init can create new users and initialise the OS for them.
 Usage:
   kano-init schedule (reset|add-user)
   kano-init schedule delete-user [<name>]
-  kano-init finalise
+  kano-init finalise [-f]
   kano-init status
   kano-init reset [-f]
   kano-init boot
@@ -131,7 +131,7 @@ def main():
         # switched to multiuser mode.
         logger.info('kano-init finalise called')
         status = Status.get_instance()
-        if status.stage == Status.UI_INIT_STAGE:
+        if status.stage == Status.UI_INIT_STAGE or args['--force']:
             reconfigure_autostart_policy()
 
             status.stage = Status.DISABLED_STAGE
