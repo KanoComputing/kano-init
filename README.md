@@ -16,6 +16,7 @@ It is bound to the system via systemd - the commands below summarize the availab
  * `kano-init create-temp-user [-x]` creates a temporary kano user which is returned through `stdout`, `[-x]` starts an empty XServer.
  * `kano-init rename-user <current> <new>` renames the user account, group name, home folder, and its inner permissions.
  * `kano-init xserver-start <username>` starts the Xserver in the background, logs in as username.
+ * `kano-init status` will return `disabled` when normal Dashboard mode, `add-user` when Overture is running or scheduled for next reboot.
 
 At the systemd level, `systemctl set-default multi-user.target` will enable the Overture app through systemd,
 leaving the Xserver and Dashboard disabled. You can still `systemctl start ligthdm` without disrupting the Overture app.
