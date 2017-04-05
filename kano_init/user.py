@@ -179,16 +179,17 @@ def rename_user(current, new):
 
     # Sanity checks
     if not user_exists(current) or user_exists(new):
-        logger.error(N_('cannot rename user {} to {} due to conflicting names'.format(current, new)))
-        return False
+        msg = N_("cannot rename user {} to {} due to conflicting names".format(current, new))
+        logger.error(msg)
+        raise UserError(msg)
 
     # Rename the username and move his home directory.
     cmd='usermod --login {} --home /home/{} --move-home {}'.format(new, new, current)
     _, _, rv = run_cmd_log(cmd)
     if rv != 0:
-        msg = N_("Unable to rename user, rename_user failed.")
+        msg = N_("Unable to rename user, perhaps user has processes running? usermod rc={}".format(rv))
         logger.error(msg)
-        raise UserError(_(msg))
+        raise UserError(msg)
 
     # Do the same with his initial user group
     cmd='groupmod --new-name {} {}'.format(new, current)
@@ -201,7 +202,7 @@ def rename_user(current, new):
         cmd='usermod --login {} --home /home/{} --move-home {}'.format(current, current, new)
         _, _, rv = run_cmd_log(cmd)
 
-        raise UserError(_(msg))
+        raise UserError(msg)
 
 
 def get_next_uid():
