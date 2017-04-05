@@ -14,7 +14,7 @@ It is bound to the system via systemd - the commands below summarize the availab
  * `kano-init schedule add-user` will disable the Dashbhoard and start the Overture app with no Xserver on next reboot.
  * `kano-init finalise -f` will mark the onboarding as complete, the next reboot will go to either Dashboard or Greeter.
  * `kano-init create-temp-user [-x]` creates a temporary kano user which is returned through `stdout`, `[-x]` starts an empty XServer.
- * `kano-init rename-user <current> <new>` renames the user account, group name, home folder, and its inner permissions.
+ * `kano-init rename-user <current> <new>` renames the user account, group name, home folder, and its permissions. No user process must be running.
  * `kano-init xserver-start <username>` starts the Xserver in the background, logs in as username.
  * `kano-init status` will return `disabled` when normal Dashboard mode, `add-user` when Overture is running or scheduled for next reboot.
 
