@@ -1,14 +1,16 @@
 #
 # overture.service
 #
-# The Overture service is the modern Onboarding app,
+# The Overture service is the modern Onboarding app.
 # It takes new users through an engaging flow.
 #
-# It is started at boot time right after the tty1 console is allocated.
-# We make sure it is started only when lightdm is disabled,
-# this is needed because we do not have the new user account just yet.
+# It is started at boot time right before the tty1 console is allocated,
+# and only when multi-user mode is active - not graphical mode.
 #
-# see the README for grainer details.
+# Reason to work in multi-user mode only is because we do not have a new user account yet.
+# Throughout the Onboarding flow, we start the X server as the new user, in the background.
+#
+# see the README file for grainer details.
 #
 
 [Unit]
@@ -17,6 +19,8 @@ Conflicts=graphical.target
 
 [Service]
 ExecStart=/usr/bin/overture
+Restart=no
+RemainAfterExit=yes
 
 [Install]
 WantedBy=getty@tty1.service multi-user.target
