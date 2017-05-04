@@ -110,6 +110,15 @@ def start_lightdm():
     run_cmd('systemctl start lightdm')
 
 
+def start_dashboard_services(username):
+    '''
+    Starts the Dashboard app and related user services on top of the XServer,
+    Using su to impersonate them as the specified "username".
+    '''
+    run_cmd('su - "{}" -c "systemctl --user start kano-dashboard.service"'.format(username))
+    run_cmd('su - "{}" -c "systemctl --user restart kano-common.target"'.format(username))
+
+
 def set_dashboard_onboarding(username, run_it=True):
     '''
     FIXME: This onboarding stage is to be superseded by Overture
