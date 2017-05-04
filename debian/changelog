@@ -1,4 +1,4 @@
-kano-init (3.3.0-1) unstable; urgency=low
+kano-init (3.4.0-1) unstable; urgency=low
 
   * Added a new option to start Dashboard and user services
 
