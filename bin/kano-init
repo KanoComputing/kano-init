@@ -14,7 +14,7 @@ kano-init can create new users and initialise the OS for them.
 Usage:
   kano-init schedule (reset|add-user)
   kano-init schedule delete-user [<name>]
-  kano-init finalise [-f]
+  kano-init finalise [-f] [-d=username]
   kano-init status
   kano-init reset [-f]
   kano-init create-user <username> [-x]
@@ -25,10 +25,11 @@ Usage:
   kano-init test [<stage>]
 
 Options:
-  -h, --help       Show this message.
-  -v, --version    Print the version of the updater.
-  -f, --force      Force resetting of the kit.
-  -x, --xserver    Start the xserver as the new user
+  -h, --help                           Show this message.
+  -v, --version                        Print the version of the updater.
+  -f, --force                          Force resetting of the kit.
+  -x, --xserver                        Start the xserver as the new user
+  -d username, --dashboard=<username>  Start the Dashboard and user services
 """
 
 import os
@@ -39,7 +40,7 @@ from collections import OrderedDict
 import docopt
 
 from kano.utils import enforce_root
-from kano_init.utils import set_ldm_autologin, start_lightdm
+from kano_init.utils import set_ldm_autologin, start_lightdm, start_dashboard_services
 from kano_init.user import create_user, create_temporary_user, rename_user
 from kano.logging import logger
 
@@ -140,11 +141,17 @@ def main():
         logger.info('kano-init finalise called')
         status = Status.get_instance()
         if status.stage == Status.UI_INIT_STAGE or args['--force']:
+
             reconfigure_autostart_policy()
 
             status.stage = Status.DISABLED_STAGE
             status.username = None
             status.save()
+
+            # Start the Dashboard as the specified username
+            if args['--dashboard']:
+                start_dashboard_services(args['--dashboard'])
+
         else:
             logger.warn('kano-init finalise called from the wrong stage ' +
                         status.stage)

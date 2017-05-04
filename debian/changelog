@@ -1,3 +1,9 @@
+kano-init (3.4.0-1) unstable; urgency=low
+
+  * Added a new option to start Dashboard and user services
+
+ -- Team Kano <dev@kano.me>  Thu, 04 May 2017 17:40:00 +0100
+
 kano-init (3.3.0-1) unstable; urgency=low
 
   * Added the new Kano Overture onboarding
