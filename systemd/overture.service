@@ -10,12 +10,17 @@
 # Reason to work in multi-user mode only is because we do not have a new user account yet.
 # Throughout the Onboarding flow, we start the X server as the new user, in the background.
 #
+# Dependency with kano-settings is to avoid the visual annoyance of overture starting up,
+# while kano-settings might need a reboot to adapt screen resolution.
+#
 # see the README file for grainer details.
 #
 
 [Unit]
 Description=Kano Overture
 Conflicts=graphical.target
+Wants=kano-settings.service
+After=kano-settings.service
 
 [Service]
 ExecStart=/usr/bin/overture
