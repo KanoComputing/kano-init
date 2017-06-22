@@ -63,10 +63,6 @@ def save_original_state():
         atexit.register(restore_original_state)
 
 
-# Store the original state of the terminal and make sure we restore it
-save_original_state()
-
-
 def clear_screen(top_padding=True):
     sys.stderr.write("\x1b[2J\x1b[H")
     if top_padding:
@@ -158,8 +154,3 @@ def user_input(prompt):
 
 def discard_input():
     termios.tcflush(sys.stdin.fileno(), termios.TCIOFLUSH)
-
-
-if __name__ == '__main__':
-    typewriter_echo(_("Hello!"))
-    typewriter_echo(_("I'm KANO. Thanks for bringing me to life."))
