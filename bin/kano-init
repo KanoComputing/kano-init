@@ -59,9 +59,6 @@ from kano_init.status import Status, StatusError
 from kano_init.tasks.add_user import do_add_user, schedule_add_user
 from kano_init.tasks.delete_user import do_delete_user, schedule_delete_user
 from kano_init.tasks.reset import do_reset, schedule_reset
-from kano_init.tasks.flow import do_username_stage, do_white_rabbit_stage, \
-    do_lightup_stage, do_switch_stage, do_letters_stage,  \
-    do_love_stage, do_final_stage
 from kano_init.utils import reconfigure_autostart_policy, load_init_conf
 import locale
 
@@ -83,14 +80,7 @@ def main():
     func_table = OrderedDict([
         (Status.ADD_USER_STAGE,      do_add_user),
         (Status.DELETE_USER_STAGE,   do_delete_user),
-        (Status.RESET_STAGE,         do_reset),
-        (Status.USERNAME_STAGE,      do_username_stage),
-        (Status.LIGHTUP_STAGE,       do_lightup_stage),
-        (Status.SWITCH_STAGE,        do_switch_stage),
-        (Status.LETTERS_STAGE,       do_letters_stage),
-        (Status.WHITE_RABBIT_STAGE,  do_white_rabbit_stage),
-        (Status.LOVE_STAGE,          do_love_stage),
-        (Status.FINAL_STAGE,         do_final_stage)
+        (Status.RESET_STAGE,         do_reset)
     ])
 
     if args['boot']:

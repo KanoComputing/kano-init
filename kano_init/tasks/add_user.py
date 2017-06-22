@@ -31,5 +31,5 @@ def schedule_add_user():
 
 def do_add_user(flow_param):
     status = Status.get_instance()
-    status.stage = Status.USERNAME_STAGE
+    status.stage = Status.DISABLED_STAGE
     status.save()
