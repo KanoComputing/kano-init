@@ -7,7 +7,7 @@
 # The task of removing a user at boot.
 #
 
-
+import os
 from kano.logging import logger
 from kano.utils import get_user_unsudoed
 
@@ -28,8 +28,12 @@ def schedule_delete_user(name=None):
     if not name:
         name = get_user_unsudoed()
 
-    disable_ldm_autostart()
-    unset_ldm_autologin()
+    # Remove the user from the kano users
+    # so it is not considered when reconfiguring the login
+    cmd='usermod {} -G {}'.format(name, name)
+    os.system(cmd)
+
+    reconfigure_autostart_policy()
 
     status.stage = Status.DELETE_USER_STAGE
     status.username = name
@@ -58,7 +62,6 @@ def do_delete_user(flow_param):
         status.stage = Status.ADD_USER_STAGE
     else:
         status.stage = Status.DISABLED_STAGE
-        start_lightdm()
 
     status.username = None
     status.save()

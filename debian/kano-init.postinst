@@ -22,6 +22,7 @@ case "$1" in
         # Enable the overture systemd service
         systemctl enable overture
 
+        systemctl enable kano-init-boot
         ;;
 esac
 

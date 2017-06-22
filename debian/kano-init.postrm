@@ -15,6 +15,9 @@ case "$1" in
         # As a precaution, so a safe cleanup takes place
         systemctl disable overture
         systemctl stop overture
+
+        systemctl disable kano-init-boot
+
         ;;
 esac
 

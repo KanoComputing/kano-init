@@ -1,0 +1,17 @@
+#
+# kano-init-boot.service
+#
+# Kano init boot makes sure the kit goes to either Greeter, Dashboard or Overture. 
+# It will also remove the user, should a schedule removal be in place.
+#
+
+[Unit]
+Description=Kano Init Boot
+
+[Service]
+ExecStart=/usr/bin/kano-init boot
+Restart=no
+RemainAfterExit=yes
+
+[Install]
+WantedBy=kano-settings.service
