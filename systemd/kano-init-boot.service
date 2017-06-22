@@ -9,6 +9,7 @@
 Description=Kano Init Boot
 
 [Service]
+ExecStartPre=/bin/bash -c "/usr/bin/kano-init status | grep delete-user"
 ExecStart=/usr/bin/kano-init boot
 Restart=no
 RemainAfterExit=yes
