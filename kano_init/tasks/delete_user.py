@@ -9,7 +9,7 @@
 
 
 from kano.logging import logger
-from kano.utils import get_user_unsudoed, run_cmd
+from kano.utils import get_user_unsudoed
 
 from kano_init.status import Status, StatusError
 from kano_init.utils import disable_ldm_autostart, \
@@ -37,7 +37,7 @@ def schedule_delete_user(name=None):
 
     # Converting name to unicode for safety and then back to bytes for print.
     print _("The '{string_username}' user will be deleted on the next"
-            " reboot.").format(unicode(name)).encode('utf8')
+            " reboot.").format(string_username=unicode(name)).encode('utf8')
 
 
 def do_delete_user(flow_param):
