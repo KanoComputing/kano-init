@@ -88,7 +88,11 @@ def main():
 
         flow_params = load_init_conf()
 
-        while True:
+        # This can loop indefinitely if the status is set elsewhere, e.g. during
+        # the onboarding so, as the status is never read again from file - it
+        # uses the instance in memory. The loop limit is only to prevent this
+        # FIXME: Remove the need to loop at all
+        for dummy in xrange(10):
             if status.stage in func_table:
                 func_table[status.stage](flow_params)
             else:
