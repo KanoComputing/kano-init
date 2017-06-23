@@ -28,4 +28,4 @@ Restart=no
 RemainAfterExit=yes
 
 [Install]
-WantedBy=getty@tty1.service multi-user.target
+WantedBy=multi-user.target
