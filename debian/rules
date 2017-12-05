@@ -6,3 +6,5 @@
 override_dh_auto_build:
 	cd po && make messages.pot
 	cd po && make
+
+override_dh_auto_test:

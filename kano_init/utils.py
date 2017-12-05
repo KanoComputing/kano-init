@@ -1,23 +1,29 @@
 #
 # utils.py
 #
-# Copyright (C) 2015-216 Kano Computing Ltd.
+# Copyright (C) 2015-2017 Kano Computing Ltd.
 # License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
 #
 # A collection of utilities for the initflow.
 #
 
+
 import os
 import json
+import shutil
 
 import pwd
 import grp
 
-from kano.utils import sed, run_cmd
+from kano.utils.shell import run_cmd
+from kano.utils.file_operations import ensure_dir, sed
 
-from kano_init.paths import INIT_CONF_PATH
+from kano_init.paths import INIT_CONF_PATH, DEFAULT_LIGHTDM_CONF_FILE
 from kano_init.user import get_group_members
 from kano_init.status import Status
+
+
+LIGHTDM_CONF_FILE = '/etc/lightdm/lightdm.conf'
 
 
 def enable_console_autologin(username, restart=False):
@@ -72,20 +78,20 @@ def set_ldm_autologin(username):
     '''
     Tell lightdm to skip the greeter, login username, and go directly to the desktop.
     '''
-    sed('^#?(autologin-user)=.*$', 'autologin-user={}'.format(username), '/etc/lightdm/lightdm.conf')
+    sed('^#?(autologin-user)=.*$', 'autologin-user={}'.format(username), LIGHTDM_CONF_FILE)
 
     # Make sure the autologin timeout is set to 0
-    sed('^#?(autologin-user-timeout)=.*$', '\\1=0', '/etc/lightdm/lightdm.conf')
+    sed('^#?(autologin-user-timeout)=.*$', '\\1=0', LIGHTDM_CONF_FILE)
 
 
 def unset_ldm_autologin():
     '''
     Disable lightdm automatic login, the greeter should provide a login window
     '''
-    sed('^autologin-user=.*$', '#autologin-user=none', '/etc/lightdm/lightdm.conf')
+    sed('^autologin-user=.*$', '#autologin-user=none', LIGHTDM_CONF_FILE)
 
     # Comment out the autologin-user-timeout option
-    sed('^#?(autologin-user-timeout=.*)$', '#\\1', '/etc/lightdm/lightdm.conf')
+    sed('^#?(autologin-user-timeout=.*)$', '#\\1', LIGHTDM_CONF_FILE)
 
 
 def enable_ldm_autostart():
@@ -162,6 +168,21 @@ def reconfigure_autostart_policy():
         disable_console_autologin()
         unset_ldm_autologin()
         enable_ldm_autostart()
+
+
+def ensure_lightdm_conf():
+    '''
+    If the LightDM config file is missing then the undesirable LXDE login screen
+    appears rather than our greeter. Ensure that the file exists and create the
+    correct one if it doesn't
+    '''
+
+    if os.path.exists(LIGHTDM_CONF_FILE):
+        return
+
+    ensure_dir(os.path.dirname(LIGHTDM_CONF_FILE))
+    shutil.copy(DEFAULT_LIGHTDM_CONF_FILE, LIGHTDM_CONF_FILE)
+    reconfigure_autostart_policy()
 
 
 def restore_factory_settings():

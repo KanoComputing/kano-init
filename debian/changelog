@@ -1,3 +1,9 @@
+kano-init (3.14.0-1) unstable; urgency=low
+
+  * Add method to regenerate the LightDM configuration
+
+ -- Team Kano <dev@kano.me>  Tue, 5 Dec 2017 17:18:00 +0100
+
 kano-init (3.10.2-1) unstable; urgency=low
 
   * Fixed an issue with deleting users with new OS onboarding
