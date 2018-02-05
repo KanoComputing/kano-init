@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+# stop-unsupported-rpi-boot
+#
+# Copyright (C) 2018 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU GPL v2
+#
+# This script is executed via the systemd stop-unsupported-rpi-boot.service
+
+"""
+stop-unsupported-rpi-boot can create new users and initialise the OS for them.
+
+Requires root permissions.
+
+Usage:
+    stop-unsupported-rpi-boot [options]
+    stop-unsupported-rpi-boot -h | --help
+
+Options:
+    -n, --no-detect   Skip over the board model detection. It also disables its
+                      systemd service to avoid reboot loop. Testing purposes.
+    -s, --dry-run     Skip over the final shutdown action. Testing purposes.
+    -h, --help        Show this message.
+"""
+
+
+from os.path import abspath, join, dirname
+import sys
+
+import docopt
+
+if __name__ == '__main__' and __package__ is None:
+    DIR_PATH = abspath(join(dirname(__file__), '..'))
+    if DIR_PATH != '/usr':
+        sys.path.insert(0, DIR_PATH)
+        LOCALE_PATH = os.path.join(DIR_PATH, 'locale')
+    else:
+        LOCALE_PATH = None
+
+import kano_i18n.init
+kano_i18n.init.install('kano-init', LOCALE_PATH)
+
+from kano_init.stop_unsupported_rpi_boot import main
+from kano_init.return_codes import RC
+
+
+if __name__ == '__main__':
+    # Show the entire docstring when incorrect arguments are given.
+    try:
+        args = docopt.docopt(__doc__)
+    except docopt.DocoptExit:
+        print __doc__
+        sys.exit(RC.INCORRECT_ARGS)
+
+    # Careful with exit codes on unexpected failures. This script is executed
+    # very early on boot and it's best to avoid boot loops / crashes.
+    try:
+        sys.exit(main(args) or RC.SUCCESS)
+    except:
+        sys.exit(RC.SUCCESS)

@@ -2,4 +2,4 @@ bin/* usr/bin
 kano_init usr/lib/python2.7/dist-packages
 share/* /usr/share/kano-init
 locale/* /usr/share/locale
-systemd/* /usr/lib/systemd/system
+systemd/* /usr/lib/systemd/
