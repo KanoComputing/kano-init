@@ -23,6 +23,7 @@ case "$1" in
         systemctl enable overture
 
         systemctl enable kano-init-boot
+        systemctl enable stop-unsupported-rpi-boot
         ;;
 esac
 

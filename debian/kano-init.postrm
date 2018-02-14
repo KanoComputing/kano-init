@@ -17,7 +17,7 @@ case "$1" in
         systemctl stop overture
 
         systemctl disable kano-init-boot
-
+        systemctl disable stop-unsupported-rpi-boot
         ;;
 esac
 
