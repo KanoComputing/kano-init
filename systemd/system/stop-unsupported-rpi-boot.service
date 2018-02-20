@@ -18,7 +18,7 @@
 Description=Stop Unsupported RPi Boot
 DefaultDependencies=no
 After=kano-os-loader.service
-Before=systemd-remount-fs.service
+Before=systemd-remount-fs.service boot-splash-start.service
 
 [Service]
 StandardOutput=journal

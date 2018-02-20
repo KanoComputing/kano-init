@@ -33,6 +33,12 @@ def sysrq_power_off():
     This function requires root permissions.
     """
 
+    # Safety check: Do not trigger a reboot if the filesystem has been
+    # mounted as read/write to avoid potentially corrupting the SD card.
+    out, err, rc = run_cmd('/bin/mount | /bin/grep "on / " | /bin/grep "ro"')
+    if rc != 0:
+        return
+
     with open('/proc/sys/kernel/sysrq', 'a') as sysrq:
         sysrq.write('1')
 
