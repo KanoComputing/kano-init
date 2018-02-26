@@ -76,6 +76,9 @@ def get_group_members(name):
         :rtype: list
     """
 
+    if not group_exists(name):
+        return list()
+
     group = grp.getgrnam(name)
     return group.gr_mem
 
