@@ -114,6 +114,7 @@ def start_lightdm():
     Starts the X server immediately, it is safe to call while overture is running
     '''
     run_cmd('systemctl start lightdm')
+    run_cmd('systemctl start kano-touch-flip.service')
 
 
 def start_dashboard_services(username):

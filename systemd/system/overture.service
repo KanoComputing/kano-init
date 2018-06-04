@@ -23,7 +23,7 @@ Wants=kano-settings.service
 After=kano-settings.service
 
 [Service]
-ExecStart=/usr/bin/overture
+ExecStart=/usr/bin/overture-wrapper
 Restart=no
 RemainAfterExit=yes
 
