@@ -6,5 +6,9 @@
 
 source /usr/share/kano-peripherals/scripts/flip_qt.sh
 
+# Ensure that even in the case where Overture uses lots of memory it rarely
+# fails to finalise
+/sbin/sysctl vm.overcommit_memory=1
 /usr/bin/overture $*
+/sbin/sysctl vm.overcommit_memory=0
 
