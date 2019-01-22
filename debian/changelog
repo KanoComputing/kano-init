@@ -1,3 +1,9 @@
+kano-init (4.2.1-0) unstable; urgency=low
+
+  * Remove dependency on overture, fix dependency loop
+
+ -- Team Kano <dev@kano.me>  Tue, 22 Jan 2019 11:41:00 +0000
+
 kano-init (4.1.0-0) unstable; urgency=low
 
   * Remove OS support for Raspberry Pi 2 stopping them from booting up
